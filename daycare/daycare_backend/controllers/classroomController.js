@@ -1,14 +1,14 @@
 const knexConfig = require('../knexfile')
 const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
-const Student = bookshelf.Model.extend({
-      tableName: 'student',
-      classroom: function() {
-            return this.belongsTo('Classroom')
-      },
-      teacher: function() {
-            return this.belongsToMany('Teacher')
-      }
+const Classroom = bookshelf.Model.extend({
+      tableName: 'classroom',
+      students: function() {
+            return this.hasMany('Student')
+      },    
+      teacher: function(){
+            return this.hasMany('Teacher')
+      }  
 })
 
 exports.getStudents = () => {

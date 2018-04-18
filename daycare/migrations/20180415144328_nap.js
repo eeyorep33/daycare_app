@@ -4,9 +4,11 @@ exports.up = function (knex, Promise) {
         table.increments('id').primary();
         table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
         table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now());
-        table.timestamp('startTime').notNullable();
-        table.string('stopTime').notNullable();
-        table.integer('report_id').references('id').inTable('report')
+        table.time('startTime').notNullable();
+        table.time('stopTime').notNullable();
+        table.integer('report_id').notNullable();
+        table.foreign('report_id').references('report.id');
+     
     })
 };
 

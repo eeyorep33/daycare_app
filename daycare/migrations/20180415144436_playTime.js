@@ -6,7 +6,9 @@ exports.up = function (knex, Promise) {
         table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now());
         table.string('type').notNullable();
         table.string('activity').notNullable();
-        table.integer('report_id').references('id').inTable('report')
+        table.integer('report_id').notNullable();
+        table.foreign('report_id').references('report.id');
+        
     })
 };
 

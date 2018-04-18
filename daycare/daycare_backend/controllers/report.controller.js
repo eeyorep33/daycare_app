@@ -3,6 +3,7 @@ const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
 const Reports = bookshelf.Model.extend({
       tableName: 'report',
+      
 })
 exports.createReport = (report) => {
       const newReport = new Reports(

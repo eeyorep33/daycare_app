@@ -5,7 +5,9 @@ exports.up = function (knex, Promise) {
         table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
         table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now());
         table.string('comment').notNullable();
-        table.integer('report_id').references('id').inTable('report')
+        table.integer('report_id').notNullable();
+        table.foreign('report_id').references('report.id');
+       
     })
 };
 

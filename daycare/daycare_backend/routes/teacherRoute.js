@@ -4,15 +4,15 @@ const bookshelf = require('bookshelf')(knex)
 module.exports = (app) => {
       const teachers = require('./controllers/teacherController')
 
-      app.get('/teachers', (req, res) => {
+      app.get('/teacherList', (req, res) => {
             teachers.getTeachers().then((teachers) => { res.send(teachers) })
       })
-      app.post('/teachers', (req, res) => {
+      app.post('/teacherList', (req, res) => {
             teahers.createTeacher().then((teacher) => {
 
             })
       })
-      app.delete('/teachers/:id', (req, res) => {
+      app.delete('/teacherList/:id', (req, res) => {
             teachers.deleteTeacher(req.params.id).then((teacher) => {
                   res.send('Deleted')
             })

@@ -4,10 +4,13 @@ exports.up = function (knex, Promise) {
         table.increments('id').primary();
         table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
         table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now());
-        table.timestamp('time').notNullable();
-        table.string('food').notNullable();
-        table.string('amount').notNullable();
-        table.integer('report_id').references('id').inTable('report')
+        table.time('time').notNullable();
+        table.string('food');
+        table.string('amount');
+        table.integer('report_id').notNullable();
+        table.foreign('report_id').references('report.id');
+        
+       
     })
 };
 

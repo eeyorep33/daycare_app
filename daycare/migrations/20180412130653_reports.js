@@ -4,8 +4,9 @@ exports.up = function (knex, Promise) {
         table.increments('id').primary();
         table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
         table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now());
-        table.string('date').notNullable();
-        table.integer('student_id').references('id').inTable('student')
+        table.date('date').notNullable();
+        table.integer('student_id').notNullable();
+        table.foreign('student_id').references('student.id')
       
 
     })

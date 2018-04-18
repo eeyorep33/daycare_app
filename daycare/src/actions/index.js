@@ -1,43 +1,161 @@
-const addStudent = student => ({
-  type: "ADD_STUDENT", payload: student
+import axios from 'axios'
+
+export const addStudent = student => ({
+  type: "ADD_STUDENT", student
 })
-const addDiapering = payload => ({
+export const addToStudentList = (student) => {
+  return (dispatch) => {
+    return axios.post('/studentList', student)
+      .then(response => {
+        dispatch(addStudent(response.data))
+      })
+      .catch(error => {
+        throw(error);
+      });
+  };
+};
+ export const addDiapering = payload => ({
   type: "ADD_DIAPERING", payload
 })
-const addFeeding = payload => ({
+export const addToDiapering=(diaper)=>{
+  return (dispatch)=>{
+    return axios.post('/diapering', diaper)
+    .then(response=>{
+      dispatch(addDiapering(response.data))
+    })
+  }
+}
+export const addFeeding = payload => ({
   type: "ADD_FEEDING", payload
 })
-const addNap = payload => ({
+export const addToFeeding=(feeding)=>{
+  return (dispatch)=>{
+    return axios.post('/feeding', feeding)
+    .then(response=>{
+      dispatch(addFeeding(response.data))
+    })
+  }
+}
+export const addNap = payload => ({
   type: "ADD_NAP", payload
 })
-const addMeds = payload => ({
+export const addToNap=(nap)=>{
+  return (dispatch)=>{
+    return axios.post('/nap', nap)
+    .then(response=>{
+      dispatch(addNap(response.data))
+    })
+  }
+}
+export const addMeds = payload => ({
   type: "ADD_MEDS", payload
 })
+export const addToMeds=(med)=>{
+  return (dispatch)=>{
+    return axios.post('/meds', med)
+    .then(response=>{
+      dispatch(addMeds(response.data))
+    })
+  }
+}
 const addComments = payload => ({
   type: "ADD_COMMENTS", payload
 })
+export const addToComments=(comment)=>{
+  return (dispatch)=>{
+    return axios.post('/comments', comment)
+    .then(response=>{
+      dispatch(addComments(response.data))
+    })
+  }
+}
 const addSupplies = payload => ({
   type: "ADD_SUPPLIES", payload
 })
-const removeStudent = student => ({
-  type: "REMOVE_STUDENT", payload: student
+export const addToSupplies=(item)=>{
+  return (dispatch)=>{
+    return axios.post('/supplies', item)
+    .then(response=>{
+      dispatch(addSupplies(response.data))
+    })
+  }
+}
+export const removeStudent = student => ({
+  type: "REMOVE_STUDENT",  student
 })
-const addPlayTime = student => ({
+export const removeFromStudentList=(student)=>{
+  return (dispatch)=>{
+    return axios.delete('/studentList', student)
+    .then(response=>{
+      dispatch(removeStudent(response.data))
+    })
+  }
+}
+export const addPlayTime = student => ({
   type: "ADD_PLAYTIME", payload: student
 })
-const changeStatus = student => ({
-  type: "CHANGE_STATUS", payload: student
+export const addToPlayTime=(playtime)=>{
+  return (dispatch)=>{
+    return axios.post('/playTime', playtime)
+    .then(response=>{
+      dispatch(addPlayTime(response.data))
+    })
+  }
+}
+// export const changeStatus = student => ({
+//   type: "CHANGE_STATUS",  student
+// })
+// export const changeStudentStatus=(student)=>{
+//   return (dispatch)=>{
+//     return axios.put('/diapering', diaper)
+//     .then(response=>{
+//       dispatch(addDiapering(response.data))
+//     })
+//   }
+// }
+export const addTeacher = teacher =>({
+  type: "ADD_TEACHER",  teacher
 })
-const addTeacher = teacher =>({
-  type: "ADD_TEACHER", payload: teacher
-})
+export const addToTeacherList=(teacher)=>{
+  return (dispatch)=>{
+    return axios.post('/teacherList', teacher)
+    .then(response=>{
+      dispatch(addTeacher(response.data))
+    })
+  }
+}
 const removeTeacher = teacher =>({
-  type:"REMOVE_TEACHER", payload:teacher
+  type:"REMOVE_TEACHER", teacher
 })
-const addClassroom = classroom =>({
-  type: "ADD_CLASSROOM", payload:classroom
+export const removeFromTeacherList=(teacher)=>{
+  return (dispatch)=>{
+    return axios.delete('/teacherList', teacher)
+    .then(response=>{
+      dispatch(removeTeacher(response.data))
+    })
+  }
+}
+export const addClassroom = classroom =>({
+  type: "ADD_CLASSROOM", classroom
 })
-const removeClassroom = classroom =>({
-  type: "REMOVE_CLASSROOM", payload: classroom
+export const addToclassList=(classroom)=>{
+  return (dispatch)=>{
+    return axios.post('/classroomList', classroom)
+    .then(response=>{
+      dispatch(addClassroom(response.data))
+    })
+  }
+}
+export const removeClassroom = classroom =>({
+  type: "REMOVE_CLASSROOM", classroom
 })
-export {addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, changeStatus}
+export const removeFromClassList=(classroom)=>{
+  return (dispatch)=>{
+    return axios.delete('/classroomList', classroom)
+    .then(response=>{
+      dispatch(removeClassroom(response.data))
+    })
+  }
+}
+
+
