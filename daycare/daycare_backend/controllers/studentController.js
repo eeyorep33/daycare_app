@@ -1,4 +1,4 @@
-const knexConfig = require('../knexfile')
+const knexConfig = require('../../knexfile')
 const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
 const Student = bookshelf.Model.extend({
@@ -33,6 +33,7 @@ exports.getStudents = () => {
                         console.log(err)
                   })
       }
+      
       exports.deleteStudent=(key)=>{
             return new Students(key)
             .destroy()
@@ -43,4 +44,10 @@ exports.getStudents = () => {
                   console.log(err)
             })
                   }
+            }
+            exports.getStudentById=(id)=>{
+                  return Students.where(id).fetch()
+                  .then(student=>{
+                        return student
+                  })
             }

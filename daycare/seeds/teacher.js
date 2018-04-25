@@ -5,9 +5,12 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('teacher').insert([
-        { name: 'Alisha', room:1, initials:'AS', status:'out'},
-        { name: 'Alexis', room:2, initials:'AL', status:'out'},
-        { name: 'Kim', room:3, initials:'KH', status:'out'}
+        { name: 'Alisha', classroom_id:7, initials:'AS', status:'out'},
+        { name: 'Alexis', classroom_id:8, initials:'AL', status:'out'},
+        { name: 'Kim', classroom_id:9, initials:'KH', status:'out'}
       ]);
     });
 };
+
+
+

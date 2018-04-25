@@ -1,15 +1,20 @@
-const knexConfig = require('../knexfile')
+const knexConfig = require('../../knexfile')
 const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
 module.exports = (app) => {
-      const students = require('./controllers/studentController')
+      const students = require('../controllers/studentController')
 
       app.get('/studentList', (req, res) => {
             students.getStudents().then((students) => { res.send(students) })
       })
-      app.post('studentList', (req, res) => {
+      app.post('/studentList', (req, res) => {
             students.createStudent().then((student) => {
 
+            })
+      })
+      app.get('/studentList/:id',(req,res)=>{
+            students.getStudentById(req.params.id).then((student)=>{
+                  res.send(student)
             })
       })
       app.delete('/studentList/:id', (req, res) => {

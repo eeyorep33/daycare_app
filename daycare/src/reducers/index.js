@@ -1,5 +1,5 @@
 const initialState = {
-  students: [], teacher:[], report:[]
+  students: [], teachers:[], report:[{feeding:[],nap:[], diapering:[], playTime:[], meds:[],supplies:[],comment:[]}], classrooms:[]
 }
 
 const rootReducer = (state = initialState, action) => {

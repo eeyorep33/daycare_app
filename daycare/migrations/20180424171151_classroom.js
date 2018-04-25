@@ -4,7 +4,7 @@ exports.up = function (knex, Promise) {
         table.increments('id').primary();
         table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
         table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now());
-        table.integer('room').notNullable();
+        table.string('name').notNullable();
        
     })
 };
@@ -12,3 +12,8 @@ exports.up = function (knex, Promise) {
 exports.down = function (knex, Promise) {
     return knex.schema.dropTable('classroom') // drop table when reverting
 };
+     
+
+
+
+

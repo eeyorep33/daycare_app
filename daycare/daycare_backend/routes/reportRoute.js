@@ -1,8 +1,8 @@
-const knexConfig = require('../knexfile')
+const knexConfig = require('../../knexfile')
 const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
 module.exports = (app) => {
-      const report = require('./controllers/reportController')
+      const report = require('../controllers/reportController')
 
       app.post('/report', (req, res) => {
            report.createReport(req.body).then((report) => {

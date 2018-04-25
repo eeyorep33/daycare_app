@@ -13,7 +13,10 @@ class Student extends Component {
                   currentStudent: props.student
             };
       }
-
+getData=(id)=>{
+      axios.get('/getStudentData/'+ id, new Date().getDate())
+      .then()
+}
       checkIn(e, id) {
 
             const today = new Date();
@@ -30,15 +33,18 @@ class Student extends Component {
            // );
             axios.post('/report', newReport)
                   .then()
-
-
+            document.getElementById('diaperChangeLocation').innerHTML+= e.target.diaperingTime.value
+            document.getElementById('feedingTimeLocation').innerHTML=e.target.feedingTime.value
+            document.getElementById('medTimeLocation').innerHTML=e.target.medTime.value
       }
       render() {
+            let param = (this.props.match.params.id)
             const { match, location, report } = this.props;
+            {this.getData(param)}
            // const { name, status } = this.state.currentStudent;
             const format = 'h:mm a';
             const now = moment().hour(6).minute(30);
-            let param = (this.props.match.params.id)
+            
             return (<div>
                    <h1 className="studentName">Student Name</h1>                
                   <p className="status">Status:</p>
@@ -103,7 +109,7 @@ class Student extends Component {
                               </select>
                               <button className='checkIn btn'onClick={() => this.props.addDiapering()}>Add</button>
                               </div>
-                              <p className='checkIn'>mapped diaper changes here</p>
+                              <p className='checkIn' id='diaperChangeLocation'></p>
                         </div>
                         <div className='checkInDiv'>
                               <label className='add'>Add feeding:</label>
@@ -121,7 +127,7 @@ class Student extends Component {
                               <label className='checkIn'>Amount</label>
                               <input className='checkIn' type='text' name='amount' />
                               <button className='checkIn btn' onClick={() => this.props.addFeeding()}>Add</button>
-                              <p className='checkIn'>mapped feedings here</p>
+                              <p className='checkIn' id='feedingTimeLocation'></p>
                         </div>
                         <div className='checkInDiv'>
                               <label className='add'>Add play time: </label>
@@ -170,7 +176,7 @@ class Student extends Component {
                               <label className='checkIn'>Dosage</label>
                               <input className='checkIn' type='text' name='dosage' />
                               <button className='checkIn btn' onClick={() => this.props.addMeds()} type='submit'>Add</button>
-                              <p className='checkIn'>mapped meds here</p>
+                              <p className='checkIn' id='medTimeLocation'></p>
                         </div>
                         <div className='checkInDiv'>
                               <label className='add'>Add supplies:</label>
@@ -194,7 +200,15 @@ class Student extends Component {
 
 function mapStateToProps(state) {
       return {
-            report: state.report
+            report: state.report,
+            feeding:state.feeding,
+            diapering: state.diapering,
+            comment:state.comment,
+            supplies:state.supplies,
+            nap:state.nap,
+            playTime:state.playTime,
+            meds:state.meds
+
       };
 }
 export default connect(mapStateToProps)(Student);

@@ -5,20 +5,35 @@ import Home from './components/home'
 import Classroom from './components/classroom';
 import Teachers from './components/teachers'
 import Student from './components/students'
+import Report from './components/report'
+import ReportList from './components/reportList'
+import TeacherList from './components/teacherList'
 import axios from 'axios'
 
 class App extends Component {
-  componentDidMount(){
-    axios.get('/studentList')
-    .then(res=>{
-          this.setState({students:res.data})
-    })
-    axios.get('/teacherList')
-    .then(res=>{
-          this.setState({teachers:res.data})
-    })
-}
+  constructor(){
+    super()
+    this.state={
+      classrooms:[]
+    }
+  }
+  componentDidMount() {   
+    axios.get('http://localhost:8080/classroomList')
+      .then(res => {
+                this.setState({ classrooms: res.data })
+      })
+      .catch((error)=>{
+        console.log(error)
+      })
+    
+  }
   render() {
+    const getStudents=(room)=>{
+axios.get('/classroom/' + room)
+.then(res =>{
+  
+})
+    }
     let today = new Date()
     let date = today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear()
     return (
@@ -26,34 +41,25 @@ class App extends Component {
         <h1 className="title">Look What I Did Today</h1>
         <p> {date}</p>
         <div className="navBar">
-          <div className="nav">
-
-
-            <a className="btn dropdown-toggle navButtons" href="#" role="button" id="teachers" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Teachers
-                                    </a>
-
-            <div className="dropdown-menu" aria-labelledby="teachers">
-              <Link className="drop buttonText" to="/teacher/1">Teacher 1</Link>
-              <Link className="drop buttonText" to="/teacher/2">Teacher 2</Link>
-              <Link className="drop buttonText" to="/teacher/3">Teacher 3</Link>
-
-            </div>
-          </div>
+          <button><Link to='/'>Home</Link></button>
+         
           <div className="nav">
             <a className="btn dropdown-toggle navButtons" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Classroom
-                                    </a>
+              Classroom</a>
 
             <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <Link className="drop buttonText" to="/classroom/1">Classroom 1</Link>
-              <Link className="drop buttonText" to="/classroom/2">Classroom 2</Link>
-              <Link className="drop buttonText" to="/classroom/3">Classroom 3</Link>
-
+              {this.state.classrooms.map((room)=>
+                
+               <Link onClick={()=>this.getStudents(room.id)}className="drop buttonText" to={"/classroom/" + room.id}>{room.name} </Link>
+              )
+            }
+              
+             
             </div>
           </div>
-
+          <button><Link to='/reportList'>Reports</Link></button>
         </div>
+        
         <Switch>
           <Route path="/" exact render={(props) => (
             <Home {...props} />
@@ -61,13 +67,18 @@ class App extends Component {
           <Route path='/classroom/:id' render={(props) => (
             <Classroom {...props} />
           )} />
-          <Route path='/teachers/:id' render={(props) => (
+          <Route path='/teacher/:id' render={(props) => (
             <Teachers {...props} />
-            
           )} />
-          <Route path="/student/:id" render={(props)=>(
-                                   <Student {...props}/>)} />
-        </Switch>
+          <Route path="/student/:id" render={(props) => (
+            <Student {...props} />)} />
+          <Route path='/report/:id' render={(props) => (
+            <Report {...props} />)} />}
+            <Route path='reportList' render={(props) => (
+            <ReportList {...props} />)} />
+             <Route path='/teacherlist' render={(props) => (
+            <TeacherList {...props} />)} />}
+                   </Switch>
       </div>
     );
   }

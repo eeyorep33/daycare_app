@@ -56,3 +56,74 @@ knex(comment).insert([
 ])
 
       })
+     
+
+      exports.seed = function (knex, Promise) {
+        // Deletes ALL existing entries
+        return knex('report').del()
+          .then(function () {
+            // Inserts seed entries
+            return knex('report').insert([
+              {
+      
+                student_id: 1,
+                date: '02/06/18'
+      
+              },
+              {
+      
+                student_id: 2,
+                date: '02/08/18'
+      
+      
+              },
+              {
+      
+                student_id: 3,
+                date: '04/06/17'
+              }
+            ])
+      
+      
+      
+          })
+      
+        }
+        exports.seed = function(knex, Promise) {
+          // Deletes ALL existing entries
+          return knex('classroom').del()
+            .then(function () {
+              // Inserts seed entries
+              return knex('classroom').insert([
+                { name: ' classroom 1'},
+                { name: 'Classroom 2'},
+                { name: 'Classroom 3'},
+                {name:'Classroom 4'},
+                {name:'Classroom 5'}
+              ]);
+            });
+        };
+        
+      
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+
+
+
+
+
+
+

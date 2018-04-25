@@ -1,49 +1,58 @@
-import React, {Component} from 'react';
-import {Switch, Route, Link} from 'react-router-dom'
-import Student from './students'
+import React, { Component } from 'react';
+import { Switch, Route, Link } from 'react-router-dom'
+import { connect } from 'react-redux'; 
+
 
 
 class Classroom extends Component {
-      
-      render(){
-            
+
+      render() {
+
             const { match, location } = this.props
-           
-           
-           
 
-            return(
+
+
+
+            return (
                   <div>
+                        <p>Add classroom</p>
+                        <form>
+                         <label>Name</label> 
+                         <input type='text' name='className'/>
+                         <button type='submit'>Submit</button>    
+                        </form>
 
-                       <p>List of students in room that are links to student page</p>
-                       <p>Add Student</p>
-                       <form>
-                             <label>Name</label>
-                             <input type="text" name="name"/>
-                             <label>Room</label>
-                             <input type="text" name="room"/>
-                             <label>Email</label>
-                             <input type='email' name='email'/>                             
-                             </form>
-                            
-                             {/* {this.props.students.map((student)=>{
+                        {this.props.students.map((student)=>{
+                             <Link to={'/student/' + student.id}>{ student.name}</Link>
+                        })}
+                        <p>Add Student</p>
+                        <form>
+                              <label>Name</label>
+                              <input type="text" name="name" />
+                              <label>Email</label>
+                              <input type='email' name='email' />
+                              <button type='submit'>Submit</button>
+                        </form>
+
+                        {/* {this.props.students.map((student)=>{
                                    return <Link to={"student/" + student.id}>{student.name}</Link>
                              })} */}
 
-                             {/* // TODO = come back to react router issues with this */}
-                           <Switch> 
-                                   <Route path="/student/:id" render={(props)=>(
-                                    <Student {...props}  />)}/> */}
-                            </Switch>
+                        {/* // TODO = come back to react router issues with this */}
+                        {/* <Switch>
+                              <Route path="/student/:id" render={(props) => (
+                                    <Student {...props} />)} /> 
+                            </Switch> */}
 
-                           
-                        </div>
+
+                  </div>
             )
       }
 }
-// mapStateToProps=(state)=>{
-//       return {
-//        students:state.students     
-//       }
-// }
+const mapStateToProps=(state)=>{
+      return {
+       students:state.students, 
+       classrooms: state.classrooms    
+      }
+}
 export default Classroom

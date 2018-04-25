@@ -5,7 +5,7 @@ module.exports = {
   connection:process.env.DATABASE_URL ||{
     user:'postgres',
     password:'fergip33',
-    database:'daycare'
+    database:'dayCare'
   }
     
     

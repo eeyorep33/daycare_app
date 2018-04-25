@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
-import Classroom from './classroom';
-import Teachers from './teachers';
+
 
 
 class Home extends Component {

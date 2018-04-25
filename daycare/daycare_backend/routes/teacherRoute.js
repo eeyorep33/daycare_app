@@ -1,8 +1,8 @@
-const knexConfig = require('../knexfile')
+const knexConfig = require('../../knexfile')
 const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
 module.exports = (app) => {
-      const teachers = require('./controllers/teacherController')
+      const teachers = require('../controllers/teacherController')
 
       app.get('/teacherList', (req, res) => {
             teachers.getTeachers().then((teachers) => { res.send(teachers) })

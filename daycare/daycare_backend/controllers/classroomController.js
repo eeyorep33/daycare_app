@@ -1,46 +1,55 @@
-const knexConfig = require('../knexfile')
+const knexConfig = require('../../knexfile')
 const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
 const Classroom = bookshelf.Model.extend({
       tableName: 'classroom',
-      students: function() {
+      students: function () {
             return this.hasMany('Student')
-      },    
-      teacher: function(){
+      },
+      teacher: function () {
             return this.hasMany('Teacher')
-      }  
+      }
 })
 
-exports.getStudents = () => {
-      return Students.fetchAll()
+exports.getClassrooms = () => {
+      return Classroom.fetchAll()
             .then(result => {
-                  const students = result.models.map(student => {
-                        return student.attributes
+                  const classroom = result.models.map(classroom => {
+                        return classroom.attributes
+                        console.log(classroom.attributes)
                   })
                   return students
             })
             .catch(err => {
                   console.log(err)
             })
-            exports.createStudent=(student)=>{
-                  const newStudent= new Students(
-                  student)
-                  return newStudent.save()
-                  .then(student => {
-                        return student;
+      }
+      exports.getClassroomById = (id) => {
+            return Classroom.where(id).fetch({
+                  withRelated: ['student']
+            })
+                  .catch(err => {
+                        console.log(err)
+                  })
+      }
+      exports.createClassroom = (classroom) => {
+            const newClassroom = new Classroom(
+                  classroom)
+            return newClassroom.save()
+                  .then(classroom => {
+                        return classroom;
                   })
                   .catch(err => {
                         console.log(err)
                   })
       }
-      exports.deleteStudent=(key)=>{
-            return new Students(key)
-            .destroy()
-            .then(result=>{
-            
-            })
-            .catch(err=>{
-                  console.log(err)
-            })
-                  }
-            }
+      exports.deleteClassroom = (id) => {
+            return new Classroom(id)
+                  .destroy()
+                  .then(result => {
+
+                  })
+                  .catch(err => {
+                        console.log(err)
+                  })
+      }
