@@ -3,54 +3,43 @@ import TimePicker from 'rc-time-picker'
 import moment from 'moment';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus } from '../actions/index'
+//import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus } from '../actions/index'
 import axios from 'axios'
 
-class Student extends Component {
-      constructor(props) {
-            super(props);
-            this.state = {
-                  currentStudent: props.student
-            };
-      }
-getData=(id)=>{
-      axios.get('/getStudentData/'+ id, new Date().getDate())
-      .then()
-}
-      checkIn(e, id) {
 
+class Student extends Component {
+ findStudent=(id)=>{
+       console.log(id)
+       let studentDetails=this.props.students.find((student)=>{
+             return student.id==id
+       })
+       console.log(studentDetails)
+       return <div>
+       <h1 className="studentName">{studentDetails.name}</h1>
+       <p className="status">Status:{studentDetails.status}</p>
+       </div>
+ }
+
+      checkIn=(e, id)=> {
+e.preventDefault()
             const today = new Date();
             const date = today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear()
-            let newReport = {
-                  student_id: id, date, feeding: { time: e.target.feedingTime.value}, diapering: {
-                        time: e.target.diaperingTime.value}, meds: { time: e.target.medTime.value}
-            }
-            // this.setState({
-            //       currentStudent: { ...currentStudent, status: 'in' }
-            // }
+           
 
 
-           // );
-            axios.post('/report', newReport)
-                  .then()
-            document.getElementById('diaperChangeLocation').innerHTML+= e.target.diaperingTime.value
-            document.getElementById('feedingTimeLocation').innerHTML=e.target.feedingTime.value
-            document.getElementById('medTimeLocation').innerHTML=e.target.medTime.value
       }
       render() {
+            const { match, location } = this.props
             let param = (this.props.match.params.id)
-            const { match, location, report } = this.props;
-            {this.getData(param)}
-           // const { name, status } = this.state.currentStudent;
+           
             const format = 'h:mm a';
             const now = moment().hour(6).minute(30);
-            
+
             return (<div>
-                   <h1 className="studentName">Student Name</h1>                
-                  <p className="status">Status:</p>
+                  {this.findStudent(param)}
                   <div className="checkInDiv">
-                  <p className="status">Check-in</p>
-                  
+                        <p className="status">Check-in</p>
+
                         <label className="checkIn">Last Diaper Change</label>
                         <TimePicker
                               name='diaperingTime'
@@ -61,7 +50,7 @@ getData=(id)=>{
                               use12Hours
                               inputReadOnly
                         />
-                        <label  className="checkIn">Last Feeding</label>
+                        <label className="checkIn">Last Feeding</label>
                         <TimePicker
                               name='feedingTime'
                               showSecond={false}
@@ -71,7 +60,7 @@ getData=(id)=>{
                               use12Hours
                               inputReadOnly
                         />
-                        <label  className="checkIn">Last Medication</label>
+                        <label className="checkIn">Last Medication</label>
                         <TimePicker
                               name="medTime"
                               showSecond={false}
@@ -81,33 +70,33 @@ getData=(id)=>{
                               use12Hours
                               inputReadOnly
                         />
-                        <button className="checkIn btn"onClick={() => this.checkIn(param)}>Check-in</button>
+                        <button className="checkIn btn" onClick={() => this.checkIn(param)}>Check-in</button>
                   </div>
                   <div>
                         <div className='checkInDiv'>
                               <label className='add'>Add diaper change:</label>
                               <div className='centerDiv'>
-                              <label className='checkIn'>Time:</label>
-                              <TimePicker
-                                    showSecond={false}
-                                    defaultValue={now}
-                                    className="checkIn"
-                                    format={format}
-                                    use12Hours
-                                    inputReadOnly
-                              />
-                              <label className='checkIn'>B/W</label>
-                              <select className='checkIn'>
-                                    <option value='B'>B</option>
-                                    <option value='W'>W</option>
-                              </select>
-                              <label className='checkIn'>Initials:</label>
-                              <select className='checkIn'>
-                                    <option value='AL'>AL</option>
-                                    <option value='KH'>KH</option>
-                                    <option value='BF'>BF</option>
-                              </select>
-                              <button className='checkIn btn'onClick={() => this.props.addDiapering()}>Add</button>
+                                    <label className='checkIn'>Time:</label>
+                                    <TimePicker
+                                          showSecond={false}
+                                          defaultValue={now}
+                                          className="checkIn"
+                                          format={format}
+                                          use12Hours
+                                          inputReadOnly
+                                    />
+                                    <label className='checkIn'>B/W</label>
+                                    <select className='checkIn'>
+                                          <option value='B'>B</option>
+                                          <option value='W'>W</option>
+                                    </select>
+                                    <label className='checkIn'>Initials:</label>
+                                    <select className='checkIn'>
+                                          <option value='AL'>AL</option>
+                                          <option value='KH'>KH</option>
+                                          <option value='BF'>BF</option>
+                                    </select>
+                                    <button className='checkIn btn' onClick={() => this.props.addDiapering()}>Add</button>
                               </div>
                               <p className='checkIn' id='diaperChangeLocation'></p>
                         </div>
@@ -123,7 +112,7 @@ getData=(id)=>{
                                     inputReadOnly
                               />
                               <label className="checkIn">Food type</label>
-                              <input  className='checkIn'type='text' name='food' />
+                              <input className='checkIn' type='text' name='food' />
                               <label className='checkIn'>Amount</label>
                               <input className='checkIn' type='text' name='amount' />
                               <button className='checkIn btn' onClick={() => this.props.addFeeding()}>Add</button>
@@ -157,7 +146,7 @@ getData=(id)=>{
                                     use12Hours
                                     inputReadOnly
                               />
-                              <button className='checkIn btn'onClick={() => this.props.addNap()} type='submit'>Add</button>
+                              <button className='checkIn btn' onClick={() => this.props.addNap()} type='submit'>Add</button>
                               <p className='checkIn'>mapped naps here</p>
                         </div>
                         <div className='checkInDiv'>
@@ -198,17 +187,17 @@ getData=(id)=>{
       }
 }
 
-function mapStateToProps(state) {
-      return {
-            report: state.report,
-            feeding:state.feeding,
-            diapering: state.diapering,
-            comment:state.comment,
-            supplies:state.supplies,
-            nap:state.nap,
-            playTime:state.playTime,
-            meds:state.meds
+// function mapStateToProps(state) {
+//       return {
+//             report: state.report,
+//             feeding: state.feeding,
+//             diapering: state.diapering,
+//             comment: state.comment,
+//             supplies: state.supplies,
+//             nap: state.nap,
+//             playTime: state.playTime,
+//             meds: state.meds
 
-      };
-}
-export default connect(mapStateToProps)(Student);
+//       };
+// }
+export default Student;

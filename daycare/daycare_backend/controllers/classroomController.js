@@ -4,10 +4,10 @@ const bookshelf = require('bookshelf')(knex)
 const Classroom = bookshelf.Model.extend({
       tableName: 'classroom',
       students: function () {
-            return this.hasMany('Student')
+            return this.hasMany(Student)
       },
       teacher: function () {
-            return this.hasMany('Teacher')
+            return this.hasMany(Teacher)
       }
 })
 
@@ -18,15 +18,22 @@ exports.getClassrooms = () => {
                         return classroom.attributes
                         console.log(classroom.attributes)
                   })
-                  return students
+                  return classroom
             })
             .catch(err => {
                   console.log(err)
             })
       }
       exports.getClassroomById = (id) => {
-            return Classroom.where(id).fetch({
+                           
+            
+                       return Classroom.where(id).fetch({
                   withRelated: ['student']
+                 
+            })
+            .then(classroom =>{
+                  console.log(classroom.attributes)
+                  return classroom
             })
                   .catch(err => {
                         console.log(err)

@@ -3,16 +3,16 @@ const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
 const Student = bookshelf.Model.extend({
       tableName: 'student',
-      classroom: function() {
+      classroom: function () {
             return this.belongsTo('Classroom')
       },
-      teacher: function() {
+      teacher: function () {
             return this.belongsToMany('Teacher')
       }
 })
 
 exports.getStudents = () => {
-      return Students.fetchAll()
+      return Student.fetchAll()
             .then(result => {
                   const students = result.models.map(student => {
                         return student.attributes
@@ -22,10 +22,11 @@ exports.getStudents = () => {
             .catch(err => {
                   console.log(err)
             })
-            exports.createStudent=(student)=>{
-                  const newStudent= new Students(
+exports.makeStudent = (student) => {
+            console.log('function accessed')
+            const newStudent = new Student(
                   student)
-                  return newStudent.save()
+            return newStudent.save()
                   .then(student => {
                         return student;
                   })
@@ -33,21 +34,25 @@ exports.getStudents = () => {
                         console.log(err)
                   })
       }
-      
-      exports.deleteStudent=(key)=>{
+
+ exports.deleteStudent = (key) => {
             return new Students(key)
-            .destroy()
-            .then(result=>{
-            
-            })
-            .catch(err=>{
-                  console.log(err)
-            })
-                  }
-            }
-            exports.getStudentById=(id)=>{
-                  return Students.where(id).fetch()
-                  .then(student=>{
-                        return student
+                  .destroy()
+                  .then(result => {
+
                   })
-            }
+                  .catch(err => {
+                        console.log(err)
+                  })
+      }
+}
+exports.getStudentByClass = (id) => {
+      return Student.where(id).fetchAll()
+            .then(result => {
+                  const students = result.models.map(student => {
+                        return student.attributes
+                  })
+                  return students
+
+            })
+}

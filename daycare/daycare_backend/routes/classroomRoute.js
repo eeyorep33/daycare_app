@@ -5,14 +5,9 @@ module.exports = (app) => {
       const classroom = require('../controllers/classroomController')
 
       app.get('/classroomList', (req, res) => {
-            console.log('req received')
             classroom.getClassrooms().then((classrooms) => { res.send(classrooms) })
       })
-      app.get('/classroom/:id', (req,res)=>{
-            classroom.getClassroomById(req.params.id).then((classroom)=>{
-                  res.send(classrooms)
-            })
-      })
+      
       app.post('/classroomList', (req, res) => {
             classroom.createClassroom().then((classroom) => {
 

@@ -8,19 +8,16 @@ class TeacherList extends Component {
             return (
                   <div>
                         <p>teachers</p>
-                        <form>
-                              <label>Add teacher</label>
-                              <label>Name</label>
-                              <input type='text' name='teacherName'/>
-                              <label>Room</label>
-                              <input type='text' name='teacherRoom'/>
-                              <label>Initials</label>
-                              <input type='text' name='initials'/>
-                              <button type='submit'>Submit</button>
-                        </form>
+                        
+                        {this.props.teachers.map((teacher)=>
+                        <div>
+                             {teacher.name} <p>Status:{teacher.status}</p>
+                             <button onClick={()=>this.props.teacherCheckIn(teacher.id)}>Check-in</button>
+                        </div>)}
                         <form>
                               <label>Delete a teacher</label>
                               <label>Name</label>
+                              <input type="text" name='deleteTeacher'/>
                               <button type='submit'>Submit </button>
                         </form>
                   </div>

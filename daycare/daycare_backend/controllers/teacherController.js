@@ -24,6 +24,7 @@ exports.getTeachers = () => {
                   console.log(err)
             })
             exports.createTeacher=(teacher)=>{
+                  console.log('function accessed')
                   const newTeacher= new Teacher(
                   teacher)
                   return newTeacher.save()

@@ -8,8 +8,10 @@ module.exports = (app) => {
             teachers.getTeachers().then((teachers) => { res.send(teachers) })
       })
       app.post('/teacherList', (req, res) => {
-            teahers.createTeacher().then((teacher) => {
-
+            console.log('req received')
+            console.log(req.body)
+            teachers.createTeacher(req.body).then((teacher) => {
+                  res.send('teacher created')
             })
       })
       app.delete('/teacherList/:id', (req, res) => {

@@ -7,19 +7,15 @@ module.exports = (app) => {
       app.get('/studentList', (req, res) => {
             students.getStudents().then((students) => { res.send(students) })
       })
-      app.post('/studentList', (req, res) => {
-            students.createStudent().then((student) => {
-
-            })
-      })
-      app.get('/studentList/:id',(req,res)=>{
-            students.getStudentById(req.params.id).then((student)=>{
-                  res.send(student)
-            })
-      })
+     
       app.delete('/studentList/:id', (req, res) => {
             students.deletestudent(req.params.id).then((student) => {
                   res.send('Deleted')
+            })
+      })
+      app.post('/studentList', (req,res) =>{
+            students.makeStudent(req.body).then((students)=>{
+                  res.send(students)
             })
       })
 

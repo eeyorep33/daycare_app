@@ -5,44 +5,49 @@ import { connect } from 'react-redux';
 
 
 class Classroom extends Component {
-
+     
+      
       render() {
-
+            let param = (this.props.match.params.id)
             const { match, location } = this.props
-
-
+let filteredList=this.props.students.filter((student)=>{
+      return student.classroom_id==param
+})
+let classroomName=this.props.classroom.find((room)=>{
+      return room.id==param
+})
+{console.log(filteredList)}
 
 
             return (
                   <div>
-                        <p>Add classroom</p>
-                        <form>
-                         <label>Name</label> 
-                         <input type='text' name='className'/>
-                         <button type='submit'>Submit</button>    
-                        </form>
+                       <h1 className='classroomTitle'> {classroomName.name}</h1>
 
-                        {this.props.students.map((student)=>{
-                             <Link to={'/student/' + student.id}>{ student.name}</Link>
-                        })}
-                        <p>Add Student</p>
-                        <form>
+                       
+                        
+                        <form onSubmit={(e)=>this.props.addStudent(e,param)}className='checkInDiv topmar'>
+                        <label className='add'>Add Student</label>
                               <label>Name</label>
-                              <input type="text" name="name" />
-                              <label>Email</label>
-                              <input type='email' name='email' />
-                              <button type='submit'>Submit</button>
+                              <input className='checkIn'type="text" name="name" />
+                              <label className='checkIn'>Email</label>
+                              <input className='checkIn' type='email' name='email' />
+                              <button className='checkIn btn' type='submit'>Submit</button>
                         </form>
-
-                        {/* {this.props.students.map((student)=>{
-                                   return <Link to={"student/" + student.id}>{student.name}</Link>
-                             })} */}
-
-                        {/* // TODO = come back to react router issues with this */}
-                        {/* <Switch>
-                              <Route path="/student/:id" render={(props) => (
-                                    <Student {...props} />)} /> 
-                            </Switch> */}
+                        <form onSubmit={(e)=>this.props.addTeacher(e,param)}className='checkInDiv topmar'>
+                        <label className='add'>Add Teacher</label>
+                              <label>Name</label>
+                              <input className='checkIn'type="text" name="teacherName" />
+                              <label className='checkIn'>Initials</label>
+                              <input className='checkIn' type='text' name='initials' />
+                              <button className='checkIn btn' type='submit'>Submit</button>
+                        </form>
+                        {filteredList.map((student)=>
+                        <div className='studentDiv'>
+                             <Link className='studentList'to={'/student/' + student.id}>{ student.name}</Link>
+                             </div>
+                        )}
+                      
+                        
 
 
                   </div>
