@@ -9,14 +9,15 @@ module.exports = (app) => {
       })
      
       app.delete('/studentList/:id', (req, res) => {
-            students.deletestudent(req.params.id).then((student) => {
+            console.log('req received')
+            students.deleteStudent(req.params.id).then((student) => {
                   res.send('Deleted')
             })
       })
-      app.post('/studentList', (req,res) =>{
-            students.makeStudent(req.body).then((students)=>{
-                  res.send(students)
-            })
-      })
-
+      app.post('/studentList', (req, res) => {  
+            console.log(req.body)    
+            students.createStudent(req.body)
+            
+            
+                  })
 } 

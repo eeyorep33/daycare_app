@@ -17,3 +17,7 @@
 .studentList{font-size: 40px; margin-left:10px}
 .studentDiv{border: 2px solid black}
 .classroomTitle{text-align:center; margin-top:20px}
+.date{font-family:'Henny Penny', cursive;color:turquoise; margin-left:15px; margin-bottom:10px; text-shadow:2px 2px #EFEB8B}
+.addClass{float:right; margin-top: 8px; margin-right:10px}
+.addButton{background-color:turquoise}
+.deleteStudent{float:right; margin-right:10px; margin-top:14px}

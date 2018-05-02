@@ -3,11 +3,11 @@ const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
 const Teacher = bookshelf.Model.extend({
       tableName: 'teacher',
-      classroom: function(){
+      classroom: function () {
             return belongsTo('Classroom')
 
       },
-      students: function(){
+      students: function () {
             return hasMany('Student')
       }
 })
@@ -23,26 +23,28 @@ exports.getTeachers = () => {
             .catch(err => {
                   console.log(err)
             })
-            exports.createTeacher=(teacher)=>{
-                  console.log('function accessed')
-                  const newTeacher= new Teacher(
-                  teacher)
-                  return newTeacher.save()
-                  .then(teacher => {
-                        return teacher;
-                  })
-                  .catch(err => {
-                        console.log(err)
-                  })
-      }   
-      exports.deleteTeacher=(key)=>{
-return new Teacher(key)
-.destroy()
-.then(result=>{
 
-})
-.catch(err=>{
-      console.log(err)
-})
-      }
+
+}
+exports.deleteTeacher = (key) => {
+      return new Teacher(key)
+            .destroy()
+            .then(result => {
+
+            })
+            .catch(err => {
+                  console.log(err)
+            })
+}
+exports.createTeacher = (teacher) => {
+      console.log('function accessed')
+      const newTeacher = new Teacher(
+            teacher)
+      return newTeacher.save()
+            .then(teacher => {
+                  return teacher;
+            })
+            .catch(err => {
+                  console.log(err)
+            })
 }

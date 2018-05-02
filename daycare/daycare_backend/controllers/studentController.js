@@ -22,30 +22,10 @@ exports.getStudents = () => {
             .catch(err => {
                   console.log(err)
             })
-exports.makeStudent = (student) => {
-            console.log('function accessed')
-            const newStudent = new Student(
-                  student)
-            return newStudent.save()
-                  .then(student => {
-                        return student;
-                  })
-                  .catch(err => {
-                        console.log(err)
-                  })
       }
+     
 
- exports.deleteStudent = (key) => {
-            return new Students(key)
-                  .destroy()
-                  .then(result => {
-
-                  })
-                  .catch(err => {
-                        console.log(err)
-                  })
-      }
-}
+      
 exports.getStudentByClass = (id) => {
       return Student.where(id).fetchAll()
             .then(result => {
@@ -54,5 +34,28 @@ exports.getStudentByClass = (id) => {
                   })
                   return students
 
+            })
+}
+exports.createStudent = (student) => {
+      console.log('function accessed')
+      const newStudent = new Student(
+            student)
+      return newStudent.save()
+            .then(student => {
+                  return student;
+            })
+            .catch(err => {
+                  console.log(err)
+            })
+}
+exports.deleteStudent = (key) => {
+      console.log(key)
+      return new Student({id:parseInt(key)})
+            .destroy()
+            .then(result => {
+
+            })
+            .catch(err => {
+                  console.log(err)
             })
 }

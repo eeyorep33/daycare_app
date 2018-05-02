@@ -7,7 +7,7 @@ class TeacherList extends Component {
       render() {
             return (
                   <div>
-                        <p>teachers</p>
+                        
                         
                         {this.props.teachers.map((teacher)=>
                         <div>

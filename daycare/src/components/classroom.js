@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'; 
+import axios from 'axios'
 
 
 
 class Classroom extends Component {
      
-      
       render() {
             let param = (this.props.match.params.id)
             const { match, location } = this.props
@@ -16,11 +16,12 @@ let filteredList=this.props.students.filter((student)=>{
 let classroomName=this.props.classroom.find((room)=>{
       return room.id==param
 })
-{console.log(filteredList)}
+
 
 
             return (
                   <div>
+                        {/* {this.props.getStudents(param)} */}
                        <h1 className='classroomTitle'> {classroomName.name}</h1>
 
                        
@@ -44,6 +45,7 @@ let classroomName=this.props.classroom.find((room)=>{
                         {filteredList.map((student)=>
                         <div className='studentDiv'>
                              <Link className='studentList'to={'/student/' + student.id}>{ student.name}</Link>
+                             <button onClick={()=>this.props.deleteStudent(student.id)}className='deleteStudent btn'>Delete Student</button>
                              </div>
                         )}
                       
