@@ -19,15 +19,9 @@ class Student extends Component {
                   <p className="status">Status:{studentDetails.status}</p>
             </div>
       }
+      
 
-      checkIn = (e, id) => {
-            e.preventDefault()
-            const today = new Date();
-            const date = today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear()
-
-
-
-      }
+     
       render() {
             const { match, location } = this.props
             let param = (this.props.match.params.id)
@@ -80,6 +74,7 @@ class Student extends Component {
                               <div className='centerDiv'>
                                     <label className='checkIn'>Time:</label>
                                     <TimePicker
+                                          name='diapertime'
                                           showSecond={false}
                                           defaultValue={now}
                                           className="checkIn"
@@ -88,15 +83,17 @@ class Student extends Component {
                                           inputReadOnly
                                     />
                                     <label className='checkIn'>B/W</label>
-                                    <select className='checkIn'>
+                                    <select className='checkIn' name='diaperType'>
                                           <option value='B'>B</option>
                                           <option value='W'>W</option>
                                     </select>
                                     <label className='checkIn'>Initials:</label>
                                     <select className='checkIn'>
-                                          <option value='AL'>AL</option>
-                                          <option value='KH'>KH</option>
-                                          <option value='BF'>BF</option>
+                                    {this.props.teacherList.map((teacher)=>{
+                                     <option value={teacher.name}>{teacher.name}</option>
+                                    })}
+                                         
+                                         
                                     </select>
                                     <button className='checkIn btn' onClick={(e) => this.props.addDiapering(e,report_id)}>Add</button>
                               </div>
@@ -106,6 +103,7 @@ class Student extends Component {
                               <label className='add'>Add feeding:</label>
                               <label className='checkIn'>Time:</label>
                               <TimePicker
+                                    name='feedingtime'
                                     showSecond={false}
                                     defaultValue={now}
                                     className="checkIn"
@@ -132,6 +130,7 @@ class Student extends Component {
                               <label className='add'>Add nap:</label>
                               <label className='checkIn'>Start time</label>
                               <TimePicker
+                                    name='napStartTime'
                                     showSecond={false}
                                     defaultValue={now}
                                     className="checkIn"
@@ -141,6 +140,7 @@ class Student extends Component {
                               />
                               <label className='checkIn'>Stop time</label>
                               <TimePicker
+                                    name='napStopTime'
                                     showSecond={false}
                                     defaultValue={now}
                                     className="checkIn"
@@ -155,7 +155,8 @@ class Student extends Component {
                               <label className='add'>Add meds:</label>
                               <label className='checkIn'>Time:</label>
                               <TimePicker
-                                    showSecond={false}
+                                    name='medicinetime'
+                                   showSecond={false}
                                     defaultValue={now}
                                     className="checkIn"
                                     format={format}

@@ -27,7 +27,8 @@ exports.getTeachers = () => {
 
 }
 exports.deleteTeacher = (key) => {
-      return new Teacher(key)
+      console.log('fuction accessed')
+      return new Teacher({id:parseInt(key)})
             .destroy()
             .then(result => {
 

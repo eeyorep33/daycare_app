@@ -15,6 +15,8 @@ module.exports = (app) => {
             })
       })
       app.delete('/teacherList/:id', (req, res) => {
+            console.log('req received')
+            console.log(req.params.id)
             teachers.deleteTeacher(req.params.id).then((teacher) => {
                   res.send('Deleted')
             })

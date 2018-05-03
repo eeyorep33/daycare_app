@@ -14,7 +14,7 @@ class TeacherList extends Component {
                              {teacher.name} <p>Status:{teacher.status}</p>
                              <button onClick={()=>this.props.teacherCheckIn(teacher.id)}>Check-in</button>
                         </div>)}
-                        <form>
+                        <form onSubmit={(e)=>this.props.deleteTeacher(e)}>
                               <label>Delete a teacher</label>
                               <label>Name</label>
                               <input type="text" name='deleteTeacher'/>

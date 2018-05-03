@@ -9,6 +9,11 @@ import Report from './components/report'
 import ReportList from './components/reportList'
 import TeacherList from './components/teacherList'
 import axios from 'axios'
+import {connect} from 'react-redux'
+import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus, getClassroomList, getStudentList, getTeacherList } from './actions/index'
+let today = new Date()
+let date = today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear()
+const mapDispatchToProps={getStudentList}
 
 class App extends Component {
   constructor() {
@@ -17,7 +22,7 @@ class App extends Component {
       classrooms: [],
       students: [],
       teachers: [],
-      reports: [],
+      report: [],
       feeding: [],
       nap: [],
       diapering: [],
@@ -35,13 +40,13 @@ class App extends Component {
       .catch((error) => {
         console.log(error)
       })
-    axios.get('http://localhost:8080/studentList')
-      .then(res => {
-        this.setState({ students: res.data })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    // axios.get('http://localhost:8080/studentList')
+    //   .then(res => {
+    //     this.setState({ students: res.data })
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //   })
     axios.get('http://localhost:8080/teacherList')
       .then(res => {
         this.setState({ teachers: res.data })
@@ -49,58 +54,66 @@ class App extends Component {
       .catch((error) => {
         console.log(error)
       })
+      
+       { this.props.dispatch(getStudentList) }  
+     
   }
-  getStudents=(id)=>{
-    axios.get('http://localhost:8080/classroomList/' +id)
-    .then(res => {
-      this.setState({ students: res.data })
-    })
-    .catch((error) => {
-      console.log(error)
-    }) 
+findReport=(id, dt)=>{
+let studentId=id
+let todayDate=dt
+
 }
-  addFeeding=(e,id)=>{
-e.preventDefault()
-let time=e.target.feedingtime.value
-let food= e.target.food.value
-let amount= e.target.amount.value
-let feeding={time:time, food:food, amount:amount, report_id:id}
+  getStudents = (id) => {
+    axios.get('http://localhost:8080/classroomList/' + id)
+      .then(res => {
+        this.setState({ students: res.data })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
-  addDiapering=(e,id)=>{
-e.preventDefault()
-let time= e.target.diapertime.value
-let type= e.target.type.value
-let initials=e.target.initials.value
-let diapering={time:time, type:type, initials:initials, report_id:id}
+  addFeeding = (e, id) => {
+    e.preventDefault()
+    let time = e.target.feedingtime.value
+    let food = e.target.food.value
+    let amount = e.target.amount.value
+    let feeding = { time: time, food: food, amount: amount, report_id: id }
   }
-  addNap=(e,id)=>{
-e.preventDefault()
-let startTime=e.target.startTime.value
-let stopTime=e.target.stopTime.value
-let nap={startTime:startTime, stopTime:stopTime, report_id:id}
+  addDiapering = (e, id) => {
+    e.preventDefault()
+    let time = e.target.diapertime.value
+    let type = e.target.type.value
+    let initials = e.target.initials.value
+    let diapering = { time: time, type: type, initials: initials, report_id: id }
   }
-  addMeds=(e,id)=>{
-e.preventDefault()
-let time=e.target.medTime.value
-let name=e.target.medName.value
-let dosage=e.target.dosage.value
-let meds={time:time, name:name, amount:dosage, report_id:id}
+  addNap = (e, id) => {
+    e.preventDefault()
+    let startTime = e.target.startTime.value
+    let stopTime = e.target.stopTime.value
+    let nap = { startTime: startTime, stopTime: stopTime, report_id: id }
   }
-  addPlayTime=(e,id)=>{
-e.preventDefault()
-let playType=e.target.playType.value
-let activity=e.target.activity.value
-let playTime={type:playType, activity:activity, report_id:id}
+  addMeds = (e, id) => {
+    e.preventDefault()
+    let time = e.target.medTime.value
+    let name = e.target.medName.value
+    let dosage = e.target.dosage.value
+    let meds = { time: time, name: name, amount: dosage, report_id: id }
   }
-  addComments=(e,id)=>{
-e.preventDefault()
-let comment=e.target.comments.value
-let comments={comment:comment, report_id:id}
+  addPlayTime = (e, id) => {
+    e.preventDefault()
+    let playType = e.target.playType.value
+    let activity = e.target.activity.value
+    let playTime = { type: playType, activity: activity, report_id: id }
   }
-  addSupplies=(e,id)=>{
-e.preventDefault()
-let supply=e.target.supplies.value
-let supplies={supply_item:supply, report_id:id}
+  addComments = (e, id) => {
+    e.preventDefault()
+    let comment = e.target.comments.value
+    let comments = { comment: comment, report_id: id }
+  }
+  addSupplies = (e, id) => {
+    e.preventDefault()
+    let supply = e.target.supplies.value
+    let supplies = { supply_item: supply, report_id: id }
   }
   teacherCheckIn = (id) => {
     let teacherStatus = this.state.teachers.find((teacher) => {
@@ -109,18 +122,16 @@ let supplies={supply_item:supply, report_id:id}
     teacherStatus.status = 'in'
     this.setState({ teachers: teacherStatus.status })
   }
-  studentCheckIn=(e,id)=>{
-e.preventDefault()
-let studentId=id
-let feeding=e.target.feedingTime.value
-let diaper=e.target.diaperingTime.value
-let meds=e.target.medTime.value
-console.log(studentId)
-console.log(diaper)
+  studentCheckIn = (e, id) => {
+    e.preventDefault()
+    let studentId = id
+    let feeding = e.target.feedingTime.value
+    let diaper = e.target.diaperingTime.value
+    let meds = e.target.medTime.value
+    let report = { student_id: studentId, date: date }
   }
   addClassroom = (e) => {
     e.preventDefault()
-    console.log('front-end accessed')
     let newClass = { name: e.target.addClass.value }
     axios.post('http://localhost:8080/classroomList', newClass)
     e.target.addClass.value = ''
@@ -153,11 +164,8 @@ console.log(diaper)
         this.setState({ students: res.data })
       })
   }
-  deleteStudent=(id)=>{
-    console.log('function accessed')
-console.log(id)
-    
-    axios.delete('http://localhost:8080/studentList/'+id)
+  deleteStudent = (id) => {
+    axios.delete('http://localhost:8080/studentList/' + id)
   }
   addTeacher = (e, room) => {
     e.preventDefault()
@@ -173,25 +181,26 @@ console.log(id)
     e.target.teacherName.value = ''
     e.target.initials.value = ''
   }
-  deleteTeacher=(id)=>{
-let deletedTeacher=this.state.teachers.find((teacher)=>{
-  return teacher.id==id
-})
-axios.delete('http://localhost:8080/teacherList/'+deletedTeacher)
+  deleteTeacher = (e) => {
+    e.preventDefault()
+    let deletedTeacher = e.target.deleteTeacher.value
+    let deleted = this.state.teachers.find((teacher) => {
+      return teacher.name == deletedTeacher
+    })
+    axios.delete('http://localhost:8080/teacherList/' + deleted.id)
   }
-  
+
 
   render() {
-    let today = new Date()
-    let date = today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear()
+
     return (
       <div>
         <h1 className="title">Look What I Did Today</h1>
         <h1 className='date'> {date}</h1>
         <div className="navBar">
           <button className='navButtons btn'>
-            <Link className='buttonText' to='/'>Home</Link
-            ></button>
+            <Link className='buttonText' to='/'>Home</Link>
+          </button>
           <div className="nav">
             <a className="btn dropdown-toggle navButtons"
               href="#" role="button"
@@ -233,17 +242,21 @@ axios.delete('http://localhost:8080/teacherList/'+deletedTeacher)
               addStudent={this.addStudent}
               classroom={this.state.classrooms}
               addTeacher={this.addTeacher}
-              getStudents={this.getStudents} 
-              deleteStudent={this.deleteStudent}/>
+              getStudents={this.getStudents}
+              deleteStudent={this.deleteStudent}
+               />
           )} />
           <Route path='/teacher/:id' render={(props) => (
-            <Teachers {...props} />
+            <Teachers {...props}
+              deleteTeacher={this.deleteTeacher} />
           )} />
           <Route path="/student/:id" render={(props) => (
             <Student {...props}
-              students={this.state.students} 
-              checkIn={this.studentCheckIn}/>)}
-            studentDetails={this.studentDetails} />
+              students={this.state.students}
+              checkIn={this.studentCheckIn} />)}
+            studentDetails={this.studentDetails}
+            teacherList={this.state.teachers}
+            reportNumber={this.state.report} />
           <Route path='/report/:id' render={(props) => (
             <Report {...props} />)} />}
             <Route path='reportList' render={(props) => (
@@ -251,7 +264,7 @@ axios.delete('http://localhost:8080/teacherList/'+deletedTeacher)
           <Route path='/teacherlist' render={(props) => (
             <TeacherList
               teachers={this.state.teachers}
-              teacherCheckIn={this.teacherCheckIn}          
+              teacherCheckIn={this.teacherCheckIn}
               deleteTeacher={this.deleteTeacher}
               {...props} />)} />}
         </Switch>
@@ -259,5 +272,9 @@ axios.delete('http://localhost:8080/teacherList/'+deletedTeacher)
     );
   }
 }
+const mapStateToProps=(state)=>{
+  classrooms:state.classrooms
+}
 
-export default App;
+
+export default connect(mapDispatchToProps, mapStateToProps)(App);

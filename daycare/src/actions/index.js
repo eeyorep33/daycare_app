@@ -157,5 +157,36 @@ export const removeFromClassList=(classroom)=>{
     })
   }
 }
+export const getStudents= students=>({
+  type:'GET_STUDENTS', students
+})
+export  const getStudentList=()=>{
+  return(dispatch)=>{
+    return axios.get('/studentList')
+    .then(response=>{dispatch(getStudents(response.data))})
+  }
+}
+export const getTeachers= teachers =>({
+  type:'GET_TEACHERS', teachers
+})
+export const getTeacherList=()=>{
+  return(dispatch)=>{
+    return axios.get('/teacherList')
+    .then(response=>{
+      dispatch(getTeachers(response.data))
+    })
+  }
+}
+export const getClassrooms=classroom=>({
+type:'GET_CLASSROOMS', classroom
+})
+export const getClassroomList=()=>{
+  return(dispatch)=>{
+    return axios.get('/classroomList')
+    .then(response=>{
+      dispatch(getClassrooms(response.data))
+    })
+  }
+}
 
 

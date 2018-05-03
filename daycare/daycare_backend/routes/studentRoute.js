@@ -10,6 +10,7 @@ module.exports = (app) => {
      
       app.delete('/studentList/:id', (req, res) => {
             console.log('req received')
+            console.log(req.params.id)
             students.deleteStudent(req.params.id).then((student) => {
                   res.send('Deleted')
             })

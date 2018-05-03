@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'; 
 import axios from 'axios'
-
+import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus } from '../actions/index'
 
 
 class Classroom extends Component {
@@ -16,6 +16,7 @@ let filteredList=this.props.students.filter((student)=>{
 let classroomName=this.props.classroom.find((room)=>{
       return room.id==param
 })
+
 
 
 
@@ -44,7 +45,7 @@ let classroomName=this.props.classroom.find((room)=>{
                         </form>
                         {filteredList.map((student)=>
                         <div className='studentDiv'>
-                             <Link className='studentList'to={'/student/' + student.id}>{ student.name}</Link>
+                             <Link className='studentList'to={'/student/' + student.id} onCick={()=>this.findReport(student.id)}>{ student.name}</Link>
                              <button onClick={()=>this.props.deleteStudent(student.id)}className='deleteStudent btn'>Delete Student</button>
                              </div>
                         )}
