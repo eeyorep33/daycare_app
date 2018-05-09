@@ -18,7 +18,7 @@ module.exports = (app) => {
       app.post('/studentList', (req, res) => {  
             console.log(req.body)    
             students.createStudent(req.body)
-            
+            .then((student)=>{res.send(student.attributes)})
             
                   })
 } 

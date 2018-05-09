@@ -3,7 +3,7 @@ import TimePicker from 'rc-time-picker'
 import moment from 'moment';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-//import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus } from '../actions/index'
+import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus, getClassroomList, getStudentList, getTeacherList } from '../actions/index'
 import axios from 'axios'
 
 
@@ -89,8 +89,8 @@ class Student extends Component {
                                     </select>
                                     <label className='checkIn'>Initials:</label>
                                     <select className='checkIn'>
-                                    {this.props.teacherList.map((teacher)=>{
-                                     <option value={teacher.name}>{teacher.name}</option>
+                                                                        {/* {this.props.teachers.map((teacher)=>{
+                                     <option value={teacher.name}>{teacher.name}</option> */}
                                     })}
                                          
                                          

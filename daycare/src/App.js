@@ -40,13 +40,13 @@ class App extends Component {
       .catch((error) => {
         console.log(error)
       })
-    // axios.get('http://localhost:8080/studentList')
-    //   .then(res => {
-    //     this.setState({ students: res.data })
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
+    axios.get('http://localhost:8080/studentList')
+      .then(res => {
+        this.setState({ students: res.data })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
     axios.get('http://localhost:8080/teacherList')
       .then(res => {
         this.setState({ teachers: res.data })
@@ -55,7 +55,7 @@ class App extends Component {
         console.log(error)
       })
       
-       { this.props.dispatch(getStudentList) }  
+        
      
   }
 findReport=(id, dt)=>{
@@ -134,6 +134,11 @@ let todayDate=dt
     e.preventDefault()
     let newClass = { name: e.target.addClass.value }
     axios.post('http://localhost:8080/classroomList', newClass)
+        .then(res=>{
+          console.log(res.data)
+         
+          this.setState({classrooms:[...this.state.classrooms, res.data]})
+        })
     e.target.addClass.value = ''
   }
   deleteClassroom = (e) => {
@@ -161,7 +166,7 @@ let todayDate=dt
     e.target.email.value = ''
     axios.get('http://localhost:8080/studentList')
       .then(res => {
-        this.setState({ students: res.data })
+        this.setState({ students:[...this.state.students,res.data] })
       })
   }
   deleteStudent = (id) => {
@@ -178,6 +183,9 @@ let todayDate=dt
       status: 'out'
     }
     axios.post('http://localhost:8080/teacherList', newTeacher)
+    .then(res=>{
+      this.setState({teachers:[...this.state.teachers, res.data]})
+    })
     e.target.teacherName.value = ''
     e.target.initials.value = ''
   }
@@ -244,6 +252,7 @@ let todayDate=dt
               addTeacher={this.addTeacher}
               getStudents={this.getStudents}
               deleteStudent={this.deleteStudent}
+              teacherList={this.state.teachers}
                />
           )} />
           <Route path='/teacher/:id' render={(props) => (
@@ -255,7 +264,7 @@ let todayDate=dt
               students={this.state.students}
               checkIn={this.studentCheckIn} />)}
             studentDetails={this.studentDetails}
-            teacherList={this.state.teachers}
+            teachers={this.state.teachers}
             reportNumber={this.state.report} />
           <Route path='/report/:id' render={(props) => (
             <Report {...props} />)} />}
@@ -272,9 +281,9 @@ let todayDate=dt
     );
   }
 }
-const mapStateToProps=(state)=>{
-  classrooms:state.classrooms
-}
+// const mapStateToProps=(state)=>{
+//   classrooms:state.classrooms
+// }
 
 
-export default connect(mapDispatchToProps, mapStateToProps)(App);
+export default App;

@@ -6,8 +6,9 @@ import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, add
 
 
 class Classroom extends Component {
-     
+    
       render() {
+            
             let param = (this.props.match.params.id)
             const { match, location } = this.props
 let filteredList=this.props.students.filter((student)=>{
@@ -43,6 +44,7 @@ let classroomName=this.props.classroom.find((room)=>{
                               <input className='checkIn' type='text' name='initials' />
                               <button className='checkIn btn' type='submit'>Submit</button>
                         </form>
+                        
                         {filteredList.map((student)=>
                         <div className='studentDiv'>
                              <Link className='studentList'to={'/student/' + student.id} onCick={()=>this.findReport(student.id)}>{ student.name}</Link>
