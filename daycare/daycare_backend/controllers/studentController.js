@@ -10,7 +10,6 @@ const Student = bookshelf.Model.extend({
             return this.belongsToMany('Teacher')
       }
 })
-
 exports.getStudents = () => {
       return Student.fetchAll()
             .then(result => {
@@ -22,10 +21,7 @@ exports.getStudents = () => {
             .catch(err => {
                   console.log(err)
             })
-      }
-     
-
-      
+}
 exports.getStudentByClass = (id) => {
       return Student.where(id).fetchAll()
             .then(result => {
@@ -33,7 +29,6 @@ exports.getStudentByClass = (id) => {
                         return student.attributes
                   })
                   return students
-
             })
 }
 exports.createStudent = (student) => {
@@ -50,7 +45,7 @@ exports.createStudent = (student) => {
 }
 exports.deleteStudent = (key) => {
       console.log(key)
-      return new Student({id:parseInt(key)})
+      return new Student({ id: parseInt(key) })
             .destroy()
             .then(result => {
 

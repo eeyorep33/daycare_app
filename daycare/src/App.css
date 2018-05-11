@@ -1,23 +1,85 @@
-.drop{display:block}
-.nav{display:inline-block}
-.navBar{background-color:#FFC988}
-.title{font-family: 'Henny Penny', cursive;text-align:center; font-size:60px; color:turquoise; margin-top:20px; margin-bottom:10px; text-shadow: #EFEB8B 2px 2px}
-.navButtons{background-color:turquoise; margin:8px; color:black}
-.buttonText{color:black}
-.buttonText:hover{color:turquoise}
-.hands{width:900px; height:auto; margin-right:auto; margin-left:auto; display:block}
-.home{border: 2px solid lightgreen; margin-top: 20px;}
-.add{display: block; text-align:center; font-size: 20px; margin-top:20px}
-.studentName{text-align:center; font-size:30px; margin-top:20px}
-.status{text-align:center; font-size:20px; margin-top:20px}
-.checkInDiv{border: solid 2px black; height:150px; width:90%; margin-right:auto; margin-left:auto; display:block; margin-bottom:20px; text-align:center}
-.checkIn{margin-left:20px}
-.checkOut{float:right; margin-right:100px; margin-bottom:50px}
-.topmar{margin-top:20px}
-.studentList{font-size: 40px; margin-left:10px}
-.studentDiv{border: 2px solid black}
-.classroomTitle{text-align:center; margin-top:20px}
-.date{font-family:'Henny Penny', cursive;color:turquoise; margin-left:15px; margin-bottom:10px; text-shadow:2px 2px #EFEB8B}
-.addClass{float:right; margin-top: 8px; margin-right:10px}
-.addButton{background-color:turquoise}
-.deleteStudent{float:right; margin-right:10px; margin-top:14px}
+.drop{
+     display:block}
+.nav{
+    display:inline-block}
+.navBar{
+    background-color:#FFC988}
+.title{
+    font-family: 'Henny Penny', cursive;
+    text-align:center;
+    font-size:60px; 
+    color:turquoise; 
+    margin-top:20px; 
+    margin-bottom:10px; 
+    text-shadow: #EFEB8B 2px 2px}
+.navButtons{
+    background-color:turquoise; 
+    margin:8px; 
+    color:black}
+.buttonText{
+    color:black}
+.buttonText:hover{
+    color:turquoise}
+.hands{
+    width:900px; 
+    height:auto; 
+    margin-right:auto; 
+    margin-left:auto; 
+    display:block}
+.home{
+    border: 2px solid lightgreen; 
+    margin-top: 20px;}
+.add{
+    display: block; 
+    text-align:center; 
+    font-size: 20px; 
+    margin-top:20px}
+.studentName{
+    text-align:center; 
+    font-size:30px; 
+    margin-top:20px}
+.status{
+    text-align:center; 
+    font-size:20px; 
+    margin-top:20px}
+.checkInDiv{
+    border: solid 2px black; 
+    height:150px; 
+    width:90%; 
+    margin-right:auto; 
+    margin-left:auto; 
+    display:block; 
+    margin-bottom:20px; 
+    text-align:center}
+.checkIn{
+    margin-left:20px}
+.checkOut{
+    float:right; 
+    margin-right:100px; 
+    margin-bottom:50px}
+.topmar{
+    margin-top:20px}
+.studentList{
+    font-size: 40px; 
+    margin-left:10px}
+.studentDiv{
+    border: 2px solid black}
+.classroomTitle{
+    text-align:center;
+     margin-top:20px}
+.date{
+    font-family:'Henny Penny', cursive;
+    color:turquoise; 
+    margin-left:15px; 
+    margin-bottom:10px; 
+    text-shadow:2px 2px #EFEB8B}
+.addClass{
+    float:right; 
+    margin-top: 8px; 
+    margin-right:10px}
+.addButton{
+    background-color:turquoise}
+.deleteStudent{
+    float:right; 
+    margin-right:10px; 
+    margin-top:14px}

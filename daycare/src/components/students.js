@@ -8,7 +8,7 @@ import axios from 'axios'
 
 
 class Student extends Component {
-      componentDidMount(){
+      componentDidMount() {
             console.log(this.props.store)
       }
       findStudent = (id) => {
@@ -22,22 +22,18 @@ class Student extends Component {
                   <p className="status">Status:{studentDetails.status}</p>
             </div>
       }
-      
 
-     
       render() {
             const { match, location } = this.props
             let param = (this.props.match.params.id)
-            let report_id=''
-
+            let report_id = ''
             const format = 'h:mm a';
             const now = moment().hour(6).minute(30);
-
             return (<div>
                   {this.findStudent(param)}
                   <div className="checkInDiv">
                         <p className="status">Check-in</p>
-                        <form onSubmit={(e)=>this.props.checkIn(e,param)}>
+                        <form onSubmit={(e) => this.props.checkIn(e, param)}>
                               <label className="checkIn">Last Diaper Change</label>
                               <TimePicker
                                     name='diaperingTime'
@@ -92,13 +88,11 @@ class Student extends Component {
                                     </select>
                                     <label className='checkIn'>Initials:</label>
                                     <select className='checkIn'>
-                                                                        {/* {this.props.teachers.map((teacher)=>{
+                                          {/* {this.props.teachers.map((teacher)=>{
                                      <option value={teacher.name}>{teacher.name}</option> */}
-                                    })}
-                                         
-                                         
-                                    </select>
-                                    <button className='checkIn btn' onClick={(e) => this.props.addDiapering(e,report_id)}>Add</button>
+                                          })}
+                                                                             </select>
+                                    <button className='checkIn btn' onClick={(e) => this.props.addDiapering(e, report_id)}>Add</button>
                               </div>
                               <p className='checkIn' id='diaperChangeLocation'></p>
                         </div>
@@ -127,7 +121,7 @@ class Student extends Component {
                               <input className='checkIn' type='text' name='playType' />
                               <label className='checkIn'>Activity</label>
                               <input className='checkIn' type='text' name='activity' />
-                              <button className='checkIn btn' onClick={(e) => this.props.addPlayTime(e,report_id)}>Add</button>
+                              <button className='checkIn btn' onClick={(e) => this.props.addPlayTime(e, report_id)}>Add</button>
                         </div>
                         <div className='checkInDiv'>
                               <label className='add'>Add nap:</label>
@@ -159,7 +153,7 @@ class Student extends Component {
                               <label className='checkIn'>Time:</label>
                               <TimePicker
                                     name='medicinetime'
-                                   showSecond={false}
+                                    showSecond={false}
                                     defaultValue={now}
                                     className="checkIn"
                                     format={format}
@@ -185,7 +179,6 @@ class Student extends Component {
                               <button className='checkIn btn' onClick={(e) => this.props.addComments(e, report_id)} type='submit'>Add</button>
                               <p className='checkIn'>mapped comments here</p>
                         </div>
-
                   </div>
                   <button className='checkOut btn'>Check Out</button>
             </div>
@@ -195,18 +188,18 @@ class Student extends Component {
 
 function mapStateToProps(state) {
       return {
-           store:state
+            store: state
       };
 }
-function mapDispatchToProps(dispatch){
-return{
-      addDiapers:(diapering)=>dispatch(addDiapering(diapering)),
-      addFeed:(feeding)=>dispatch(addFeeding(feeding)),
-      addMedicine:(med)=>dispatch(addMeds(meds)),
-      addSup:(sup)=>dispatch(addSuplies(sup)),
-      addCom:(comment)=>dispatch(addComments(comment)),
-      addPlay:(play)=>dispatch(addPlayTime(play)),
-      addNapTime:(nap)=>dispatch(addNap(nap))
-}
+function mapDispatchToProps(dispatch) {
+      return {
+            addDiapers: (diapering) => dispatch(addDiapering(diapering)),
+            addFeed: (feeding) => dispatch(addFeeding(feeding)),
+            addMedicine: (med) => dispatch(addMeds(meds)),
+            addSup: (sup) => dispatch(addSuplies(sup)),
+            addCom: (comment) => dispatch(addComments(comment)),
+            addPlay: (play) => dispatch(addPlayTime(play)),
+            addNapTime: (nap) => dispatch(addNap(nap))
+      }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Student);

@@ -3,28 +3,28 @@ const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
 const Reports = bookshelf.Model.extend({
       tableName: 'report',
-      feedings: function() {
+      feedings: function () {
             return this.hasMany('Feeding')
-      },    
-      teacher: function(){
+      },
+      teacher: function () {
             return this.hasMany('Diapering')
-      },  
-      nap: function() {
+      },
+      nap: function () {
             return this.hasMany('Nap')
-      },    
-      meds: function(){
+      },
+      meds: function () {
             return this.hasMany('Meds')
-      } ,
-      comments: function() {
+      },
+      comments: function () {
             return this.hasMany('Comment')
-      },    
-      playTime: function(){
+      },
+      playTime: function () {
             return this.hasMany('PlayTime')
       },
-      supplies: function() {
+      supplies: function () {
             return this.hasMany('Supplies')
-      } 
-         })
+      }
+})
 exports.createReport = (report) => {
       const newReport = new Reports(
             report)
@@ -39,7 +39,7 @@ exports.createReport = (report) => {
 exports.getReport = (id) => {
       return Reports.where(id)
             .fetch({
-                  withRelated:['feeding', 'diapering', 'nap', 'meds', 'playTime', 'comment', 'supplies']
+                  withRelated: ['feeding', 'diapering', 'nap', 'meds', 'playTime', 'comment', 'supplies']
             })
             .then(report => {
                   return report

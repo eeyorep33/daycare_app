@@ -5,13 +5,11 @@ const Teacher = bookshelf.Model.extend({
       tableName: 'teacher',
       classroom: function () {
             return belongsTo('Classroom')
-
       },
       students: function () {
             return hasMany('Student')
       }
 })
-
 exports.getTeachers = () => {
       return Teacher.fetchAll()
             .then(result => {
@@ -23,12 +21,10 @@ exports.getTeachers = () => {
             .catch(err => {
                   console.log(err)
             })
-
-
 }
 exports.deleteTeacher = (key) => {
       console.log('fuction accessed')
-      return new Teacher({id:parseInt(key)})
+      return new Teacher({ id: parseInt(key) })
             .destroy()
             .then(result => {
 

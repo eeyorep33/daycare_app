@@ -108,7 +108,7 @@ export const removeFromStudentList = (student) => {
   }
 }
 export const addPlayTime = playTime => ({
-  type: ADD_PLAYTIME,  playTime
+  type: ADD_PLAYTIME, playTime
 })
 export const addToPlayTime = (playtime) => {
   return (dispatch) => {

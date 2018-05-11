@@ -19,14 +19,11 @@ const Student = bookshelf.Model.extend({
             return this.belongsToMany('Teacher')
       }
 })
-
-
 exports.getClassrooms = () => {
       return Classroom.fetchAll()
             .then(result => {
                   const classroom = result.models.map(classroom => {
                         return classroom.attributes
-                        
                   })
                   return classroom
             })
@@ -35,7 +32,7 @@ exports.getClassrooms = () => {
             })
 }
 exports.getStudentsByClass = (key) => {
-      return Classroom.where({ id:key }).fetch({
+      return Classroom.where({ id: key }).fetch({
             withRelated: 'student'
       })
             .then(classroom => {

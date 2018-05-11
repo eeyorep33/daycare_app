@@ -7,16 +7,13 @@ module.exports = (app) => {
       app.get('/diapering/:id', (req, res) => {
             diaper.getdiapering(req.params.id).then((diapers) => { res.send(diapers) })
       })
-      
-      app.post('/diapering', (req, res) => {      
+      app.post('/diapering', (req, res) => {
             diaper.creatediapering(req.body)
-            .then((diapers)=>{res.send(diapers.attributes)})
-            
-                  })
+                  .then((diapers) => { res.send(diapers.attributes) })
+      })
       app.delete('/diapering/:id', (req, res) => {
             diaper.deletediapering(req.params.id).then((diapers) => {
                   res.send('Deleted')
             })
       })
-
 } 

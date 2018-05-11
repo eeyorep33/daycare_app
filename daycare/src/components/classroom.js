@@ -1,72 +1,60 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
-import { connect } from 'react-redux'; 
+import { connect } from 'react-redux';
 import axios from 'axios'
 import { addStudent, addTeacher, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus } from '../actions/index'
 
 
 class Classroom extends Component {
-    
       render() {
-            
             let param = (this.props.match.params.id)
             const { match, location } = this.props
-let filteredList=this.props.students.filter((student)=>{
-      return student.classroom_id==param
-})
-let classroomName=this.props.classroom.find((room)=>{
-      return room.id==param
-})
-
-
-
+            let filteredList = this.props.students.filter((student) => {
+                  return student.classroom_id == param
+            })
+            let classroomName = this.props.classroom.find((room) => {
+                  return room.id == param
+            })
 
             return (
                   <div>
                         {/* {this.props.getStudents(param)} */}
-                       <h1 className='classroomTitle'> {classroomName.name}</h1>
-
-                       
-                        
-                        <form onSubmit={(e)=>this.props.addStudent(e,param)}className='checkInDiv topmar'>
-                        <label className='add'>Add Student</label>
+                        <h1 className='classroomTitle'> {classroomName.name}</h1>
+                        <form onSubmit={(e) => this.props.addStudent(e, param)} className='checkInDiv topmar'>
+                              <label className='add'>Add Student</label>
                               <label>Name</label>
-                              <input className='checkIn'type="text" name="name" />
+                              <input className='checkIn' type="text" name="name" />
                               <label className='checkIn'>Email</label>
                               <input className='checkIn' type='email' name='email' />
                               <button className='checkIn btn' type='submit'>Submit</button>
                         </form>
-                        <form onSubmit={(e)=>this.props.addTeacher(e,param)}className='checkInDiv topmar'>
-                        <label className='add'>Add Teacher</label>
+                        <form onSubmit={(e) => this.props.addTeacher(e, param)} className='checkInDiv topmar'>
+                              <label className='add'>Add Teacher</label>
                               <label>Name</label>
-                              <input className='checkIn'type="text" name="teacherName" />
+                              <input className='checkIn' type="text" name="teacherName" />
                               <label className='checkIn'>Initials</label>
                               <input className='checkIn' type='text' name='initials' />
                               <button className='checkIn btn' type='submit'>Submit</button>
                         </form>
-                        
-                        {filteredList.map((student)=>
-                        <div className='studentDiv'>
-                             <Link className='studentList'to={'/student/' + student.id} onCick={()=>this.findReport(student.id)}>{ student.name}</Link>
-                             <button onClick={()=>this.props.deleteStudent(student.id)}className='deleteStudent btn'>Delete Student</button>
-                             </div>
+                        {filteredList.map((student) =>
+                              <div className='studentDiv'>
+                                    <Link className='studentList' to={'/student/' + student.id} onCick={() => this.findReport(student.id)}>{student.name}</Link>
+                                    <button onClick={() => this.props.deleteStudent(student.id)} className='deleteStudent btn'>Delete Student</button>
+                              </div>
                         )}
-                      
-                        
-
-
                   </div>
             )
       }
 }
 function mapStateToProps(state) {
       return {
-           store:state
+            store: state
       };
 }
-function mapDispatchToProps(dispatch){
-return{addStudent:(newStudent)=>dispatch(addStudent(newStudent)),
-      addTeacher:(newTeacher)=>dispatch(addTeacher(newTeacher))
-}
+function mapDispatchToProps(dispatch) {
+      return {
+            addStudent: (newStudent) => dispatch(addStudent(newStudent)),
+            addTeacher: (newTeacher) => dispatch(addTeacher(newTeacher))
+      }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Classroom)

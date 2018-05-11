@@ -9,11 +9,10 @@ import Report from './components/report'
 import ReportList from './components/reportList'
 import TeacherList from './components/teacherList'
 import axios from 'axios'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { addClassroom, addStudent, getStudents, getTeachers, getClassrooms, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus, getClassroomList, getStudentList, getTeacherList } from './actions/index'
 let today = new Date()
 let date = today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear()
-
 
 class App extends Component {
   constructor() {
@@ -33,10 +32,10 @@ class App extends Component {
     }
   }
   componentDidMount() {
-   this.props.addClass({name:'Classroom 11'})
-   this.props.getClassrooms()
-   this.props.getStudents()
-   this.props.getTeachers()
+    this.props.addClass({ name: 'Classroom 11' })
+    this.props.getClassrooms()
+    this.props.getStudents()
+    this.props.getTeachers()
     axios.get('http://localhost:8080/classroomList')
       .then(res => {
         this.setState({ classrooms: res.data })
@@ -58,15 +57,11 @@ class App extends Component {
       .catch((error) => {
         console.log(error)
       })
-      
-        
-     
   }
-findReport=(id, dt)=>{
-let studentId=id
-let todayDate=dt
-
-}
+  findReport = (id, dt) => {
+    let studentId = id
+    let todayDate = dt
+  }
   getStudents = (id) => {
     axios.get('http://localhost:8080/classroomList/' + id)
       .then(res => {
@@ -138,11 +133,10 @@ let todayDate=dt
     e.preventDefault()
     let newClass = { name: e.target.addClass.value }
     axios.post('http://localhost:8080/classroomList', newClass)
-        .then(res=>{
-          console.log(res.data)
-         
-          this.setState({classrooms:[...this.state.classrooms, res.data]})
-        })
+      .then(res => {
+        console.log(res.data)
+        this.setState({ classrooms: [...this.state.classrooms, res.data] })
+      })
     e.target.addClass.value = ''
   }
   deleteClassroom = (e) => {
@@ -170,7 +164,7 @@ let todayDate=dt
     e.target.email.value = ''
     axios.get('http://localhost:8080/studentList')
       .then(res => {
-        this.setState({ students:[...this.state.students,res.data] })
+        this.setState({ students: [...this.state.students, res.data] })
       })
   }
   deleteStudent = (id) => {
@@ -187,9 +181,9 @@ let todayDate=dt
       status: 'out'
     }
     axios.post('http://localhost:8080/teacherList', newTeacher)
-    .then(res=>{
-      this.setState({teachers:[...this.state.teachers, res.data]})
-    })
+      .then(res => {
+        this.setState({ teachers: [...this.state.teachers, res.data] })
+      })
     e.target.teacherName.value = ''
     e.target.initials.value = ''
   }
@@ -202,9 +196,7 @@ let todayDate=dt
     axios.delete('http://localhost:8080/teacherList/' + deleted.id)
   }
 
-
   render() {
-
     return (
       <div>
         <h1 className="title">Look What I Did Today</h1>
@@ -257,7 +249,7 @@ let todayDate=dt
               getStudents={this.getStudents}
               deleteStudent={this.deleteStudent}
               teacherList={this.state.teachers}
-               />
+            />
           )} />
           <Route path='/teacher/:id' render={(props) => (
             <Teachers {...props}
@@ -287,15 +279,16 @@ let todayDate=dt
 }
 function mapStateToProps(state) {
   return {
-       store:state
+    store: state
   };
 }
-function mapDispatchToProps(dispatch){
-return{addClass:(newClass)=>dispatch(addClassroom(newClass)),
-       getStudentList:(students)=>dispatch(getStudents(students)),
-      getClassroomList:(classrooms)=>dispatch(getClassrooms(classrooms)),
-      getTeacherList:(teachers)=>dispatch(getTeachers(teachers))
-      }
+function mapDispatchToProps(dispatch) {
+  return {
+    addClass: (newClass) => dispatch(addClassroom(newClass)),
+    getStudentList: (students) => dispatch(getStudents(students)),
+    getClassroomList: (classrooms) => dispatch(getClassrooms(classrooms)),
+    getTeacherList: (teachers) => dispatch(getTeachers(teachers))
+  }
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

@@ -7,16 +7,13 @@ module.exports = (app) => {
       app.get('/feeding/:id', (req, res) => {
             feeding.getFeeding(req.params.id).then((feedings) => { res.send(feedings) })
       })
-      
-      app.post('/feeding', (req, res) => {      
+      app.post('/feeding', (req, res) => {
             feeding.createFeeding(req.body)
-            .then((feedings)=>{res.send(feedings.attributes)})
-            
-                  })
+                  .then((feedings) => { res.send(feedings.attributes) })
+      })
       app.delete('/feeding/:id', (req, res) => {
             feeding.deleteFeeding(req.params.id).then((feedings) => {
                   res.send('Deleted')
             })
       })
-
 } 

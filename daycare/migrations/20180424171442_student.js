@@ -9,14 +9,13 @@ exports.up = function (knex, Promise) {
         table.string('email').notNullable();
         table.integer('classroom_id').notNullable();
         table.foreign('classroom_id').references('classroom.id')
-       
-    }).createTable('student_teacher', function(table){
+
+    }).createTable('student_teacher', function (table) {
         table.integer('student_id').notNullable;
         table.foreign('student_id').references('student.id');
         table.integer('teacher_id').notnullable;
         table.foreign('teacher_id').references('teacher.id')
     })
-    
 };
 
 exports.down = function (knex, Promise) {

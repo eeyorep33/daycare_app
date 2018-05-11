@@ -1,23 +1,20 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
-import {connect} from 'react-redux'
-
+import { connect } from 'react-redux'
 
 class TeacherList extends Component {
       render() {
             return (
                   <div>
-                        
-                        
-                        {this.props.teachers.map((teacher)=>
-                        <div>
-                             {teacher.name} <p>Status:{teacher.status}</p>
-                             <button onClick={()=>this.props.teacherCheckIn(teacher.id)}>Check-in</button>
-                        </div>)}
-                        <form onSubmit={(e)=>this.props.deleteTeacher(e)}>
+                        {this.props.teachers.map((teacher) =>
+                              <div>
+                                    {teacher.name} <p>Status:{teacher.status}</p>
+                                    <button onClick={() => this.props.teacherCheckIn(teacher.id)}>Check-in</button>
+                              </div>)}
+                        <form onSubmit={(e) => this.props.deleteTeacher(e)}>
                               <label>Delete a teacher</label>
                               <label>Name</label>
-                              <input type="text" name='deleteTeacher'/>
+                              <input type="text" name='deleteTeacher' />
                               <button type='submit'>Submit </button>
                         </form>
                   </div>
@@ -26,10 +23,10 @@ class TeacherList extends Component {
 }
 function mapStateToProps(state) {
       return {
-           store:state
+            store: state
       };
 }
-function mapDispatchToProps(dispatch){
-return{}
+function mapDispatchToProps(dispatch) {
+      return {}
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TeacherList)

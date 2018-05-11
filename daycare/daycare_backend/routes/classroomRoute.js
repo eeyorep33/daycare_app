@@ -7,17 +7,16 @@ module.exports = (app) => {
       app.get('/classroomList', (req, res) => {
             classroom.getClassrooms().then((classrooms) => { res.send(classrooms) })
       })
-      app.get('/classroomList/:id',(req,res)=>{
-            classroom.getStudentsByClass(req.params.id).then((student)=>{
+      app.get('/classroomList/:id', (req, res) => {
+            classroom.getStudentsByClass(req.params.id).then((student) => {
                   res.send(student)
             })
       })
-      
-      app.post('/classroomList', (req, res) => {      
+      app.post('/classroomList', (req, res) => {
             classroom.createClassroom(req.body)
-            .then((classroom)=>{res.send(classroom.attributes)})
+                  .then((classroom) => { res.send(classroom.attributes) })
             console.log(classroom.attributes)
-                  })
+      })
       app.delete('/classroomList/:id', (req, res) => {
             console.log('req received')
             classroom.deleteClassroom(req.params.id).then((classroom) => {
