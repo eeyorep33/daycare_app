@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Route, Link, Switch } from 'react-router-dom'
+import { Route, Link, Switch, withRouter } from 'react-router-dom'
 import Home from './components/home'
 import Classroom from './components/classroom';
 import Teachers from './components/teachers'
@@ -10,10 +10,10 @@ import ReportList from './components/reportList'
 import TeacherList from './components/teacherList'
 import axios from 'axios'
 import {connect} from 'react-redux'
-import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus, getClassroomList, getStudentList, getTeacherList } from './actions/index'
+import { addClassroom, addStudent, getStudents, getTeachers, getClassrooms, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus, getClassroomList, getStudentList, getTeacherList } from './actions/index'
 let today = new Date()
 let date = today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear()
-const mapDispatchToProps={getStudentList}
+
 
 class App extends Component {
   constructor() {
@@ -33,6 +33,10 @@ class App extends Component {
     }
   }
   componentDidMount() {
+   this.props.addClass({name:'Classroom 11'})
+   this.props.getClassrooms()
+   this.props.getStudents()
+   this.props.getTeachers()
     axios.get('http://localhost:8080/classroomList')
       .then(res => {
         this.setState({ classrooms: res.data })
@@ -281,9 +285,17 @@ let todayDate=dt
     );
   }
 }
-// const mapStateToProps=(state)=>{
-//   classrooms:state.classrooms
-// }
+function mapStateToProps(state) {
+  return {
+       store:state
+  };
+}
+function mapDispatchToProps(dispatch){
+return{addClass:(newClass)=>dispatch(addClassroom(newClass)),
+       getStudentList:(students)=>dispatch(getStudents(students)),
+      getClassroomList:(classrooms)=>dispatch(getClassrooms(classrooms)),
+      getTeacherList:(teachers)=>dispatch(getTeachers(teachers))
+      }
+}
 
-
-export default App;
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

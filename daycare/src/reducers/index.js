@@ -39,7 +39,7 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, report: newDiaper };
       break;
     case "ADD_PLAYTIME":
-      const newPlayTime = state.report.concat([action.payload]);
+      const newPlayTime = state.report.concat([action.playTime]);
       return { ...state, report: newPlayTime };
       break;
     case "CHANGE_STATUS":
@@ -53,7 +53,7 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, teachers: [...state.teachers, action.payload] };
       break;
     case "ADD_CLASSROOM":
-      let newClassroom = state.classrooms.concat([action.payload])
+      let newClassroom = state.classrooms.concat([action.classroom])
       return { ...state, classrooms: newClassroom };
       break;
     case "REMOVE_CLASSROOM":

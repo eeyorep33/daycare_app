@@ -8,6 +8,9 @@ import axios from 'axios'
 
 
 class Student extends Component {
+      componentDidMount(){
+            console.log(this.props.store)
+      }
       findStudent = (id) => {
             console.log(id)
             let studentDetails = this.props.students.find((student) => {
@@ -190,17 +193,20 @@ class Student extends Component {
       }
 }
 
-// function mapStateToProps(state) {
-//       return {
-//             report: state.report,
-//             feeding: state.feeding,
-//             diapering: state.diapering,
-//             comment: state.comment,
-//             supplies: state.supplies,
-//             nap: state.nap,
-//             playTime: state.playTime,
-//             meds: state.meds
-
-//       };
-// }
-export default Student;
+function mapStateToProps(state) {
+      return {
+           store:state
+      };
+}
+function mapDispatchToProps(dispatch){
+return{
+      addDiapers:(diapering)=>dispatch(addDiapering(diapering)),
+      addFeed:(feeding)=>dispatch(addFeeding(feeding)),
+      addMedicine:(med)=>dispatch(addMeds(meds)),
+      addSup:(sup)=>dispatch(addSuplies(sup)),
+      addCom:(comment)=>dispatch(addComments(comment)),
+      addPlay:(play)=>dispatch(addPlayTime(play)),
+      addNapTime:(nap)=>dispatch(addNap(nap))
+}
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Student);

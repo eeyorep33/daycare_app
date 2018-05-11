@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Switch, Route, Link} from 'react-router-dom'
-
+import {connect} from 'react-redux'
 class ReportList extends Component{
     render(){
         return(
@@ -20,4 +20,13 @@ class ReportList extends Component{
         )
     }
 }
-export default ReportList
+function mapStateToProps(state) {
+    return {
+         store:state
+    };
+}
+function mapDispatchToProps(dispatch){
+return{}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReportList)

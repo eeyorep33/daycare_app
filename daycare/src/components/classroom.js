@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'; 
 import axios from 'axios'
-import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus } from '../actions/index'
+import { addStudent, addTeacher, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus } from '../actions/index'
 
 
 class Classroom extends Component {
@@ -59,10 +59,14 @@ let classroomName=this.props.classroom.find((room)=>{
             )
       }
 }
-const mapStateToProps=(state)=>{
+function mapStateToProps(state) {
       return {
-       students:state.students, 
-       classrooms: state.classrooms    
-      }
+           store:state
+      };
 }
-export default Classroom
+function mapDispatchToProps(dispatch){
+return{addStudent:(newStudent)=>dispatch(addStudent(newStudent)),
+      addTeacher:(newTeacher)=>dispatch(addTeacher(newTeacher))
+}
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Classroom)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
-
+import {connect} from 'react-redux'
 
 
 class TeacherList extends Component {
@@ -24,4 +24,12 @@ class TeacherList extends Component {
             )
       }
 }
-export default TeacherList
+function mapStateToProps(state) {
+      return {
+           store:state
+      };
+}
+function mapDispatchToProps(dispatch){
+return{}
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TeacherList)

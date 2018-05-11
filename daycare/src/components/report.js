@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import {connect} from 'react-redux'
 class DailyReport extends Component {
       render() {
             return (
@@ -21,4 +21,12 @@ class DailyReport extends Component {
             )
       }
 }
-export default DailyReport
+function mapStateToProps(state) {
+      return {
+           store:state
+      };
+}
+function mapDispatchToProps(dispatch){
+return{}
+}
+export default connect(mapStateToProps, mapDispatchToProps)(DailyReport)
