@@ -54,3 +54,15 @@ exports.deleteStudent = (key) => {
                   console.log(err)
             })
 }
+
+exports.editStatus=(id)=>{
+      console.log(id)
+      const fieldToUpdate={status:'in'}
+     return new Student({id:id})
+      .save(fieldToUpdate)
+      .then(saved=>{
+            return saved;
+      }).catch(err=>{
+            console.log(err)
+      })
+}

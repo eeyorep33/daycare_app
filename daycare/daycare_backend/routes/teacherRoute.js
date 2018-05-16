@@ -18,7 +18,7 @@ module.exports = (app) => {
             console.log('req received')
             console.log(req.params.id)
             teachers.deleteTeacher(req.params.id).then((teacher) => {
-                  res.send('Deleted')
+                  res.send(req.params.id)
             })
       })
 }

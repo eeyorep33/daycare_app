@@ -3,24 +3,23 @@ import TimePicker from 'rc-time-picker'
 import moment from 'moment';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus, getClassroomList, getStudentList, getTeacherList } from '../actions/index'
-import axios from 'axios'
+import { addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, addPlayTime} from '../actions/reportActions'
+import {fetchStudents} from'../actions/studentActions'
+
 
 
 class Student extends Component {
       componentDidMount() {
-            console.log(this.props.store)
+            this.props.getStudentList()
       }
       findStudent = (id) => {
-            console.log(id)
-            let studentDetails = this.props.students.find((student) => {
+                        let studentDetails = this.props.students.data.find((student) => {
                   return student.id == id
             })
-            console.log(studentDetails)
-            return <div>
+                        return studentDetails ? <div>
                   <h1 className="studentName">{studentDetails.name}</h1>
                   <p className="status">Status:{studentDetails.status}</p>
-            </div>
+            </div> : <p>Loading...</p>
       }
 
       render() {
@@ -31,42 +30,8 @@ class Student extends Component {
             const now = moment().hour(6).minute(30);
             return (<div>
                   {this.findStudent(param)}
-                  <div className="checkInDiv">
-                        <p className="status">Check-in</p>
-                        <form onSubmit={(e) => this.props.checkIn(e, param)}>
-                              <label className="checkIn">Last Diaper Change</label>
-                              <TimePicker
-                                    name='diaperingTime'
-                                    showSecond={false}
-                                    defaultValue={now}
-                                    className="checkIn"
-                                    format={format}
-                                    use12Hours
-                                    inputReadOnly
-                              />
-                              <label className="checkIn">Last Feeding</label>
-                              <TimePicker
-                                    name='feedingTime'
-                                    showSecond={false}
-                                    defaultValue={now}
-                                    className="checkIn"
-                                    format={format}
-                                    use12Hours
-                                    inputReadOnly
-                              />
-                              <label className="checkIn">Last Medication</label>
-                              <TimePicker
-                                    name="medTime"
-                                    showSecond={false}
-                                    defaultValue={now}
-                                    className="checkIn"
-                                    format={format}
-                                    use12Hours
-                                    inputReadOnly
-                              />
-                              <button type='submit' className="checkIn btn">Check-in</button>
-                        </form>
-                  </div>
+                  <button onClick={(e) => { this.props.checkIn(e, param) }} className='navButtons btn checkInButton'>Check In</button>
+                  <p>Report #:</p>
                   <div>
                         <div className='checkInDiv'>
                               <label className='add'>Add diaper change:</label>
@@ -88,7 +53,7 @@ class Student extends Component {
                                     </select>
                                     <label className='checkIn'>Initials:</label>
                                     <select className='checkIn'>
-                                          {/* {this.props.teachers.map((teacher)=>{
+                                          {/* {this.props.teachers.data.map((teacher)=>{
                                      <option value={teacher.name}>{teacher.name}</option> */}
                                           })}
                                                                              </select>
@@ -188,18 +153,20 @@ class Student extends Component {
 
 function mapStateToProps(state) {
       return {
-            store: state
+            students: state.students,
+            teachers: state.teachers
       };
 }
 function mapDispatchToProps(dispatch) {
       return {
             addDiapers: (diapering) => dispatch(addDiapering(diapering)),
             addFeed: (feeding) => dispatch(addFeeding(feeding)),
-            addMedicine: (med) => dispatch(addMeds(meds)),
-            addSup: (sup) => dispatch(addSuplies(sup)),
+            addMedicine: (meds) => dispatch(addMeds(meds)),
+            addSup: (sup) => dispatch(addSupplies(sup)),
             addCom: (comment) => dispatch(addComments(comment)),
             addPlay: (play) => dispatch(addPlayTime(play)),
-            addNapTime: (nap) => dispatch(addNap(nap))
+            addNapTime: (nap) => dispatch(addNap(nap)),
+            getStudentList: () => dispatch(fetchStudents()),
       }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Student);

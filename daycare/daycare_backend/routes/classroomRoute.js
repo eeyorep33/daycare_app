@@ -15,12 +15,11 @@ module.exports = (app) => {
       app.post('/classroomList', (req, res) => {
             classroom.createClassroom(req.body)
                   .then((classroom) => { res.send(classroom.attributes) })
-            console.log(classroom.attributes)
+
       })
       app.delete('/classroomList/:id', (req, res) => {
-            console.log('req received')
             classroom.deleteClassroom(req.params.id).then((classroom) => {
-                  res.send('Deleted')
+                  res.send(req.params.id)
             })
       })
 

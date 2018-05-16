@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-
+import {fetchTeachers} from '../actions/teacherActions'
 class TeacherList extends Component {
-      render() {
+      componentDidMount()
+{
+      this.props.getTeacherList()
+}      render() {
             return (
                   <div>
-                        {this.props.teachers.map((teacher) =>
+                        {this.props.store.teachers.data.map((teacher) =>
                               <div>
                                     {teacher.name} <p>Status:{teacher.status}</p>
                                     <button onClick={() => this.props.teacherCheckIn(teacher.id)}>Check-in</button>
@@ -27,6 +30,8 @@ function mapStateToProps(state) {
       };
 }
 function mapDispatchToProps(dispatch) {
-      return {}
+      return {
+            getTeacherList: () => dispatch(fetchTeachers())
+      }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TeacherList)

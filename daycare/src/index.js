@@ -5,7 +5,7 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import store from './store/index';
 import { Provider } from 'react-redux';
-import { addStudent, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, removeStudent, addPlayTime, studentStatus } from './actions/index'
+
 
 
 ReactDOM.render(<BrowserRouter>
