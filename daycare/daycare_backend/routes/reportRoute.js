@@ -6,10 +6,11 @@ module.exports = (app) => {
 
       app.post('/report', (req, res) => {
             report.createReport(req.body).then((report) => {
-                  res.send(report.attributes) })
+                  res.send(report.attributes)
+            })
       })
-      app.get('/report/:id', (req, res) => {
-            report.getReport({ id: req.params.id }).then((report) => {
+      app.get('/reports/:id', (req, res) => {
+            report.getReportByName({ student_id: req.params.id }).then((report) => {
                   res.send(report)
             })
       })

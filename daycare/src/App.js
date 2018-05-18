@@ -9,20 +9,24 @@ import Report from './components/report'
 import ReportList from './components/reportList'
 import TeacherList from './components/teacherList'
 import { connect } from 'react-redux'
-import { removeTeacher, addTeacher} from './actions/teacherActions'
-import {studentCheckIn, addStudent,removeStudent} from './actions/studentActions'
-import {addClassroom, fetchClassrooms,  removeClassroom} from './actions/classroomActions'
-import {addReport} from './actions/reportActions'
+import { removeTeacher, teacherCheckIn, addTeacher } from './actions/teacherActions'
+import { studentCheckIn, fetchStudents, studentCheckOut, addStudent, removeStudent } from './actions/studentActions'
+import { addClassroom, fetchClassrooms, removeClassroom } from './actions/classroomActions'
+import { addReport, getReports } from './actions/reportActions'
 let today = new Date()
 let date = today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear()
 
 class App extends Component {
- 
-    
-  
   componentDidMount() {
-       this.props.LoadClassrooms()
-    
+    this.props.LoadClassrooms()
+    this.props.getStudentList()
+  }
+  getReports = (e, name) => {
+    e.preventDefault()
+    let studentId = this.props.store.students.data.find((student) => {
+      return student.name === name
+    })
+    this.props.getReports(studentId.id)
   }
   addFeeding = (e, id) => {
     e.preventDefault()
@@ -30,13 +34,17 @@ class App extends Component {
     let food = e.target.food.value
     let amount = e.target.amount.value
     let feeding = { time: time, food: food, amount: amount, report_id: id }
+    console.log(food)
   }
-  addDiapering = (e, id) => {
+  addDiapering = (e) => {
     e.preventDefault()
+    console.log('function accessed')
     let time = e.target.diapertime.value
     let type = e.target.type.value
     let initials = e.target.initials.value
-    let diapering = { time: time, type: type, initials: initials, report_id: id }
+    let diapering = { time: time, type: type, initials: initials }
+    console.log(type)
+    console.log(time)
   }
   addNap = (e, id) => {
     e.preventDefault()
@@ -51,11 +59,12 @@ class App extends Component {
     let dosage = e.target.dosage.value
     let meds = { time: time, name: name, amount: dosage, report_id: id }
   }
-  addPlayTime = (e, id) => {
+  addPlayTime = (e) => {
     e.preventDefault()
     let playType = e.target.playType.value
     let activity = e.target.activity.value
-    let playTime = { type: playType, activity: activity, report_id: id }
+    let playTime = { type: playType, activity: activity }
+    console.log(activity)
   }
   addComments = (e, id) => {
     e.preventDefault()
@@ -65,20 +74,21 @@ class App extends Component {
   addSupplies = (e, id) => {
     e.preventDefault()
     let supply = e.target.supplies.value
+    console.log(supply)
     let supplies = { supply_item: supply, report_id: id }
   }
   teacherCheckIn = (id) => {
-    let teacherStatus = this.state.teachers.find((teacher) => {
-      return teacher.id == id
-    })
-    teacherStatus.status = 'in'
-    this.setState({ teachers: teacherStatus.status })
+    this.props.teacherCheckIn(id)
   }
   studentCheckIn = (e, id) => {
-    e.preventDefault()        
+    e.preventDefault()
     let report = { student_id: id, date: date }
     this.props.addReport(report)
     this.props.studentCheckIn(id)
+  }
+  studentCheckOut = (e, id) => {
+    e.preventDefault()
+    this.props.studentCheckOut(id)
   }
   addClassroom = (e) => {
     e.preventDefault()
@@ -109,7 +119,7 @@ class App extends Component {
     this.props.addNewStudent(newStudent)
     e.target.name.value = ''
     e.target.email.value = ''
-      }
+  }
   deleteStudent = (id) => {
     this.props.removeStudent(id)
   }
@@ -123,20 +133,18 @@ class App extends Component {
       classroom_id: parseInt(room),
       status: 'out'
     }
-    this.props.addNewTeacher(newTeacher)     
+    this.props.addNewTeacher(newTeacher)
     e.target.teacherName.value = ''
     e.target.initials.value = ''
   }
-  deleteTeacher = (e) => {   
-    e.preventDefault() 
-    console.log('function accessed') 
-    console.log(this.props.store.teachers.data)  
+  deleteTeacher = (e) => {
+    e.preventDefault()
     let deletedTeacher = e.target.deleteTeacher.value
     let deleted = this.props.store.teachers.data.find((teacher) => {
       return teacher.name == deletedTeacher
     })
-        this.props.removeTeacher(deleted.id)
-         e.target.deleteTeacher.value=''
+    this.props.removeTeacher(deleted.id)
+    e.target.deleteTeacher.value = ''
   }
 
   render() {
@@ -157,7 +165,7 @@ class App extends Component {
               aria-expanded="false">
               Classroom</a>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                          {this.props.store.classrooms.data.map((room) =>
+              {this.props.store.classrooms.data.map((room) =>
                 <Link className="drop buttonText" to={"/classroom/" + room.id}>{room.name} </Link>
               )}
             </div>
@@ -167,62 +175,60 @@ class App extends Component {
           </button>
           <button className='navButtons btn'>
             <Link className='buttonText' to='/teacherlist'>Teachers</Link>
-          </button>          
-         <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#deleteClassroomModal">
-  Delete Classroom
+          </button>
+          <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#deleteClassroomModal">
+            Delete Classroom
 </button>
-<button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#classroomModal">
-  Add Classroom
+          <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#addClassroomModal">
+            Add Classroom
 </button>
-        </div>       
+        </div>
+        <div className="modal fade" id="addClassroomModal" tabindex="-1" role="dialog" aria-labelledby="addClassroomModalLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modalTitle" id="addClassroomModalLabel">Add Classroom</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={(e) => this.addClassroom(e)} >
+                  <label className='modalContent'>Classroom Name:</label>
+                  <input type='text' name='addClass' />
+                  <div className="modal-footer">
+                    <button type="submit" className="btn saveButton">Save changes</button>
+                    <button type="button" className="btn closeButton" data-dismiss="modal">Close</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="modal fade" id="deleteClassroomModal" tabindex="-1" role="dialog" aria-labelledby="deleteClassroomModalLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modalTitle" id="deleteClassroomModalLabel">Delete Classroom</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={(e) => this.deleteClassroom(e)} >
+                  <p className='modalContent'>You may only delete a classroom if no students are assigned to that room</p>
+                  <label className='modalContent'>Classroom Name:</label>
+                  <input type='text' name='deleteClass' />
+                  <div className="modal-footer">
+                    <button type="submit" className="btn saveButton">Save changes</button>
+                    <button type="button" className="btn closeButton" data-dismiss="modal">Close</button>
+                  </div>
+                </form>
+              </div>
 
-<div className="modal fade" id="addClassroomModal" tabindex="-1" role="dialog" aria-labelledby="addClassroomModalLabel" aria-hidden="true">
-  <div className="modal-dialog" role="document">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h5 className="modal-title" id="addClassroomModalLabel">Add Classroom</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div className="modal-body">
-      <form onSubmit={(e) => this.addClassroom(e)} >
-      <label>Classroom Name:</label>
-      <input type='text' name='addClass'/>
-      <div className="modal-footer">
-      <button type="submit" class="btn btn-primary">Save changes</button>
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>       
-               </div>      
-</form>      
-      </div>
-     
-    </div>
-  </div>
-</div>
-<div className="modal fade" id="deleteClassroomModal" tabindex="-1" role="dialog" aria-labelledby="deleteClassroomModalLabel" aria-hidden="true">
-  <div className="modal-dialog" role="document">
-    <div className="modal-content">
-      <div className="modal-header">
-        <h5 className="modal-title" id="deleteClassroomModalLabel">Delete Classroom</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div className="modal-body">
-      <form onSubmit={(e) => this.deleteClassroom(e)} >
-      <p>You may only delete a classroom if no students are assigned to that room</p>
-      <label>Classroom Name:</label>
-      <input type='text' name='deleteClass'/>
-      <div className="modal-footer">
-      <button type="submit" class="btn btn-primary">Save changes</button>
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>       
-               </div>      
-</form>      
-      </div>
-     
-    </div>
-  </div>
-</div>
+            </div>
+          </div>
+        </div>
         <Switch>
           <Route path="/" exact render={(props) => (
             <Home {...props} />
@@ -233,7 +239,6 @@ class App extends Component {
               addaTeacher={this.addaTeacher}
               getStudents={this.getStudents}
               deleteStudent={this.deleteStudent}
-              
             />
           )} />
           <Route path='/teacher/:id' render={(props) => (
@@ -243,12 +248,20 @@ class App extends Component {
           <Route path="/student/:id" render={(props) => (
             <Student {...props}
               checkIn={this.studentCheckIn} />)}
-            studentDetails={this.studentDetails}             
-            />
+            studentDetails={this.studentDetails}
+            addDiapering={this.addDiapering}
+            addFeeding={this.addFeeding}
+            addNap={this.addNap}
+            addMeds={this.addMeds}
+            addComments={this.addComments}
+            addSupplies={this.addSupplies}
+            addPlayTime={this.addPlayTime}
+            checkOut={this.studentCheckOut}
+          />
           <Route path='/report/:id' render={(props) => (
             <Report {...props} />)} />}
-            <Route path='reportList' render={(props) => (
-            <ReportList {...props} />)} />
+            <Route path='/reportList' render={(props) => (
+            <ReportList {...props} getReports={this.getReports} />)} />
           <Route path='/teacherlist' render={(props) => (
             <TeacherList
               teacherCheckIn={this.teacherCheckIn}
@@ -268,13 +281,16 @@ function mapDispatchToProps(dispatch) {
   return {
     addClass: (newClass) => dispatch(addClassroom(newClass)),
     addReport: (newReport) => dispatch(addReport(newReport)),
-    removeClass:(room)=>dispatch(removeClassroom(room)),
-    removeStudent:(student)=>dispatch(removeStudent(student)),
-     LoadClassrooms: () => dispatch(fetchClassrooms()),
-     removeTeacher:(teacher)=>dispatch(removeTeacher(teacher)),
-     addNewStudent: (newStudent) => dispatch(addStudent(newStudent)),
-     addNewTeacher: (newTeacher) => dispatch(addTeacher(newTeacher)),
-     studentCheckIn:(id)=> dispatch(studentCheckIn(id))
+    removeClass: (room) => dispatch(removeClassroom(room)),
+    removeStudent: (student) => dispatch(removeStudent(student)),
+    LoadClassrooms: () => dispatch(fetchClassrooms()),
+    removeTeacher: (teacher) => dispatch(removeTeacher(teacher)),
+    addNewStudent: (newStudent) => dispatch(addStudent(newStudent)),
+    addNewTeacher: (newTeacher) => dispatch(addTeacher(newTeacher)),
+    getReports: (name) => dispatch(getReports(name)),
+    getStudentList: (students) => dispatch(fetchStudents(students)),
+    studentCheckIn: (id) => dispatch(studentCheckIn(id)),
+    teacherCheckIn: (id) => dispatch(teacherCheckIn(id))
   }
 }
 

@@ -8,18 +8,19 @@ module.exports = (app) => {
             teachers.getTeachers().then((teachers) => { res.send(teachers) })
       })
       app.post('/teacherList', (req, res) => {
-            console.log('req received')
-            console.log(req.body)
             teachers.createTeacher(req.body).then((teacher) => {
                   res.send('teacher created')
             })
       })
       app.delete('/teacherList/:id', (req, res) => {
-            console.log('req received')
-            console.log(req.params.id)
             teachers.deleteTeacher(req.params.id).then((teacher) => {
                   res.send(req.params.id)
             })
+      })
+      app.put('/teacherList/:id', (req, res) => {
+            teachers.editTeacherStatus(req.params.id)
+                  .then((teacher) => { res.send(teacher.attributes.id) })
+
       })
 }
 

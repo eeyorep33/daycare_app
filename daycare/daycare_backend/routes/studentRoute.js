@@ -8,22 +8,22 @@ module.exports = (app) => {
             students.getStudents().then((students) => { res.send(students) })
       })
       app.delete('/studentList/:id', (req, res) => {
-            console.log('req received')
-            console.log(req.params.id)
             students.deleteStudent(req.params.id).then((student) => {
                   res.send(req.params.id)
             })
       })
       app.post('/studentList', (req, res) => {
-            console.log(req.body)
             students.createStudent(req.body)
                   .then((student) => { res.send(student.attributes) })
-
       })
-      app.put('/studentList/:id', (req,res)=>{
-            let response={id:req.params.id, status:'in'}
-            students.editStatus(req.params.id)            
-            .then((student) => { res.send(student.attributes.id) })
-
+      app.put('/studentList/:id', (req, res) => {
+            let response = { id: req.params.id, status: 'in' }
+            students.editStatus(req.params.id)
+                  .then((student) => { res.send(student.attributes.id) })
+      })
+      app.put('/studentCheckOut/:id', (req, res) => {
+            console.log('req received')            
+            students.studentCheckOut(req.params.id)
+                  .then((student) => { res.send(student.attributes.id) })
       })
 } 

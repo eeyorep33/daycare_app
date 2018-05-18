@@ -32,7 +32,6 @@ exports.getStudentByClass = (id) => {
             })
 }
 exports.createStudent = (student) => {
-      console.log('function accessed')
       const newStudent = new Student(
             student)
       return newStudent.save()
@@ -54,15 +53,26 @@ exports.deleteStudent = (key) => {
                   console.log(err)
             })
 }
-
-exports.editStatus=(id)=>{
+exports.editStatus = (id) => {
       console.log(id)
-      const fieldToUpdate={status:'in'}
-     return new Student({id:id})
-      .save(fieldToUpdate)
-      .then(saved=>{
-            return saved;
-      }).catch(err=>{
-            console.log(err)
-      })
+      const fieldToUpdate = { status: 'in' }
+      return new Student({ id: id })
+            .save(fieldToUpdate)
+            .then(saved => {
+                  return saved;
+            }).catch(err => {
+                  console.log(err)
+            })
 }
+exports.studentCheckOut = (id) => {
+      console.log(id)
+      const fieldToUpdate = { status: 'out' }
+      return new Student({ id: id })
+            .save(fieldToUpdate)
+            .then(saved => {
+                  return saved;
+            }).catch(err => {
+                  console.log(err)
+            })
+}
+

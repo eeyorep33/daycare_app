@@ -48,3 +48,29 @@ exports.getReport = (id) => {
                   console.log(err)
             })
 }
+exports.getReportByName = (id) => {
+      return Reports.where(id).fetchAll()
+            .then(result => {
+                  const reports = result.models.map(report => {
+                        return report.attributes
+                  })
+                  console.log(reports)
+                  return reports
+            })
+            .catch(err => {
+                  console.log(err)
+            })
+}
+exports.getReportByDate = (date) => {
+      return Reports.where(date).fetchAll()
+            .then(result => {
+                  const reports = result.models.map(report => {
+                        return report.attributes
+                  })
+                  console.log(reports)
+                  return reports
+            })
+            .catch(err => {
+                  console.log(err)
+            })
+}

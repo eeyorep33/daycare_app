@@ -23,7 +23,6 @@ exports.getTeachers = () => {
             })
 }
 exports.deleteTeacher = (key) => {
-      console.log('fuction accessed')
       return new Teacher({ id: parseInt(key) })
             .destroy()
             .then(result => {
@@ -34,7 +33,6 @@ exports.deleteTeacher = (key) => {
             })
 }
 exports.createTeacher = (teacher) => {
-      console.log('function accessed')
       const newTeacher = new Teacher(
             teacher)
       return newTeacher.save()
@@ -45,3 +43,15 @@ exports.createTeacher = (teacher) => {
                   console.log(err)
             })
 }
+exports.editTeacherStatus = (id) => {
+      console.log(id)
+      const fieldToUpdate = { status: 'in' }
+      return new Teacher({ id: id })
+            .save(fieldToUpdate)
+            .then(saved => {
+                  return saved;
+            }).catch(err => {
+                  console.log(err)
+            })
+}
+

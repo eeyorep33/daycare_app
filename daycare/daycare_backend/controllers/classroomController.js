@@ -48,7 +48,6 @@ exports.getStudentsByClass = (key) => {
             })
 }
 exports.createClassroom = (classroom) => {
-      console.log('function accessed')
       const newClassroom = new Classroom(
             classroom)
       return newClassroom.save()
@@ -60,7 +59,6 @@ exports.createClassroom = (classroom) => {
             })
 }
 exports.deleteClassroom = (id) => {
-      console.log('function accessed')
       return new Classroom({ id: id })
             .destroy()
             .then(result => {
