@@ -8,7 +8,7 @@ module.exports = (app) => {
             classroom.getClassrooms().then((classrooms) => { res.send(classrooms) })
       })
       app.get('/classroomList/:id', (req, res) => {
-            classroom.getStudentsByClass(req.params.id).then((student) => {
+                        classroom.getStudentsByClass(req.params.id).then((student) => {
                   res.send(student)
             })
       })
@@ -22,5 +22,9 @@ module.exports = (app) => {
                   res.send(req.params.id)
             })
       })
+      app.put('/editClassroom/:id',(req,res)=>{
+            classroom.editClassroom(req.params.id, req.body)
+.then((classroom)=>{res.send (classroom.attributes)})
+})
 
 } 

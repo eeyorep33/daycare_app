@@ -37,11 +37,10 @@ exports.getStudentsByClass = (key) => {
       })
             .then(classroom => {
                   const students = classroom.related('student')
-                  console.log(students)
-                  console.log(classroom.models.map(student => {
-                        studentList.attributes
-                  }))
-                  return classroom
+                 const studentList = students.map(student => {
+                      return   student.attributes
+                  })
+                    return studentList
             })
             .catch(err => {
                   console.log(err)
@@ -65,6 +64,16 @@ exports.deleteClassroom = (id) => {
                   console.log('Classroom deleted')
             })
             .catch(err => {
+                  console.log(err)
+            })
+}
+exports.editClassroom = (id, body) => {
+      const fieldsToUpdate = { name: body.name }
+      return new Classroom({ id: id })
+            .save(fieldsToUpdate)
+            .then(saved => {
+                  return saved
+            }).catch(err => {
                   console.log(err)
             })
 }

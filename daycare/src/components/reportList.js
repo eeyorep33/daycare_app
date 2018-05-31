@@ -3,6 +3,9 @@ import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchStudents } from '../actions/studentActions'
 class ReportList extends Component {
+    componentDidMount(){
+        this.props.getStudentList()
+    }
 
     render() {
         return (
@@ -24,7 +27,7 @@ class ReportList extends Component {
                 </div>
                 {this.props.store.reports.data && this.props.store.reports.data.map((report) =>
                     <div className='reportDiv'>
-                        <Link className='reportList'to={'/report/' + report.id}>{report.date}</Link>
+                        <Link className='reportList'to={'/report/' + report.id}>{new Date(report.date).toDateString()}</Link>
                     </div>
                 )}
             </div>

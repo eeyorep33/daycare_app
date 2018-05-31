@@ -4,11 +4,12 @@
 // import classroomReducer from './classroomReducers'
 // import reportReducer from './reportReducers'
 export const initialState = {
-  students: { loading: false, error: null, data: [] }, teachers: { loading: false, error: null, data: [] }, reports: { loading: false, error: null, data: [] }, classrooms: { loading: false, error: null, data: [] }
+  students: { loading: false, error: null, data: [] }, teachers: { loading: false, error: null, data: [] }, reports: { loading: false, error: null, data: [{feeding:[],diapering:[], nap:[], meds:[],playTime:[], comments:[], supplies:[]}] }, classrooms: { loading: false, error: null, data: [] }
 }
 //const rootReducer=combineReducers({reportReducer, classroomReducer, studentReducer, teacherReducer})
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
+    
     case "ADD_STUDENT_SUCCESS":
       let newStudent = state.students.data.concat([action.payload])
       return { ...state, students: { ...state.students, loading: false, error: action.payload, data: newStudent } };
@@ -18,6 +19,15 @@ const rootReducer = (state = initialState, action) => {
       break;
     case "ADD_STUDENT_ERROR":
       return { ...state, students: { ...state.students, error: action.payload, loading: false } }
+      break;
+      case "GET_A_REPORT_START":
+      return { ...state, reports: { ...state.reports, loading: true } }
+    case "GET_A_REPORT_SUCCESS": 
+      //const report=[{id:action.payload[7].id, date:action.payload[7].date, student_id:action.payload[7].student_id,  feeding:[action.payload[0]], meds:[action.payload[6]], comments:[action.payload[1]], supplies:[action.payload[4]], nap:[action.payload[2]], playTime:[action.payload[3]], diapering:[action.payload[5]]}]
+        
+    return { ...state, reports: { ...state.reports, data:report, loading: false } }
+    case "GET_A_REPORT_ERROR":
+      return { ...state, reports: { ...state.reports, error: action.payload, loading: false } }
       break;
     case "STUDENT_CHECK_IN_SUCCESS":
       let updatedStudent = state.students.data.findIndex(
@@ -52,13 +62,27 @@ const rootReducer = (state = initialState, action) => {
         teacher => teacher.id === action.payload
       );
       const newTeacherData = [...state.teachers.data];
-      newTeacherData[updatedTeacher] = { ...newData[updatedTeacher], status: "in" }
-      return { ...state, teachers: { ...state.teachers, data: newData } };
+      newTeacherData[updatedTeacher] = { ...newTeacherData[updatedTeacher], status: "in" }
+      return { ...state, teachers: { ...state.teachers, data: newTeacherData } };
       break;
     case "TEACHER_CHECK_IN_START":
       return { ...state, teachers: { ...state.teachers, loading: true } }
       break;
     case "TEACHER_CHECK_IN_ERROR":
+      return { ...state, teachers: { ...state.teachers, error: action.payload, loading: false } }
+      break;
+      case "TEACHER_CHECK_OUT_SUCCESS":
+      let teacherCheckOut = state.teachers.data.findIndex(
+        teacher => teacher.id === action.payload
+      );
+      const newTeacherStatus = [...state.teachers.data];
+      newTeacherStatus[teacherCheckOut] = { ...newTeacherStatus[teacherCheckOut], status: "out" }
+      return { ...state, teachers: { ...state.teachers, data: newTeacherStatus } };
+      break;
+    case "TEACHER_CHECK_OUT_START":
+      return { ...state, teachers: { ...state.teachers, loading: true } }
+      break;
+    case "TEACHER_CHECK_OUT_ERROR":
       return { ...state, teachers: { ...state.teachers, error: action.payload, loading: false } }
       break;
     case "REMOVE_STUDENT_SUCCESS":
@@ -75,18 +99,19 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, students: { ...state.students, error: action.payload, loading: false } }
       break;
     case "ADD_FEEDING_SUCCESS":
-      const newFeeding = state.report.concat([action.payload]);
+      const newFeeding = state.report.feeding.concat([action.payload]);
+      console.log(action.payload)
       return { ...state, report: newFeeding };
       break;
     case "ADD_FEEDING_START":
-      return { ...state, feeding: { ...state.feeding, loading: true } }
+      return { ...state, report: { ...state.report, loading: true } }
       break;
     case "ADD_FEEDING_ERROR":
-      return { ...state, feeding: { ...state.feeding, error: action.payload, loading: false } }
+      return { ...state, report: { ...state.report, error: action.payload, loading: false } }
       break;
     case "ADD_MEDS_SUCCESS":
       const newMeds = state.report.concat([action.payload]);
-      return { ...state, report: newMeds };
+            return { ...state, report: newMeds };
       break;
     case "ADD_MEDS_START":
       return { ...state, meds: { ...state.meds, loading: true } }
@@ -144,10 +169,7 @@ const rootReducer = (state = initialState, action) => {
     case "ADD_PLAYTIME_ERROR":
       return { ...state, playTime: { ...state.playTime, error: action.payload, loading: false } }
       break;
-    case "CHANGE_STATUS":
-      return { ...state, students: [...state.students.status, action.payload] };
-      break;
-    case "ADD_TEACHER_SUCCESS":
+       case "ADD_TEACHER_SUCCESS":
       let newTeacher = state.teachers.data.concat([action.payload])
       return { ...state, teachers: { ...state.teachers, loading: false, error: action.payload, data: newTeacher } };
       break;
@@ -194,14 +216,14 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, classrooms: { ...state.classrooms, error: action.payload, loading: false } }
       break;
     case "ADD_REPORT_SUCCESS":
-      let newReport = state.report.data.concat([action.payload])
-      return { ...state, report: { ...state.report, error: action.payload, loading: false, data: newReport } };
+      let newReport = state.reports.data.concat([action.payload])
+      return { ...state, reports: { ...state.reports, error: action.payload, loading: false, data: newReport } };
       break;
     case "ADD_REPORT_START":
-      return { ...state, report: { ...state.report, loading: true } }
+      return { ...state, reports: { ...state.reports, loading: true } }
       break;
     case "ADD_REPORT_ERROR":
-      return { ...state, report: { ...state.report, error: action.payload, loading: false } }
+      return { ...state, reports: { ...state.reports, error: action.payload, loading: false } }
       break;
     case "GET_STUDENTS_START":
       return { ...state, students: { ...state.students, loading: true } }
@@ -211,6 +233,49 @@ const rootReducer = (state = initialState, action) => {
       break;
     case "GET_STUDENTS_SUCCESS":
       return { ...state, students: { ...state.students, data: action.payload, loading: false } }
+      break;
+      case "GET_STUDENTS_BY_CLASSROOM_START":
+      return { ...state, students: { ...state.students, loading: true } }
+      break;
+    case "GET_STUDENTS_BY_CLASSROOM_ERROR":
+      return { ...state, students: { ...state.students, error: action.payload, loading: false } }
+      break;
+    case "GET_STUDENTS_BY_CLASSROOM_SUCCESS":
+      return { ...state, students: { ...state.students, data: action.payload, loading: false } }
+      break;
+      case "CHANGE_STUDENT_START":
+      return { ...state, students: { ...state.students, loading: true } }
+      break;
+    case "CHANGE_STUDENT_ERROR":
+      return { ...state, students: { ...state.students, error: action.payload, loading: false } }
+      break;
+    case "CHANGE_STUDENT_SUCCESS":
+    console.log(action.payload)
+    let studentIndex1 = state.students.data.findIndex((student) => {
+      return `${student.id}`=== `${action.payload.id}`
+    })
+    console.log(studentIndex1)
+    const editStudent = [...state.students.data];
+        editStudent[studentIndex1] = { ...editStudent[studentIndex1], name:action.payload.name, email:action.payload.email }
+        console.log(editStudent)
+    return { ...state, students: { ...state.students, data: editStudent } };
+      break;
+      case "CHANGE_CLASSROOM_START":
+      return { ...state, classrooms: { ...state.classrooms, loading: true } }
+      break;
+    case "CHANGE_CLASSROOM_ERROR":
+      return { ...state, classrooms: { ...state.classrooms, error: action.payload, loading: false } }
+      break;
+    case "CHANGE_CLASSROOM_SUCCESS":
+    console.log(action.payload)
+    let classroomIndex1 = state.classrooms.data.findIndex((classroom) => {
+      return `${classroom.id}`=== `${action.payload.id}`
+    })
+    console.log(classroomIndex1)
+    const editClassroom = [...state.classrooms.data];
+        editClassroom[classroomIndex1] = { ...editClassroom[classroomIndex1], name:action.payload.name }
+        console.log(editClassroom)
+    return { ...state, classrooms: { ...state.classrooms, data: editClassroom } };
       break;
     case "GET_TEACHERS_START":
       return { ...state, teachers: { ...state.teachers, loading: true } }
@@ -236,10 +301,13 @@ const rootReducer = (state = initialState, action) => {
       return { ...state, reports: { ...state.reports, data: action.payload, loading: false } }
     case "GET_REPORTS_ERROR":
       return { ...state, reports: { ...state.reports, error: action.payload, loading: false } }
+      break;
+      
       case "GET_TODAY_REPORTS_START":
       return { ...state, reports: { ...state.reports, loading: true } }
     case "GET_TODAY_REPORTS_SUCCESS":
-      return { ...state, reports: { ...state.reports, data: action.payload, loading: false } }
+    const report=[{id:action.payload[7].id, date:action.payload[7].date, student_id:action.payload[7].student_id,  feeding:[action.payload[0]], meds:[action.payload[6]], comments:[action.payload[1]], supplies:[action.payload[4]], nap:[action.payload[2]], playTime:[action.payload[3]], diapering:[action.payload[5]]}]
+    return { ...state, reports: { ...state.reports, data:report, loading: false } }
     case "GET_TODAY_REPORTS_ERROR":
       return { ...state, reports: { ...state.reports, error: action.payload, loading: false } }
     default:

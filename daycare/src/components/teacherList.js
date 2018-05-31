@@ -1,25 +1,46 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import {fetchTeachers} from '../actions/teacherActions'
+import { fetchTeachers } from '../actions/teacherActions'
+
 class TeacherList extends Component {
-      componentDidMount()
-{
-      this.props.getTeacherList()
-}      render() {
+      componentDidMount() {
+            this.props.getTeacherList()
+      } render() {
+            let param = (this.props.match.params.id)
+            const { match, location } = this.props
             return (
                   <div>
                         {this.props.store.teachers.data.map((teacher) =>
-                              <div>
-                                    {teacher.name} <p>Status:{teacher.status}</p>
-                                    <button onClick={() => this.props.teacherCheckIn(teacher.id)}>Check-in</button>
+                              <div className='checkInDiv'>
+                              {console.log(teacher.name, teacher.id)}
+                                    <p className='teacherName'> {teacher.name}</p><p className='teacherName'> Status:{teacher.status}</p>
+                                    <button className='teacherStatus btn' onClick={(e) => this.props.teacherCheckOut(e, teacher.id)}>Check-Out</button>
+                                    <button className='teacherStatus btn' onClick={(e) => this.props.teacherCheckIn(e, teacher.id)}>Check-In</button>
+                                    <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#deleteTeacherModal">
+                                          Delete Teacher
+                       </button>
+                       <div className="modal fade" id="deleteTeacherModal" tabindex="-1" role="dialog" aria-labelledby="deleteTeacherModalLabel" aria-hidden="true">
+                              <div className="modal-dialog" role="document">
+                                    <div className="modal-content">
+                                          <div className="modal-header">
+                                                <h5 className="modalTitle" id="deleteTeacherModalLabel">Delete Teacher</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                </button>
+                                          </div>
+                                          <div className="modal-body">
+                                                <p className='modalContent'>Are you sure you want to delete this teacher?</p>
+                                                <div className="modal-footer">
+                                                      <button onClick={(e) => this.props.deleteTeacher(e,teacher.id)} type="submit" className="btn saveButton">Save changes</button>
+                                                      <button type="button" className="btn closeButton" data-dismiss="modal">Close</button>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
                               </div>)}
-                        <form onSubmit={(e) => this.props.deleteTeacher(e)}>
-                              <label>Delete a teacher</label>
-                              <label>Name</label>
-                              <input type="text" name='deleteTeacher' />
-                              <button type='submit'>Submit </button>
-                        </form>
+                       
                   </div>
             )
       }

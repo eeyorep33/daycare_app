@@ -6,20 +6,39 @@ class DailyReport extends Component {
       render() {
             const { match, location } = this.props
             let param = (this.props.match.params.id)
-            let report = this.props.store.reports.data.filter((repo) => {
-                  return repo.id == param
+            let report = this.props.store.reports.data.find((repo) => {
+                  return `${repo.id}`=== param
             })
-            let student = this.props.store.students.data.filter((stud) => {
-                  return stud.id == report.student_id
+            let student = null
+            if(report){student=this.props.store.students.data.find((stud) => {
+                 return `${stud.id}` === `${report.student_id}`
             })
+      }
+      let classroom=null;
+      if(student){classroom=this.props.store.classrooms.data.find((classroom)=>{
+return `${classroom.id}`===`${student.classroom_id}`
+      })
+}
+let teachers=null
+if(classroom){teachers=this.props.store.teachers.data.find((teacher)=>{
+      return `${teacher.classroom_id}`===`${classroom.id}`
+})}
+console.log(this.props.store.teachers.data)
+            if( report && student)
+            {
+
+            
             return (
+           
                   <div>
                         {console.log(report.id)}
                         {console.log(report.student_id)}
-                        <p className='report'>Date:{report.date}</p>
+                        <p className='report'>Date:{new Date(report.date).toDateString()}</p>
                         <p className='report'>Name:{student.name}</p>
-                        <p className='report'>Room:</p>
-                        <p className='report'>Teachers:</p>
+                        <p className='report'>Room:{classroom.name}</p>
+                        <div>{teachers.map((teacher)=>
+                        <p className='report'>Teachers:{teachers.name}</p>)}                        
+                        </div>
                         <p className='report'>Check-in Time:</p>
                         <p className='report'>Check-out Time:</p>
                         <p className='report'>Playtime:</p>
@@ -31,6 +50,9 @@ class DailyReport extends Component {
                         <p className='report'>Comments:</p>
                   </div>
             )
+      }else{
+          return  <p>Loading...</p>
+      }
       }
 }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import axios from 'axios'
 import { Route, Link, Switch, withRouter } from 'react-router-dom'
 import Home from './components/home'
 import Classroom from './components/classroom';
@@ -9,18 +10,36 @@ import Report from './components/report'
 import ReportList from './components/reportList'
 import TeacherList from './components/teacherList'
 import { connect } from 'react-redux'
-import { removeTeacher, teacherCheckIn, addTeacher } from './actions/teacherActions'
-import { studentCheckIn, fetchStudents, studentCheckOut, addStudent, removeStudent } from './actions/studentActions'
-import { addClassroom, fetchClassrooms, removeClassroom } from './actions/classroomActions'
-import { addReport, getReports } from './actions/reportActions'
+import { removeTeacher, teacherCheckIn, addTeacher, teacherCheckOut } from './actions/teacherActions'
+import { studentCheckIn, fetchStudents, studentCheckOut, addStudent, removeStudent, changeStudent } from './actions/studentActions'
+import { addClassroom, fetchClassrooms, removeClassroom, changeClassroom, getStudentsByClassroom } from './actions/classroomActions'
+import { addReport, getReports, getAReport, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, addPlayTime  } from './actions/reportActions'
+import Axios from 'axios';
 let today = new Date()
-let date = today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear()
+let date = today.getMonth() +1 + "/" + today.getDate() + "/" + today.getFullYear()
 
 class App extends Component {
-  componentDidMount() {
+  
+   componentDidMount() {
+    
     this.props.LoadClassrooms()
-    this.props.getStudentList()
-  }
+         
+      }
+  editStudent=(e,id)=>{
+e.preventDefault()
+const name=e.target.name.value
+const email=e.target.email.value
+const student={name: name, email:email}
+this.props.changeStudent(student, id)
+  }  
+  editClassroom=(e,id)=>{
+        e.preventDefault()
+        console.log(id)
+    const name=e.target.name.value
+    const classroom={name:name}
+    console.log(name)
+        this.props.changeClassroom(classroom, id)
+      }
   getReports = (e, name) => {
     e.preventDefault()
     let studentId = this.props.store.students.data.find((student) => {
@@ -28,56 +47,59 @@ class App extends Component {
     })
     this.props.getReports(studentId.id)
   }
-  addFeeding = (e, id) => {
+  
+ addFeeding = (e, id) => {
     e.preventDefault()
-    let time = e.target.feedingtime.value
+        let time = e.target.feedingtime.value
     let food = e.target.food.value
     let amount = e.target.amount.value
     let feeding = { time: time, food: food, amount: amount, report_id: id }
-    console.log(food)
+    this.props.addFeed(feeding)
   }
-  addDiapering = (e) => {
+  addDiapering = (e, id) => {
     e.preventDefault()
-    console.log('function accessed')
-    let time = e.target.diapertime.value
-    let type = e.target.type.value
+        let time = e.target.diapertime.value
+    let type = e.target.diaperType.value
     let initials = e.target.initials.value
-    let diapering = { time: time, type: type, initials: initials }
-    console.log(type)
-    console.log(time)
+    let diapering = { time: time, type: type, initials: initials, report_id:id }
+    this.props.addDiapers(diapering)
   }
   addNap = (e, id) => {
     e.preventDefault()
-    let startTime = e.target.startTime.value
-    let stopTime = e.target.stopTime.value
+    let startTime = e.target.napStartTime.value
+    let stopTime = e.target.napStopTime.value
     let nap = { startTime: startTime, stopTime: stopTime, report_id: id }
+    this.props.addNapTime(nap)
   }
   addMeds = (e, id) => {
     e.preventDefault()
-    let time = e.target.medTime.value
+    let time = e.target.medicinetime.value
     let name = e.target.medName.value
     let dosage = e.target.dosage.value
     let meds = { time: time, name: name, amount: dosage, report_id: id }
+    this.props.addMedicine(meds)
   }
-  addPlayTime = (e) => {
+  addPlayTime = (e,id) => {
     e.preventDefault()
     let playType = e.target.playType.value
     let activity = e.target.activity.value
-    let playTime = { type: playType, activity: activity }
-    console.log(activity)
+    let playTime = { type: playType, activity: activity, report_id:id }
+    this.props.addPlay(playTime)
   }
   addComments = (e, id) => {
     e.preventDefault()
     let comment = e.target.comments.value
     let comments = { comment: comment, report_id: id }
+    this.props.addCom(comments)
   }
   addSupplies = (e, id) => {
     e.preventDefault()
     let supply = e.target.supplies.value
-    console.log(supply)
-    let supplies = { supply_item: supply, report_id: id }
+       let supplies = { supply_item: supply, report_id: id }
+       this.props.addSup(supplies)
   }
-  teacherCheckIn = (id) => {
+  teacherCheckIn = (e,id) => {
+    e.preventDefault()
     this.props.teacherCheckIn(id)
   }
   studentCheckIn = (e, id) => {
@@ -89,6 +111,10 @@ class App extends Component {
   studentCheckOut = (e, id) => {
     e.preventDefault()
     this.props.studentCheckOut(id)
+  }
+  teacherCheckOut = (e, id) => {
+    e.preventDefault()
+    this.props.teacherCheckOut(id)
   }
   addClassroom = (e) => {
     e.preventDefault()
@@ -137,14 +163,10 @@ class App extends Component {
     e.target.teacherName.value = ''
     e.target.initials.value = ''
   }
-  deleteTeacher = (e) => {
+  deleteTeacher = (e,id) => {
     e.preventDefault()
-    let deletedTeacher = e.target.deleteTeacher.value
-    let deleted = this.props.store.teachers.data.find((teacher) => {
-      return teacher.name == deletedTeacher
-    })
-    this.props.removeTeacher(deleted.id)
-    e.target.deleteTeacher.value = ''
+    console.log(id)
+        this.props.removeTeacher(id)
   }
 
   render() {
@@ -166,7 +188,7 @@ class App extends Component {
               Classroom</a>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
               {this.props.store.classrooms.data.map((room) =>
-                <Link className="drop buttonText" to={"/classroom/" + room.id}>{room.name} </Link>
+                <Link onClick={()=>this.props.getStudents(room.id)}className="drop buttonText" to={"/classroom/" + room.id}>{room.name} </Link>
               )}
             </div>
           </div>
@@ -228,7 +250,7 @@ class App extends Component {
 
             </div>
           </div>
-        </div>
+                 </div>
         <Switch>
           <Route path="/" exact render={(props) => (
             <Home {...props} />
@@ -239,6 +261,7 @@ class App extends Component {
               addaTeacher={this.addaTeacher}
               getStudents={this.getStudents}
               deleteStudent={this.deleteStudent}
+              editClassroom={this.editClassroom}
             />
           )} />
           <Route path='/teacher/:id' render={(props) => (
@@ -247,7 +270,7 @@ class App extends Component {
           )} />
           <Route path="/student/:id" render={(props) => (
             <Student {...props}
-              checkIn={this.studentCheckIn} />)}
+              checkIn={this.studentCheckIn} 
             studentDetails={this.studentDetails}
             addDiapering={this.addDiapering}
             addFeeding={this.addFeeding}
@@ -256,7 +279,8 @@ class App extends Component {
             addComments={this.addComments}
             addSupplies={this.addSupplies}
             addPlayTime={this.addPlayTime}
-            checkOut={this.studentCheckOut}
+            editStudent={this.editStudent}
+            checkOut={this.studentCheckOut}/>)}
           />
           <Route path='/report/:id' render={(props) => (
             <Report {...props} />)} />}
@@ -266,6 +290,7 @@ class App extends Component {
             <TeacherList
               teacherCheckIn={this.teacherCheckIn}
               deleteTeacher={this.deleteTeacher}
+              teacherCheckOut={this.teacherCheckOut}
               {...props} />)} />}
         </Switch>
       </div>
@@ -279,6 +304,13 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
+    addDiapers: (diapering) => dispatch(addDiapering(diapering)),
+    addFeed: (feeding) => dispatch(addFeeding(feeding)),
+    addMedicine: (meds) => dispatch(addMeds(meds)),
+    addSup: (sup) => dispatch(addSupplies(sup)),
+    addCom: (comment) => dispatch(addComments(comment)),
+    addPlay: (play) => dispatch(addPlayTime(play)),
+    addNapTime: (nap) => dispatch(addNap(nap)),
     addClass: (newClass) => dispatch(addClassroom(newClass)),
     addReport: (newReport) => dispatch(addReport(newReport)),
     removeClass: (room) => dispatch(removeClassroom(room)),
@@ -288,9 +320,14 @@ function mapDispatchToProps(dispatch) {
     addNewStudent: (newStudent) => dispatch(addStudent(newStudent)),
     addNewTeacher: (newTeacher) => dispatch(addTeacher(newTeacher)),
     getReports: (name) => dispatch(getReports(name)),
+    getAReport: (id) => dispatch(getAReport(id)),
     getStudentList: (students) => dispatch(fetchStudents(students)),
     studentCheckIn: (id) => dispatch(studentCheckIn(id)),
-    teacherCheckIn: (id) => dispatch(teacherCheckIn(id))
+        teacherCheckIn: (id) => dispatch(teacherCheckIn(id)),
+    teacherCheckOut: (id) => dispatch(teacherCheckOut(id)),
+    getStudents: (students) => dispatch(getStudentsByClassroom(students)),
+    changeStudent:(student, id)=> dispatch(changeStudent(student, id)),
+    changeClassroom:(name, id)=> dispatch(changeClassroom(name, id))
   }
 }
 

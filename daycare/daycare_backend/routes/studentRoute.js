@@ -21,9 +21,12 @@ module.exports = (app) => {
             students.editStatus(req.params.id)
                   .then((student) => { res.send(student.attributes.id) })
       })
-      app.put('/studentCheckOut/:id', (req, res) => {
-            console.log('req received')            
+      app.put('/studentCheckOut/:id', (req, res) => {                      
             students.studentCheckOut(req.params.id)
                   .then((student) => { res.send(student.attributes.id) })
+      })
+      app.put('/editStudent/:id',(req,res)=>{
+                        students.editStudent(req.params.id, req.body)
+            .then((student)=>{res.send (student.attributes)})
       })
 } 

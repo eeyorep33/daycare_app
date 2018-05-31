@@ -12,6 +12,35 @@ export const GET_CLASSROOMS_SUCCESS = 'GET_CLASSROOMS_SUCCESS'
 export const GET_CLASSROOMS_ERROR = 'GET_CLASSROOMS_ERROR'
 export const GET_CLASSROOMS_START = 'GET_CLASSROOMS_START'
 
+export const GET_STUDENTS_BY_CLASSROOM_SUCCESS = 'GET_STUDENTS_BY_CLASSROOM_SUCCESS'
+export const GET_STUDENTS_BY_CLASSROOM_ERROR = 'GET_STUDENTS_BY_CLASSROOM_ERROR'
+export const GET_STUDENTS_BY_CLASSROOM_START = 'GET_STUDENTS_BY_CLASSROOM_START'
+
+
+export const CHANGE_CLASSROOM_START = 'CHANGE_CLASSROOM_START'
+export const CHANGE_CLASSROOM_ERROR = 'CHANGE_CLASSROOM_ERROR'
+export const CHANGE_CLASSROOM_SUCCESS = 'CHANGE_CLASSROOM_SUCCESS'
+
+export const changeClassroomStart=(name)=>({
+  type:CHANGE_CLASSROOM_START, name
+})
+export const changeClassroom=(name, id)=>{
+  console.log(name)
+return dispatch=>{
+  dispatch(changeClassroomStart(name))
+  return axios.put('http://localhost:8080/editClassroom/'+id, name)
+  .then((response)=>{
+    dispatch(changeClassroomSuccess(response.data))
+  }).catch(err=>{dispatch(changeClassroomError(err))})
+}
+}
+export const changeClassroomSuccess=(data)=>{
+  return {type: CHANGE_CLASSROOM_SUCCESS, payload:data}
+}
+export const changeClassroomError=(err)=>{
+return {type: CHANGE_CLASSROOM_ERROR, payload:err}
+}
+
 export const addClassroomStart = classroom => ({
   type: ADD_CLASSROOM_START, classroom
 })
@@ -65,4 +94,23 @@ export const getClassroomSuccess = (data) => {
 }
 export const getClassroomError = (error) => {
   return { type: GET_CLASSROOMS_ERROR, error }
+}
+export const getStudentsByClassroomStart = () => {
+  return { type: GET_CLASSROOMS_START }
+}
+export const getStudentsByClassroom = (id) => {
+  console.log(id)
+  return dispatch => {
+    dispatch(getStudentsByClassroomStart())
+    return axios.get('http://localhost:8080/classroomList/'+id)
+      .then(response => {console.log(response.data)
+        dispatch(getStudentsByClassroomSuccess(response.data))
+      }).catch(err => { dispatch(getStudentsByClassroomError(err)) })
+  }
+}
+export const getStudentsByClassroomSuccess = (data) => {
+  return { type: GET_STUDENTS_BY_CLASSROOM_SUCCESS, payload: data }
+}
+export const getStudentsByClassroomError = (error) => {
+  return { type: GET_STUDENTS_BY_CLASSROOM_ERROR, error }
 }

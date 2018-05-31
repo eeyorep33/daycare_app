@@ -19,6 +19,11 @@ export const GET_STUDENTS_START = 'GET_STUDENTS_START'
 export const GET_STUDENTS_ERROR = 'GET_STUDENTS_ERROR'
 export const GET_STUDENTS_SUCCESS = 'GET_STUDENTS_SUCCESS'
 
+export const CHANGE_STUDENT_START = 'CHANGE_STUDENT_START'
+export const CHANGE_STUDENT_ERROR = 'CHANGE_STUDENT_ERROR'
+export const CHANGE_STUDENT_SUCCESS = 'CHANGE_STUDENT_SUCCESS'
+
+
 
 export const addStudentStart = student => ({
   type: ADD_STUDENT_START, student
@@ -111,6 +116,29 @@ export const studentCheckOutSuccess = (data) => {
 export const studentCheckOutError = (error) => {
   return { type: STUDENT_CHECK_OUT_ERROR, error }
 }
+
+export const changeStudentStart=(student)=>({
+  type:CHANGE_STUDENT_START, student
+})
+export const changeStudent=(student, id)=>{
+return dispatch=>{
+  dispatch(changeStudentStart(student))
+  return axios.put('http://localhost:8080/editStudent/'+id, student)
+  .then((response)=>{
+    dispatch(changeStudentSuccess(response.data))
+  }).catch(err=>{dispatch(changeStudentError(err))})
+}
+}
+export const changeStudentSuccess=(data)=>{
+  return {type: CHANGE_STUDENT_SUCCESS, payload:data}
+}
+export const changeStudentError=(err)=>{
+return {type: CHANGE_STUDENT_ERROR, payload:err}
+}
+
+
+  
+
 
 
 

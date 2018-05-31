@@ -36,6 +36,10 @@ export const GET_REPORTS_START = 'GET_REPORTS_START'
 export const GET_REPORTS_SUCCESS = 'GET_REPORTS_SUCCESS'
 export const GET_REPORTS_ERROR = 'GET_REPORTS_ERROR'
 
+export const GET_A_REPORT_START = 'GET_A_REPORT_START'
+export const GET_A_REPORT_SUCCESS = 'GET_A_REPORT_SUCCESS'
+export const GET_A_REPORT_ERROR = 'GET_A_REPORT_ERROR'
+
 export const GET_TODAY_REPORTS_START = 'GET_TODAY_REPORTS_START'
 export const GET_TODAY_REPORTS_SUCCESS = 'GET_TODAY_REPORTS_SUCCESS'
 export const GET_TODAY_REPORTS_ERROR = 'GET_TODAY_REPORTS_ERROR'
@@ -90,7 +94,7 @@ export const addFeedingStart = feeding => ({
 export const addFeeding = (feeding) => {
   return dispatch => {
     dispatch(addFeedingStart())
-    return axios.post('http;//localhost:8080/feeding', feeding)
+    return axios.post('http://localhost:8080/feeding', feeding)
       .then(response => {
         dispatch(addFeedingSuccess(response.data))
       }).catch(err => { dispatch(addFeedingError(err)) })
@@ -219,15 +223,35 @@ export const getReportsSuccess = (data) => {
 export const getReportsError = (error) => {
   return { type: GET_REPORTS_ERROR, error }
 }
+export const getAReportStart = (reports) => {
+  return { type: GET_A_REPORT_START, reports }
+}
+export const getAReport = (id) => {
+
+  return dispatch => {
+    dispatch(getAReportStart())
+    return axios.get('http://localhost:8080/getReport/' + id)
+      .then(response => {
+        dispatch(getAReportSuccess(response.data))
+      }).catch(err => { dispatch(getAReportError(err)) })
+  }
+}
+export const getAReportSuccess = (data) => {
+  return { type: GET_A_REPORT_SUCCESS, payload: data }
+}
+export const getAReportError = (error) => {
+  return { type: GET_A_REPORT_ERROR, error }
+}
 
 export const getTodayReportsStart = (reports) => {
   return { type: GET_TODAY_REPORTS_START, reports }
 }
-export const getTodayReports = (date) => {
-  return dispatch => {
+export const getTodayReports = (date,id) => {
+    return dispatch => {
     dispatch(getTodayReportsStart())
-    return axios.get('http://localhost:8080/todayReports/' + date)
+       return axios.get('http://localhost:8080/getReports/' + date, id)
       .then(response => {
+        console.log(response.data)
         dispatch(getTodayReportsSuccess(response.data))
       }).catch(err => { dispatch(getTodayReportsError(err)) })
   }

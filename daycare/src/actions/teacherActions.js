@@ -16,13 +16,18 @@ export const TEACHER_CHECK_IN_SUCCESS = 'TEACHER_CHECK_IN_SUCCESS'
 export const TEACHER_CHECK_IN_ERROR = 'TEACHER_CHECK_IN_ERROR'
 export const TEACHER_CHECK_IN_START = 'TEACHER_CHECK_IN_START'
 
+export const TEACHER_CHECK_OUT_SUCCESS = 'TEACHER_CHECK_OUT_SUCCESS'
+export const TEACHER_CHECK_OUT_ERROR = 'TEACHER_CHECK_OUT_ERROR'
+export const TEACHER_CHECK_OUT_START = 'TEACHER_CHECK_OUT_START'
+
+
 export const teacherCheckInStart = teacher => ({
   type: "TEACHER_CHECK_IN_START", teacher
 })
 export const teacherCheckIn = (id) => {
   return dispatch => {
     dispatch(teacherCheckInStart())
-    return axios.put('http://localhost:8080/teacherList/' + id)
+    return axios.put('http://localhost:8080/teacherCheckIn/' + id)
       .then((response) => {
         dispatch(teacherCheckInSuccess(response.data))
       }).catch(err => { dispatch(teacherCheckInError(err)) })
@@ -60,6 +65,7 @@ export const removeTeacher = (teacher) => {
     dispatch(removeTeacherStart())
     return axios.delete('http://localhost:8080/teacherList/' + teacher)
       .then(response => {
+        console.log(response.data)
         dispatch(removeTeacherSuccess(response.data))
       }).catch(err => { dispatch(removeTeacherError(err)) })
   }
@@ -87,6 +93,25 @@ export const getTeachersSuccess = (data) => {
 }
 export const getTeachersError = (error) => {
   return { type: GET_TEACHERS_ERROR, error }
+}
+export const teacherCheckOutStart = teacher => ({
+  type: "TEACHER_CHECK_OUT_START", teacher
+})
+export const teacherCheckOut = (id) => {
+  return dispatch => {
+    dispatch(teacherCheckOutStart())
+    return axios.put('http://localhost:8080/teacherCheckOut/' + id)
+      .then((response) => {
+        console.log(response.data)
+        dispatch(teacherCheckOutSuccess(response.data))
+      }).catch(err => { dispatch(teacherCheckOutError(err)) })
+  }
+}
+export const teacherCheckOutSuccess = (data) => {
+  return { type: TEACHER_CHECK_OUT_SUCCESS, payload: data }
+}
+export const teacherCheckOutError = (error) => {
+  return { type: TEACHER_CHECK_OUT_ERROR, error }
 }
 
 

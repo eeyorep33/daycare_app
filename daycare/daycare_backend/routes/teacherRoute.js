@@ -13,13 +13,20 @@ module.exports = (app) => {
             })
       })
       app.delete('/teacherList/:id', (req, res) => {
+            console.log(req.params.id)
             teachers.deleteTeacher(req.params.id).then((teacher) => {
                   res.send(req.params.id)
             })
       })
-      app.put('/teacherList/:id', (req, res) => {
-            teachers.editTeacherStatus(req.params.id)
+      app.put('/teacherCheckIn/:id', (req, res) => {
+            console.log(req.params.id)
+            teachers.teacherCheckIn(req.params.id)
                   .then((teacher) => { res.send(teacher.attributes.id) })
+
+      })
+      app.put('/teacherCheckOut/:id', (req, res) => {
+                        teachers.teacherCheckOut(req.params.id)
+                  .then((teacher) => { console.log(teacher.attributes),res.send(teacher.attributes.id) })
 
       })
 }

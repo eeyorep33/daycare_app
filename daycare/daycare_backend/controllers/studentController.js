@@ -75,4 +75,14 @@ exports.studentCheckOut = (id) => {
                   console.log(err)
             })
 }
+exports.editStudent=(id, body)=>{
+const fieldsToUpdate={name:body.name, email:body.email}
+return new Student ({id:id})
+.save(fieldsToUpdate)
+.then(saved=>{
+      return saved
+}).catch(err=>{
+      console.log(err)
+})
+}
 

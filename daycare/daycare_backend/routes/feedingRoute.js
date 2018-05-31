@@ -8,6 +8,7 @@ module.exports = (app) => {
             feeding.getFeeding(req.params.id).then((feedings) => { res.send(feedings) })
       })
       app.post('/feeding', (req, res) => {
+            console.log('data received')
             feeding.createFeeding(req.body)
                   .then((feedings) => { res.send(feedings.attributes) })
       })

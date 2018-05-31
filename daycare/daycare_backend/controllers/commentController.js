@@ -1,14 +1,14 @@
 const knexConfig = require('../../knexfile')
 const knex = require('knex')(knexConfig)
 const bookshelf = require('bookshelf')(knex)
-const Comment = bookshelf.Model.extend({
+const Com = bookshelf.Model.extend({
       tableName: 'comment',
       report: function () {
             return this.belondsTo(Report)
       },
 })
 exports.getComments = (id) => {
-      return Comment.where(id).fetchAll()
+      return Com.where(id).fetchAll()
             .then(result => {
                   const comments = result.models.map(com => {
                         return com.attributes
@@ -18,7 +18,7 @@ exports.getComments = (id) => {
 }
 exports.createComments = (comment) => {
       console.log('function accessed')
-      const newComment = new Comment(
+      const newComment = new Com(
             comment)
       return newClassroom.save()
             .then(com => {
@@ -29,7 +29,7 @@ exports.createComments = (comment) => {
             })
 }
 exports.deleteComments = (id) => {
-      return new Comment(id)
+      return new Com(id)
             .destroy()
             .then(result => {
 

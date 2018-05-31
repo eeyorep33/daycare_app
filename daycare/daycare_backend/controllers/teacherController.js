@@ -43,9 +43,20 @@ exports.createTeacher = (teacher) => {
                   console.log(err)
             })
 }
-exports.editTeacherStatus = (id) => {
+exports.teacherCheckIn = (id) => {
       console.log(id)
       const fieldToUpdate = { status: 'in' }
+      return new Teacher({ id: id })
+            .save(fieldToUpdate)
+            .then(saved => {
+                  return saved;
+            }).catch(err => {
+                  console.log(err)
+            })
+}
+exports.teacherCheckOut = (id) => {
+      console.log("hello", id)
+      const fieldToUpdate = { status: 'out' }
       return new Teacher({ id: id })
             .save(fieldToUpdate)
             .then(saved => {

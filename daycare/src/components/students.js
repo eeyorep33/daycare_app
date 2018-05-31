@@ -3,19 +3,43 @@ import TimePicker from 'rc-time-picker'
 import moment from 'moment';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, addPlayTime } from '../actions/reportActions'
 import { fetchStudents, studentCheckOut } from '../actions/studentActions'
+import {getTodayReports} from '../actions/reportActions'
 let today = new Date()
-let date = today.getMonth() + "/" + today.getDate() + "/" + today.getFullYear()
+let date = today.getMonth() +1 + "/" + today.getDate() + "/" + today.getFullYear()
 
 
 
 class Student extends Component {
-      componentDidMount() {
-            this.props.getStudentList()
+
+      constructor() {
+            super()
+            this.state = {
+                  name: '',
+                  email: '',
+                  studentDetails:{}
+            }
       }
-      
-           
+      componentWillReceiveProps(nextProps){
+            let param = (nextProps.match.params.id)
+if(nextProps.students.data.length>0){
+      let studentDetails = nextProps.students.data.find((student) => {
+            return student.id == param
+      })
+this.setState({
+      studentDetails: studentDetails,
+      name: studentDetails.name,
+      email: studentDetails.email
+})
+}
+      }
+      componentDidMount() {
+            let param = (this.props.match.params.id)
+            this.props.getStudentList()
+            this.props.getDailyReports(date, param)
+      }
+
+
       findStudent = (id) => {
             let studentDetails = this.props.students.data.find((student) => {
                   return student.id == id
@@ -25,56 +49,98 @@ class Student extends Component {
                   <p className="status">Status:{studentDetails.status}</p>
             </div> : <p>Loading...</p>
       }
+      updateName = (value) => {
+                       this.setState({
+                  name: value
+            })
 
+      }
+      updateEmail = (value) => {
+            this.setState({
+                  email: value
+            })
+      }
       render() {
             const { match, location } = this.props
             let param = (this.props.match.params.id)
-            let report=this.props.reports.data.find((report)=>{
-                  return report.student_id===param && report.date===date                           
-      })
-      
+            
+            // let report = this.props.reports.data.find((report) => {
+            //       return `${report.student_id}` === param
+            // })
+
             const format = 'h:mm a';
             const now = moment().hour(6).minute(30);
             let studentDetails = this.props.students.data.find((student) => {
                   return student.id == param
             })
                         return (<div>
+                  <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#editStudentModal">
+                        Edit Student
+                       </button>
+                       
+                  {studentDetails && <div className="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                              <div className="modal-content">
+                                    <div className="modal-header">
+                                          <h5 className="modalTitle" id="editStudentModalLabel">Edit Student</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                          </button>
+                                    </div>
+                                    <div className="modal-body">
+                                          <form onSubmit={(e) => this.props.editStudent(e, param)} >
+                                                <label className='modalContent modalAlign'>Name</label>
+                                                <input onChange={(e) => this.updateName(e.target.value)} className='checkIn' type="text" value={this.state.name} name="name" />
+                                                <div className='modalDisplay'>
+                                                      <label className='checkIn modalContent' >Email</label>
+                                                      <input onChange={(e) => this.updateEmail(e.target.value)} className='checkIn' type='email' value={this.state.email} name='email' />
+                                                </div>
+                                                <div className="modal-footer">
+                                                      <button type="submit" className="btn saveButton">Save changes</button>
+                                                      <button type="button" className="btn closeButton" data-dismiss="modal">Close</button>
+                                                </div>
+                                          </form>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>}
                   {this.findStudent(param)}
-                  <button onClick={(e) => { this.props.checkIn(e, param) }} disabled={studentDetails.status === 'in'} className='navButtons btn checkInButton'>Check In</button>
-                  <p>Report #:</p>
+                  <button onClick={(e) => { this.props.checkIn(e, param) }} disabled={studentDetails ? studentDetails.status === 'in' : true} className='navButtons btn checkInButton'>Check In</button>
+                  {this.props.reports && <p>Report #:{this.props.reports.data.id}</p>}
+                  {console.log(this.props.reports.data)}
                   <div>
                         <div className='checkInDiv'>
                               <label className='add addTitleTur'>Add diaper change:</label>
-                            
-                                    <form onSubmit={(e) => this.props.addDiapering(e)}>
-                                          <label className='checkIn'>Time:</label>
-                                          <TimePicker
-                                                name='diapertime'
-                                                showSecond={false}
-                                                defaultValue={now}
-                                                className="checkIn"
-                                                format={format}
-                                                use12Hours
-                                                inputReadOnly
-                                          />
-                                          <label className='checkIn'>B/W</label>
-                                          <select className='checkIn' name='diaperType'>
-                                                <option value='B'>B</option>
-                                                <option value='W'>W</option>
-                                          </select>
-                                          <label className='checkIn'>Initials:</label>
-                                          <select name='initials'>
-                                                {this.props.teachers.data.map((teach) =>
-                                                      <option value={teach.initials}>{teach.initials}</option>
-                                                )}
-                                          </select>
-                                          <button type="submit" className='checkIn btn saveButton'>Add</button>
-                                    </form>
-                              
-                             
+
+                              <form onSubmit={(e) => this.props.addDiapering(e)}>
+                                    <label className='checkIn'>Time:</label>
+                                    <TimePicker
+                                          name='diapertime'
+                                          showSecond={false}
+                                          defaultValue={now}
+                                          className="checkIn"
+                                          format={format}
+                                          use12Hours
+                                          inputReadOnly
+                                    />
+                                    <label className='checkIn'>B/W</label>
+                                    <select className='checkIn' name='diaperType'>
+                                          <option value='B'>B</option>
+                                          <option value='W'>W</option>
+                                    </select>
+                                    <label className='checkIn'>Initials:</label>
+                                    <select name='initials'>
+                                          {this.props.teachers.data.map((teach) =>
+                                                <option value={teach.initials}>{teach.initials}</option>
+                                          )}
+                                    </select>
+                                    <button type="submit" className='checkIn btn saveButton'>Add</button>
+                              </form>
+
+
                         </div>
                         <div className='checkInDiv'>
-                              <form onSubmit={(e) => this.props.addFeeding(e)}>
+                              <form onSubmit={(e) => { this.props.addFeeding(e,46) }}>
                                     <label className='add addTitleOrg'>Add feeding:</label>
                                     <label className='checkIn'>Time:</label>
                                     <TimePicker
@@ -169,7 +235,7 @@ class Student extends Component {
                               <p className='checkIn'>mapped comments here</p>
                         </div>
                   </div>
-                  <button onClick={() => this.props.studentCheckOut( param)} className='checkOut btn closeButton' disabled={studentDetails.status === 'out'}>Check Out</button>
+                  <button onClick={() => this.props.studentCheckOut(param)} className='checkOut btn closeButton' disabled={studentDetails ? studentDetails.status === 'out' : true}>Check Out</button>
             </div>
             )
       }
@@ -179,20 +245,15 @@ function mapStateToProps(state) {
       return {
             students: state.students,
             teachers: state.teachers,
-            reports:state.reports
+            reports: state.reports
       };
 }
 function mapDispatchToProps(dispatch) {
       return {
-            addDiapers: (diapering) => dispatch(addDiapering(diapering)),
-            addFeed: (feeding) => dispatch(addFeeding(feeding)),
-            addMedicine: (meds) => dispatch(addMeds(meds)),
-            addSup: (sup) => dispatch(addSupplies(sup)),
-            addCom: (comment) => dispatch(addComments(comment)),
-            addPlay: (play) => dispatch(addPlayTime(play)),
-            addNapTime: (nap) => dispatch(addNap(nap)),
+
             studentCheckOut: (id) => dispatch(studentCheckOut(id)),
             getStudentList: () => dispatch(fetchStudents()),
+            getDailyReports:(dat, id)=>dispatch(getTodayReports(dat, id))
       }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Student);
