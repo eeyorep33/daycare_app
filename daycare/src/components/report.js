@@ -1,36 +1,38 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { fetchTeachers } from '../actions/teacherActions'
 
 class DailyReport extends Component {
-      componentDidMount() {
-            this.props.getTeacherList()
-      }
 
       render() {
             const { match, location } = this.props
             let param = (this.props.match.params.id)
-                        let report = this.props.reports.find((repo) => {
-                  return `${repo.id}`=== `${param}`
-            })            
+            let report = this.props.store.reports.data.find((repo) => {
+                  return `${repo.id}`=== param
+            })
             let student = null
             if(report){student=this.props.store.students.data.find((stud) => {
                  return `${stud.id}` === `${report.student_id}`
             })
-      }      
+      }
       let classroom=null;
       if(student){classroom=this.props.store.classrooms.data.find((classroom)=>{
-            return `${classroom.id}`===`${student.classroom_id}`
+return `${classroom.id}`===`${student.classroom_id}`
       })
 }
-let teachers;
+let teachers=null
 if(classroom){teachers=this.props.store.teachers.data.find((teacher)=>{
       return `${teacher.classroom_id}`===`${classroom.id}`
 })}
-            if(teachers)
-            {            
-            return (           
-                  <div>                        
+console.log(this.props.store.teachers.data)
+            if( report && student)
+            {
+
+            
+            return (
+           
+                  <div>
+                        {console.log(report.id)}
+                        {console.log(report.student_id)}
                         <p className='report'>Date:{new Date(report.date).toDateString()}</p>
                         <p className='report'>Name:{student.name}</p>
                         <p className='report'>Room:{classroom.name}</p>
@@ -56,11 +58,10 @@ if(classroom){teachers=this.props.store.teachers.data.find((teacher)=>{
 
 function mapStateToProps(state) {
       return {
-            reports: state.reportReducer.reports
+            store: state
       };
 }
 function mapDispatchToProps(dispatch) {
-      return { getTeacherList: () => dispatch(fetchTeachers())
-      }
+      return {}
 }
 export default connect(mapStateToProps, mapDispatchToProps)(DailyReport)

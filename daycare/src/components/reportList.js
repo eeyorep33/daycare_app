@@ -20,12 +20,12 @@ class ReportList extends Component {
                         aria-expanded="false">
                         Students</a>
                     <div className="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                        {this.props.students.map((stud) =>
+                        {this.props.store.students.data.map((stud) =>
                             <p onClick={(e) => this.props.getReports(e, stud.name)} className="drop buttonText">{stud.name}</p>
                         )}
                     </div>
                 </div>
-                {this.props.reports && this.props.reports.map((report) =>
+                {this.props.store.reports.data && this.props.store.reports.data.map((report) =>
                     <div className='reportDiv'>
                         <Link className='reportList'to={'/report/' + report.id}>{new Date(report.date).toDateString()}</Link>
                     </div>
@@ -36,8 +36,7 @@ class ReportList extends Component {
 }
 function mapStateToProps(state) {
     return {
-        reports: state.reportReducer.reports,
-        students: state.studentReducer.students
+        store: state
     };
 }
 function mapDispatchToProps(dispatch) {
