@@ -13,8 +13,8 @@ class Classroom extends Component {
       }
       componentWillReceiveProps(nextProps) {
             let param = (nextProps.match.params.id)
-            if (nextProps.classrooms.data.length > 0) {
-                  let classroomDetails = nextProps.classrooms.data.find((classroom) => {
+            if (nextProps.classrooms.length > 0) {
+                  let classroomDetails = nextProps.classrooms.find((classroom) => {
                         return classroom.id == param
                   })
                   this.setState({
@@ -38,11 +38,8 @@ class Classroom extends Component {
       render() {
             let param = (this.props.match.params.id)
             const { match, location } = this.props
-            let filteredList = this.props.students.data.filter((student) => {
-                  return student.classroom_id == param
-            })
-            let classroomName = this.props.classrooms.data.find((room) => {
-                  return room.id == param
+             let classroomName = this.props.classrooms.find((room) => {
+               return room.id == param
             })
 
             return (
@@ -133,10 +130,10 @@ class Classroom extends Component {
                               </div>
                         </div>
                         {classroomName && <h1 className='classroomTitle'> {classroomName.name}</h1>}
-                        {this.props.students.data && this.props.students.data.map((student) =>
+                        {this.props.students && this.props.students.map((student) =>
                               <div className='studentDiv'>
 
-                                    <Link className='studentList' to={'/student/' + student.id} onCick={() => this.findReport(student.id)}>{student.name}{student.id}</Link>
+                                    <Link className='studentList' to={'/student/' + student.id} onClick={() => this.findReport(student.id)}>{student.name}{student.id}</Link>
                                     <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#deleteStudentModal">
                                           Delete Student
                        </button>
@@ -169,10 +166,10 @@ class Classroom extends Component {
 }
 function mapStateToProps(state) {
       return {
-            classrooms: state.classrooms,
-            students: state.students,
-            teachers: state.teachers,
-            reports: state.reports
+            classrooms: state.classroomReducer.classrooms,
+            students: state.studentReducer.students,
+            teachers: state.teacherReducer.teachers,
+            reports: state.reportReducer.reports
       };
 }
 function mapDispatchToProps(dispatch) {
