@@ -49,12 +49,12 @@ export const addClassroom = (classroom) => {
     dispatch(addClassroomStart())
     return axios.post('http://localhost:8080/classroomList', classroom)
       .then(response => {
-                dispatch(addClassroomSuccess(response.data))
+        dispatch(addClassroomSuccess(response.data))
       }).catch(err => { dispatch(addClassroomError(err)) })
   }
 }
 export const addClassroomSuccess = (data) => {
-    return { type: ADD_CLASSROOM_SUCCESS, payload: data }
+  return { type: ADD_CLASSROOM_SUCCESS, payload: data }
 }
 export const addClassroomError = (error) => {
   return { type: ADD_CLASSROOM_ERROR, error }
@@ -67,7 +67,6 @@ export const removeClassroom = (classroom) => {
     dispatch(removeClassroomStart())
     return axios.delete('http://localhost:8080/classroomList/' + classroom)
       .then(response => {
-        console.log(response.data)
         dispatch(removeClassroomSuccess(response.data))
       }).catch(err => { dispatch(removeClassroomError(err)) })
   }

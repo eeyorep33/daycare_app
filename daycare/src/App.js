@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Route, Link, Switch, withRouter } from 'react-router-dom'
 import Home from './components/home'
 import Classroom from './components/classroom';
+import Teachers from './components/teachers'
 import Student from './components/students'
 import Report from './components/report'
 import ReportList from './components/reportList'
@@ -12,44 +13,44 @@ import { connect } from 'react-redux'
 import { removeTeacher, teacherCheckIn, addTeacher, teacherCheckOut } from './actions/teacherActions'
 import { studentCheckIn, fetchStudents, studentCheckOut, addStudent, removeStudent, changeStudent } from './actions/studentActions'
 import { addClassroom, fetchClassrooms, removeClassroom, changeClassroom, getStudentsByClassroom } from './actions/classroomActions'
-import { addReport, getReports, getAReport, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, addPlayTime } from './actions/reportActions'
+import { addReport, getReports, getAReport, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, addPlayTime  } from './actions/reportActions'
 import Axios from 'axios';
 let today = new Date()
-let date = today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
+let date = today.getMonth() +1 + "/" + today.getDate() + "/" + today.getFullYear()
 
 class App extends Component {
-
-  componentDidMount() {
-
+  
+   componentDidMount() {
+    
     this.props.LoadClassrooms()
-
-  }
-  editStudent = (e, id) => {
-    e.preventDefault()
-    const name = e.target.name.value
-    const email = e.target.email.value
-    const student = { name: name, email: email }
-    this.props.changeStudent(student, id)
-  }
-  editClassroom = (e, id) => {
-    e.preventDefault()
-    console.log(id)
-    const name = e.target.name.value
-    const classroom = { name: name }
+         
+      }
+  editStudent=(e,id)=>{
+e.preventDefault()
+const name=e.target.name.value
+const email=e.target.email.value
+const student={name: name, email:email}
+this.props.changeStudent(student, id)
+  }  
+  editClassroom=(e,id)=>{
+        e.preventDefault()
+        console.log(id)
+    const name=e.target.name.value
+    const classroom={name:name}
     console.log(name)
-    this.props.changeClassroom(classroom, id)
-  }
+        this.props.changeClassroom(classroom, id)
+      }
   getReports = (e, name) => {
     e.preventDefault()
-    let studentId = this.props.students.find((student) => {
+    let studentId = this.props.store.students.data.find((student) => {
       return student.name === name
     })
     this.props.getReports(studentId.id)
   }
-
-  addFeeding = (e, id) => {
+  
+ addFeeding = (e, id) => {
     e.preventDefault()
-    let time = e.target.feedingtime.value
+        let time = e.target.feedingtime.value
     let food = e.target.food.value
     let amount = e.target.amount.value
     let feeding = { time: time, food: food, amount: amount, report_id: id }
@@ -57,10 +58,10 @@ class App extends Component {
   }
   addDiapering = (e, id) => {
     e.preventDefault()
-    let time = e.target.diapertime.value
+        let time = e.target.diapertime.value
     let type = e.target.diaperType.value
     let initials = e.target.initials.value
-    let diapering = { time: time, type: type, initials: initials, report_id: id }
+    let diapering = { time: time, type: type, initials: initials, report_id:id }
     this.props.addDiapers(diapering)
   }
   addNap = (e, id) => {
@@ -78,11 +79,11 @@ class App extends Component {
     let meds = { time: time, name: name, amount: dosage, report_id: id }
     this.props.addMedicine(meds)
   }
-  addPlayTime = (e, id) => {
+  addPlayTime = (e,id) => {
     e.preventDefault()
     let playType = e.target.playType.value
     let activity = e.target.activity.value
-    let playTime = { type: playType, activity: activity, report_id: id }
+    let playTime = { type: playType, activity: activity, report_id:id }
     this.props.addPlay(playTime)
   }
   addComments = (e, id) => {
@@ -94,10 +95,10 @@ class App extends Component {
   addSupplies = (e, id) => {
     e.preventDefault()
     let supply = e.target.supplies.value
-    let supplies = { supply_item: supply, report_id: id }
-    this.props.addSup(supplies)
+       let supplies = { supply_item: supply, report_id: id }
+       this.props.addSup(supplies)
   }
-  teacherCheckIn = (e, id) => {
+  teacherCheckIn = (e,id) => {
     e.preventDefault()
     this.props.teacherCheckIn(id)
   }
@@ -124,10 +125,9 @@ class App extends Component {
   deleteClassroom = (e) => {
     e.preventDefault()
     let deletedClass = e.target.deleteClass.value
-    let deleted = this.props.classrooms.filter((room) => {
+    let deleted = this.props.store.classrooms.data.filter((room) => {
       return room.name == deletedClass
     })
-    console.log(deleted)
     let deletedId = deleted[0].id
     this.props.removeClass(deletedId)
     e.target.deleteClass.value = ''
@@ -163,14 +163,14 @@ class App extends Component {
     e.target.teacherName.value = ''
     e.target.initials.value = ''
   }
-  deleteTeacher = (e, id) => {
+  deleteTeacher = (e,id) => {
     e.preventDefault()
     console.log(id)
-    this.props.removeTeacher(id)
+        this.props.removeTeacher(id)
   }
 
   render() {
-        return (
+    return (
       <div>
         <h1 className="title">Look What I Did Today</h1>
         <h1 className='date'> {date}</h1>
@@ -187,18 +187,11 @@ class App extends Component {
               aria-expanded="false">
               Classroom</a>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <div>
-                {this.props.classrooms.map((room) =>
-                  <Link onClick={() => this.props.getStudents(room.id)} className="drop buttonText" to={"/classroom/" + room.id}>{room.name} </Link>
-                )}
-              </div>
+              {this.props.store.classrooms.data.map((room) =>
+                <Link onClick={()=>this.props.getStudents(room.id)}className="drop buttonText" to={"/classroom/" + room.id}>{room.name} </Link>
+              )}
             </div>
           </div>
-
-
-
-
-
           <button className='navButtons btn'>
             <Link className='buttonText' to='/reportList'>Reports</Link>
           </button>
@@ -257,7 +250,7 @@ class App extends Component {
 
             </div>
           </div>
-        </div>
+                 </div>
         <Switch>
           <Route path="/" exact render={(props) => (
             <Home {...props} />
@@ -271,19 +264,23 @@ class App extends Component {
               editClassroom={this.editClassroom}
             />
           )} />
+          <Route path='/teacher/:id' render={(props) => (
+            <Teachers {...props}
+              deleteTeacher={this.deleteTeacher} />
+          )} />
           <Route path="/student/:id" render={(props) => (
             <Student {...props}
-              checkIn={this.studentCheckIn}
-              studentDetails={this.studentDetails}
-              addDiapering={this.addDiapering}
-              addFeeding={this.addFeeding}
-              addNap={this.addNap}
-              addMeds={this.addMeds}
-              addComments={this.addComments}
-              addSupplies={this.addSupplies}
-              addPlayTime={this.addPlayTime}
-              editStudent={this.editStudent}
-              checkOut={this.studentCheckOut} />)}
+              checkIn={this.studentCheckIn} 
+            studentDetails={this.studentDetails}
+            addDiapering={this.addDiapering}
+            addFeeding={this.addFeeding}
+            addNap={this.addNap}
+            addMeds={this.addMeds}
+            addComments={this.addComments}
+            addSupplies={this.addSupplies}
+            addPlayTime={this.addPlayTime}
+            editStudent={this.editStudent}
+            checkOut={this.studentCheckOut}/>)}
           />
           <Route path='/report/:id' render={(props) => (
             <Report {...props} />)} />}
@@ -302,8 +299,7 @@ class App extends Component {
 }
 function mapStateToProps(state) {
   return {
-    classrooms: state.classroomReducer.classrooms,
-    students: state.studentReducer.students
+    store: state
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -327,11 +323,11 @@ function mapDispatchToProps(dispatch) {
     getAReport: (id) => dispatch(getAReport(id)),
     getStudentList: (students) => dispatch(fetchStudents(students)),
     studentCheckIn: (id) => dispatch(studentCheckIn(id)),
-    teacherCheckIn: (id) => dispatch(teacherCheckIn(id)),
+        teacherCheckIn: (id) => dispatch(teacherCheckIn(id)),
     teacherCheckOut: (id) => dispatch(teacherCheckOut(id)),
     getStudents: (students) => dispatch(getStudentsByClassroom(students)),
-    changeStudent: (student, id) => dispatch(changeStudent(student, id)),
-    changeClassroom: (name, id) => dispatch(changeClassroom(name, id))
+    changeStudent:(student, id)=> dispatch(changeStudent(student, id)),
+    changeClassroom:(name, id)=> dispatch(changeClassroom(name, id))
   }
 }
 

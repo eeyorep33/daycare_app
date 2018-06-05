@@ -3,10 +3,10 @@ import TimePicker from 'rc-time-picker'
 import moment from 'moment';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { studentCheckOut } from '../actions/studentActions'
-import { getTodayReports } from '../actions/reportActions'
+import { fetchStudents, studentCheckOut } from '../actions/studentActions'
+import {getTodayReports} from '../actions/reportActions'
 let today = new Date()
-let date = today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
+let date = today.getMonth() +1 + "/" + today.getDate() + "/" + today.getFullYear()
 
 
 
@@ -17,32 +17,31 @@ class Student extends Component {
             this.state = {
                   name: '',
                   email: '',
-                  studentDetails: {}
+                  studentDetails:{}
             }
       }
-      //       componentWillReceiveProps(nextProps){
-      //             console.log(this.props.students)
-      //             let param = (nextProps.match.params.id)
-      // if(nextProps.students.length>0){
-      //       let studentDetails = nextProps.students.find((student) => {
-      //             return student.id == param
-      //       })
-
-      // this.setState({
-      //       studentDetails: studentDetails,
-      //       name: studentDetails.name,
-      //       email: studentDetails.email
-      // })
-      // }
-      //       }
+      componentWillReceiveProps(nextProps){
+            let param = (nextProps.match.params.id)
+if(nextProps.students.data.length>0){
+      let studentDetails = nextProps.students.data.find((student) => {
+            return student.id == param
+      })
+this.setState({
+      studentDetails: studentDetails,
+      name: studentDetails.name,
+      email: studentDetails.email
+})
+}
+      }
       componentDidMount() {
             let param = (this.props.match.params.id)
+            this.props.getStudentList()
             this.props.getDailyReports(date, param)
       }
 
 
       findStudent = (id) => {
-            let studentDetails = this.props.students.find((student) => {
+            let studentDetails = this.props.students.data.find((student) => {
                   return student.id == id
             })
             return studentDetails ? <div>
@@ -51,7 +50,7 @@ class Student extends Component {
             </div> : <p>Loading...</p>
       }
       updateName = (value) => {
-            this.setState({
+                       this.setState({
                   name: value
             })
 
@@ -64,21 +63,21 @@ class Student extends Component {
       render() {
             const { match, location } = this.props
             let param = (this.props.match.params.id)
-
+            
             // let report = this.props.reports.data.find((report) => {
             //       return `${report.student_id}` === param
             // })
 
             const format = 'h:mm a';
             const now = moment().hour(6).minute(30);
-            let studentDetails = this.props.students.find((student) => {
+            let studentDetails = this.props.students.data.find((student) => {
                   return student.id == param
             })
-            return (<div>
+                        return (<div>
                   <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#editStudentModal">
                         Edit Student
                        </button>
-
+                       
                   {studentDetails && <div className="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="editStudentModalLabel" aria-hidden="true">
                         <div className="modal-dialog" role="document">
                               <div className="modal-content">
@@ -107,7 +106,8 @@ class Student extends Component {
                   </div>}
                   {this.findStudent(param)}
                   <button onClick={(e) => { this.props.checkIn(e, param) }} disabled={studentDetails ? studentDetails.status === 'in' : true} className='navButtons btn checkInButton'>Check In</button>
-                  {this.props.reports && <p>Report #:{this.props.reports.id}</p>}
+                  {this.props.reports && <p>Report #:{this.props.reports.data.id}</p>}
+                  {console.log(this.props.reports.data)}
                   <div>
                         <div className='checkInDiv'>
                               <label className='add addTitleTur'>Add diaper change:</label>
@@ -130,8 +130,7 @@ class Student extends Component {
                                     </select>
                                     <label className='checkIn'>Initials:</label>
                                     <select name='initials'>
-                                          {console.log(this.props.teachers)}
-                                          {this.props.teachers.map((teach) =>
+                                          {this.props.teachers.data.map((teach) =>
                                                 <option value={teach.initials}>{teach.initials}</option>
                                           )}
                                     </select>
@@ -141,7 +140,7 @@ class Student extends Component {
 
                         </div>
                         <div className='checkInDiv'>
-                              <form onSubmit={(e) => { this.props.addFeeding(e, 46) }}>
+                              <form onSubmit={(e) => { this.props.addFeeding(e,46) }}>
                                     <label className='add addTitleOrg'>Add feeding:</label>
                                     <label className='checkIn'>Time:</label>
                                     <TimePicker
@@ -244,17 +243,17 @@ class Student extends Component {
 
 function mapStateToProps(state) {
       return {
-            students: state.studentReducer.students,
-            teachers: state.teacherReducer.teachers,
-            reports: state.reportReducer.reports,
-            classrooms:state.classroomReducer.classrooms
+            students: state.students,
+            teachers: state.teachers,
+            reports: state.reports
       };
 }
 function mapDispatchToProps(dispatch) {
       return {
 
             studentCheckOut: (id) => dispatch(studentCheckOut(id)),
-            getDailyReports: (dat, id) => dispatch(getTodayReports(dat, id))
+            getStudentList: () => dispatch(fetchStudents()),
+            getDailyReports:(dat, id)=>dispatch(getTodayReports(dat, id))
       }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Student);
