@@ -31,21 +31,7 @@ exports.getClassrooms = () => {
                   console.log(err)
             })
 }
-exports.getStudentsByClass = (key) => {
-      return Classroom.where({ id: key }).fetch({
-            withRelated: 'student'
-      })
-            .then(classroom => {
-                  const students = classroom.related('student')
-                 const studentList = students.map(student => {
-                      return   student.attributes
-                  })
-                    return studentList
-            })
-            .catch(err => {
-                  console.log(err)
-            })
-}
+
 exports.createClassroom = (classroom) => {
       const newClassroom = new Classroom(
             classroom)

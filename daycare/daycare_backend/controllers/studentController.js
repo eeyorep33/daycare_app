@@ -10,6 +10,15 @@ const Student = bookshelf.Model.extend({
             return this.belongsToMany('Teacher')
       }
 })
+const Classroom = bookshelf.Model.extend({
+      tableName: 'classroom',
+      student: function () {
+            return this.hasMany(Student)
+      },
+      teacher: function () {
+            return this.hasMany(Teacher)
+      }
+})
 exports.getStudents = () => {
       return Student.fetchAll()
             .then(result => {
@@ -22,15 +31,7 @@ exports.getStudents = () => {
                   console.log(err)
             })
 }
-exports.getStudentByClass = (id) => {
-      return Student.where(id).fetchAll()
-            .then(result => {
-                  const students = result.models.map(student => {
-                        return student.attributes
-                  })
-                  return students
-            })
-}
+
 exports.createStudent = (student) => {
       const newStudent = new Student(
             student)
@@ -84,5 +85,20 @@ return new Student ({id:id})
 }).catch(err=>{
       console.log(err)
 })
+}
+exports.getStudentsByClass = (key) => {
+      return Classroom.where({ id: key }).fetch({
+            withRelated: 'student'
+      })
+            .then(classroom => {
+                  const students = classroom.related('student')
+                 const studentList = students.map(student => {
+                      return   student.attributes
+                  })
+                    return studentList
+            })
+            .catch(err => {
+                  console.log(err)
+            })
 }
 

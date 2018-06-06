@@ -17,10 +17,9 @@ exports.getComments = (id) => {
             })
 }
 exports.createComments = (comment) => {
-      console.log('function accessed')
       const newComment = new Com(
             comment)
-      return newClassroom.save()
+      return newComment.save()
             .then(com => {
                   return com;
             })

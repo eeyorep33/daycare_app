@@ -29,4 +29,9 @@ module.exports = (app) => {
                         students.editStudent(req.params.id, req.body)
             .then((student)=>{res.send (student.attributes)})
       })
+      app.get('/classroomList/:id', (req, res) => {
+            students.getStudentsByClass(req.params.id).then((student) => {
+      res.send(student)
+})
+})
 } 

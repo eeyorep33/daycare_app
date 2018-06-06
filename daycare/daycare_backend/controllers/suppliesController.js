@@ -17,13 +17,14 @@ exports.getSupplies = (id) => {
             })
 }
 exports.createSupply = (supply) => {
-      console.log('function accessed')
+      console.log('hello')
       const newSupply = new Supplies(
             supply)
       return newSupply.save()
             .then(supply => {
                   return supply;
             })
+            console.log(newSupply)
             .catch(err => {
                   console.log(err)
             })

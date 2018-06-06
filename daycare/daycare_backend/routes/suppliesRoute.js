@@ -9,7 +9,9 @@ module.exports = (app) => {
       })
       app.post('/supplies', (req, res) => {
             supply.createSupply(req.body)
-                  .then((supplies) => { res.send(supplies.attributes) })
+                  .then((supplies) => { 
+                        console.log(supplies.attributes)
+                        res.send(supplies.attributes) })
       })
       app.delete('/supplies/:id', (req, res) => {
             supply.deleteSupply(req.params.id).then((supplies) => {

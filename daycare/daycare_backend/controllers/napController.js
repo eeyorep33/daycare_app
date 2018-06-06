@@ -17,10 +17,9 @@ exports.getNap = (id) => {
             })
 }
 exports.createNap = (nap) => {
-      console.log('function accessed')
       const newNap = new Nap(
             nap)
-      return newClassroom.save()
+      return newNap.save()
             .then(na => {
                   return na;
             })

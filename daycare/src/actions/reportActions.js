@@ -52,7 +52,6 @@ export const addReport = (report) => {
     dispatch(addReportStart())
     return axios.post('http://localhost:8080/report', report)
       .then(response => {
-        console.log(response.data)
         dispatch(addReportSuccess(response.data))
       })
       .catch(err => { dispatch(addReportError(err)) })
@@ -175,7 +174,7 @@ export const addSuppliesStart = supplies => ({
 export const addSupplies = (item) => {
   return dispatch => {
     dispatch(addSuppliesStart())
-    return axios.post('http;//localhost:8080/supplies', item)
+    return axios.post('http://localhost:8080/supplies', item)
       .then(response => {
         dispatch(addSuppliesSuccess(response.data))
       }).catch(err => { dispatch(addSuppliesError(err)) })
@@ -223,35 +222,15 @@ export const getReportsSuccess = (data) => {
 export const getReportsError = (error) => {
   return { type: GET_REPORTS_ERROR, error }
 }
-export const getAReportStart = (reports) => {
-  return { type: GET_A_REPORT_START, reports }
-}
-export const getAReport = (id) => {
-
-  return dispatch => {
-    dispatch(getAReportStart())
-    return axios.get('http://localhost:8080/getReport/' + id)
-      .then(response => {
-        dispatch(getAReportSuccess(response.data))
-      }).catch(err => { dispatch(getAReportError(err)) })
-  }
-}
-export const getAReportSuccess = (data) => {
-  return { type: GET_A_REPORT_SUCCESS, payload: data }
-}
-export const getAReportError = (error) => {
-  return { type: GET_A_REPORT_ERROR, error }
-}
 
 export const getTodayReportsStart = (reports) => {
   return { type: GET_TODAY_REPORTS_START, reports }
 }
-export const getTodayReports = (date,id) => {
-    return dispatch => {
+export const getTodayReports = (date, id) => {
+  return dispatch => {
     dispatch(getTodayReportsStart())
-       return axios.get('http://localhost:8080/getReports/' + date, id)
+    return axios.get('http://localhost:8080/getReports/' + date + '/' + id)
       .then(response => {
-        console.log(response.data)
         dispatch(getTodayReportsSuccess(response.data))
       }).catch(err => { dispatch(getTodayReportsError(err)) })
   }

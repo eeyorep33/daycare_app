@@ -23,6 +23,30 @@ export const CHANGE_STUDENT_START = 'CHANGE_STUDENT_START'
 export const CHANGE_STUDENT_ERROR = 'CHANGE_STUDENT_ERROR'
 export const CHANGE_STUDENT_SUCCESS = 'CHANGE_STUDENT_SUCCESS'
 
+export const GET_STUDENTS_BY_CLASSROOM_SUCCESS = 'GET_STUDENTS_BY_CLASSROOM_SUCCESS'
+export const GET_STUDENTS_BY_CLASSROOM_ERROR = 'GET_STUDENTS_BY_CLASSROOM_ERROR'
+export const GET_STUDENTS_BY_CLASSROOM_START = 'GET_STUDENTS_BY_CLASSROOM_START'
+
+export const getStudentsByClassroomStart = () => {
+  return { type: GET_STUDENTS_BY_CLASSROOM_START }
+}
+export const getStudentsByClassroom = (id) => {
+  console.log(id)
+  return dispatch => {
+    dispatch(getStudentsByClassroomStart())
+    return axios.get('http://localhost:8080/classroomList/'+id)
+      .then(response => {console.log(response.data)
+        dispatch(getStudentsByClassroomSuccess(response.data))
+      }).catch(err => { dispatch(getStudentsByClassroomError(err)) })
+  }
+}
+export const getStudentsByClassroomSuccess = (data) => {
+  return { type: GET_STUDENTS_BY_CLASSROOM_SUCCESS, payload: data }
+}
+export const getStudentsByClassroomError = (error) => {
+  return { type: GET_STUDENTS_BY_CLASSROOM_ERROR, error }
+}
+
 
 
 export const addStudentStart = student => ({

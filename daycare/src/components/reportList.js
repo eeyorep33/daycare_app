@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchStudents } from '../actions/studentActions'
+import { fetchTeachers } from '../actions/teacherActions'
 class ReportList extends Component {
-    componentDidMount(){
+    componentDidMount() {
         this.props.getStudentList()
+        this.props.getTeacherList()
     }
-
     render() {
         return (
             <div>
@@ -20,14 +21,14 @@ class ReportList extends Component {
                         aria-expanded="false">
                         Students</a>
                     <div className="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                        {this.props.store.students.data.map((stud) =>
+                        {this.props.students.map((stud) =>
                             <p onClick={(e) => this.props.getReports(e, stud.name)} className="drop buttonText">{stud.name}</p>
                         )}
                     </div>
                 </div>
-                {this.props.store.reports.data && this.props.store.reports.data.map((report) =>
+                {this.props.report && this.props.report.map((report) =>
                     <div className='reportDiv'>
-                        <Link className='reportList'to={'/report/' + report.id}>{new Date(report.date).toDateString()}</Link>
+                        <Link className='reportList' to={'/report/' + report.id}>{new Date(report.date).toDateString()}</Link>
                     </div>
                 )}
             </div>
@@ -36,12 +37,16 @@ class ReportList extends Component {
 }
 function mapStateToProps(state) {
     return {
-        store: state
+        report: state.reportReducer.pastReports,
+        students: state.studentReducer.studentList,
+        teachers: state.teacherReducer.teachers,
+        
     };
 }
 function mapDispatchToProps(dispatch) {
     return {
         getStudentList: (students) => dispatch(fetchStudents(students)),
+        getTeacherList: (teachers) => dispatch(fetchTeachers(teachers)),
     }
 }
 

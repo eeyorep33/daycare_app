@@ -4,65 +4,64 @@ import axios from 'axios'
 import { Route, Link, Switch, withRouter } from 'react-router-dom'
 import Home from './components/home'
 import Classroom from './components/classroom';
-import Teachers from './components/teachers'
 import Student from './components/students'
 import Report from './components/report'
 import ReportList from './components/reportList'
 import TeacherList from './components/teacherList'
 import { connect } from 'react-redux'
 import { removeTeacher, teacherCheckIn, addTeacher, teacherCheckOut } from './actions/teacherActions'
-import { studentCheckIn, fetchStudents, studentCheckOut, addStudent, removeStudent, changeStudent } from './actions/studentActions'
-import { addClassroom, fetchClassrooms, removeClassroom, changeClassroom, getStudentsByClassroom } from './actions/classroomActions'
-import { addReport, getReports, getAReport, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, addPlayTime  } from './actions/reportActions'
+import { studentCheckIn, fetchStudents, studentCheckOut, addStudent, removeStudent, changeStudent, getStudentsByClassroom } from './actions/studentActions'
+import { addClassroom, fetchClassrooms, removeClassroom, changeClassroom } from './actions/classroomActions'
+import { addReport, getReports, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, addPlayTime } from './actions/reportActions'
 import Axios from 'axios';
 let today = new Date()
-let date = today.getMonth() +1 + "/" + today.getDate() + "/" + today.getFullYear()
+let date = today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
 
 class App extends Component {
-  
-   componentDidMount() {
-    
+  componentDidMount() {
     this.props.LoadClassrooms()
-         
-      }
-  editStudent=(e,id)=>{
-e.preventDefault()
-const name=e.target.name.value
-const email=e.target.email.value
-const student={name: name, email:email}
-this.props.changeStudent(student, id)
-  }  
-  editClassroom=(e,id)=>{
-        e.preventDefault()
-        console.log(id)
-    const name=e.target.name.value
-    const classroom={name:name}
-    console.log(name)
-        this.props.changeClassroom(classroom, id)
-      }
+  }
+  editStudent = (e, id) => {
+    e.preventDefault()
+    const name = e.target.name.value
+    const email = e.target.email.value
+    const student = { name: name, email: email }
+    this.props.changeStudent(student, id)
+  }
+  editClassroom = (e, id) => {
+    e.preventDefault()
+    const name = e.target.name.value
+    const classroom = { name: name }
+    this.props.changeClassroom(classroom, id)
+  }
   getReports = (e, name) => {
     e.preventDefault()
-    let studentId = this.props.store.students.data.find((student) => {
+    console.log(name)
+    let studentId = this.props.studentList.find((student) => {
       return student.name === name
     })
+    console.log(studentId)
     this.props.getReports(studentId.id)
   }
-  
- addFeeding = (e, id) => {
+  addFeeding = (e, id) => {
     e.preventDefault()
-        let time = e.target.feedingtime.value
+    let time = e.target.feedingtime.value
     let food = e.target.food.value
     let amount = e.target.amount.value
     let feeding = { time: time, food: food, amount: amount, report_id: id }
     this.props.addFeed(feeding)
+    e.target.food.value=''
+    e.target.amount.value=''
+    
   }
   addDiapering = (e, id) => {
     e.preventDefault()
-        let time = e.target.diapertime.value
+    let time = e.target.diapertime.value
     let type = e.target.diaperType.value
     let initials = e.target.initials.value
-    let diapering = { time: time, type: type, initials: initials, report_id:id }
+    let diapering = { time: time, type: type, initials: initials, report_id: id }
     this.props.addDiapers(diapering)
+    
   }
   addNap = (e, id) => {
     e.preventDefault()
@@ -78,27 +77,35 @@ this.props.changeStudent(student, id)
     let dosage = e.target.dosage.value
     let meds = { time: time, name: name, amount: dosage, report_id: id }
     this.props.addMedicine(meds)
+    e.target.medName.value=''
+    e.target.dosage.value=''
   }
-  addPlayTime = (e,id) => {
+  addPlayTime = (e, id) => {
     e.preventDefault()
     let playType = e.target.playType.value
     let activity = e.target.activity.value
-    let playTime = { type: playType, activity: activity, report_id:id }
+    let playTime = { type: playType, activity: activity, report_id: id }
     this.props.addPlay(playTime)
+    e.target.type.value=''
+    e.target.activity.value=''
   }
   addComments = (e, id) => {
     e.preventDefault()
     let comment = e.target.comments.value
     let comments = { comment: comment, report_id: id }
     this.props.addCom(comments)
+    e.target.comments.value=''
+    
   }
   addSupplies = (e, id) => {
     e.preventDefault()
     let supply = e.target.supplies.value
-       let supplies = { supply_item: supply, report_id: id }
-       this.props.addSup(supplies)
+    let supplies = { supply_item: supply, report_id: id }
+    this.props.addSup(supplies)
+    e.target.supplies.value=''
+    
   }
-  teacherCheckIn = (e,id) => {
+  teacherCheckIn = (e, id) => {
     e.preventDefault()
     this.props.teacherCheckIn(id)
   }
@@ -107,6 +114,17 @@ this.props.changeStudent(student, id)
     let report = { student_id: id, date: date }
     this.props.addReport(report)
     this.props.studentCheckIn(id)
+  }
+  compare = (a, b) => {
+    const nameBegin = a.name.toUpperCase()
+    const nameEnd = b.name.toUpperCase()
+    let comparison = 0
+    if (nameBegin > nameEnd) {
+      comparison = 1
+    } else if (nameEnd > nameBegin) {
+      comparison = -1
+    }
+    return comparison
   }
   studentCheckOut = (e, id) => {
     e.preventDefault()
@@ -125,10 +143,10 @@ this.props.changeStudent(student, id)
   deleteClassroom = (e) => {
     e.preventDefault()
     let deletedClass = e.target.deleteClass.value
-    let deleted = this.props.store.classrooms.data.filter((room) => {
+    let deleted = this.props.classrooms.find((room) => {
       return room.name == deletedClass
     })
-    let deletedId = deleted[0].id
+    let deletedId = deleted.id
     this.props.removeClass(deletedId)
     e.target.deleteClass.value = ''
   }
@@ -163,10 +181,9 @@ this.props.changeStudent(student, id)
     e.target.teacherName.value = ''
     e.target.initials.value = ''
   }
-  deleteTeacher = (e,id) => {
+  deleteTeacher = (e, id) => {
     e.preventDefault()
-    console.log(id)
-        this.props.removeTeacher(id)
+    this.props.removeTeacher(id)
   }
 
   render() {
@@ -187,8 +204,8 @@ this.props.changeStudent(student, id)
               aria-expanded="false">
               Classroom</a>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              {this.props.store.classrooms.data.map((room) =>
-                <Link onClick={()=>this.props.getStudents(room.id)}className="drop buttonText" to={"/classroom/" + room.id}>{room.name} </Link>
+              {this.props.classrooms.sort(this.compare).map((room) =>
+                <Link onClick={() => this.props.getStudentsByClassroom(room.id)} className="drop buttonText" to={"/classroom/" + room.id}>{room.name} </Link>
               )}
             </div>
           </div>
@@ -247,16 +264,16 @@ this.props.changeStudent(student, id)
                   </div>
                 </form>
               </div>
-
             </div>
           </div>
-                 </div>
+        </div>
         <Switch>
           <Route path="/" exact render={(props) => (
             <Home {...props} />
           )} />
           <Route path='/classroom/:id' render={(props) => (
             <Classroom {...props}
+              compareName={this.compare}
               addaStudent={this.addaStudent}
               addaTeacher={this.addaTeacher}
               getStudents={this.getStudents}
@@ -264,23 +281,19 @@ this.props.changeStudent(student, id)
               editClassroom={this.editClassroom}
             />
           )} />
-          <Route path='/teacher/:id' render={(props) => (
-            <Teachers {...props}
-              deleteTeacher={this.deleteTeacher} />
-          )} />
           <Route path="/student/:id" render={(props) => (
             <Student {...props}
-              checkIn={this.studentCheckIn} 
-            studentDetails={this.studentDetails}
-            addDiapering={this.addDiapering}
-            addFeeding={this.addFeeding}
-            addNap={this.addNap}
-            addMeds={this.addMeds}
-            addComments={this.addComments}
-            addSupplies={this.addSupplies}
-            addPlayTime={this.addPlayTime}
-            editStudent={this.editStudent}
-            checkOut={this.studentCheckOut}/>)}
+              checkIn={this.studentCheckIn}
+              studentDetails={this.studentDetails}
+              addDiapering={this.addDiapering}
+              addFeeding={this.addFeeding}
+              addNap={this.addNap}
+              addMeds={this.addMeds}
+              addComments={this.addComments}
+              addSupplies={this.addSupplies}
+              addPlayTime={this.addPlayTime}
+              editStudent={this.editStudent}
+              checkOut={this.studentCheckOut} />)}
           />
           <Route path='/report/:id' render={(props) => (
             <Report {...props} />)} />}
@@ -299,7 +312,9 @@ this.props.changeStudent(student, id)
 }
 function mapStateToProps(state) {
   return {
-    store: state
+    classrooms: state.classroomReducer.classrooms,
+    students: state.studentReducer.students,
+    studentList: state.studentReducer.studentList
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -320,14 +335,15 @@ function mapDispatchToProps(dispatch) {
     addNewStudent: (newStudent) => dispatch(addStudent(newStudent)),
     addNewTeacher: (newTeacher) => dispatch(addTeacher(newTeacher)),
     getReports: (name) => dispatch(getReports(name)),
-    getAReport: (id) => dispatch(getAReport(id)),
+    //getAReport: (id) => dispatch(getAReport(id)),
     getStudentList: (students) => dispatch(fetchStudents(students)),
     studentCheckIn: (id) => dispatch(studentCheckIn(id)),
-        teacherCheckIn: (id) => dispatch(teacherCheckIn(id)),
+    teacherCheckIn: (id) => dispatch(teacherCheckIn(id)),
     teacherCheckOut: (id) => dispatch(teacherCheckOut(id)),
     getStudents: (students) => dispatch(getStudentsByClassroom(students)),
-    changeStudent:(student, id)=> dispatch(changeStudent(student, id)),
-    changeClassroom:(name, id)=> dispatch(changeClassroom(name, id))
+    changeStudent: (student, id) => dispatch(changeStudent(student, id)),
+    getStudentsByClassroom: (id) => dispatch(getStudentsByClassroom(id)),
+    changeClassroom: (name, id) => dispatch(changeClassroom(name, id))
   }
 }
 

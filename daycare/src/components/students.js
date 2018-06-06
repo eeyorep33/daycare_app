@@ -4,44 +4,39 @@ import moment from 'moment';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { fetchStudents, studentCheckOut } from '../actions/studentActions'
-import {getTodayReports} from '../actions/reportActions'
+import { getTodayReports } from '../actions/reportActions'
 let today = new Date()
-let date = today.getMonth() +1 + "/" + today.getDate() + "/" + today.getFullYear()
-
-
+let date = today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
 
 class Student extends Component {
-
       constructor() {
             super()
             this.state = {
                   name: '',
                   email: '',
-                  studentDetails:{}
+                  studentDetails: {}
             }
       }
-      componentWillReceiveProps(nextProps){
+      componentWillReceiveProps(nextProps) {
             let param = (nextProps.match.params.id)
-if(nextProps.students.data.length>0){
-      let studentDetails = nextProps.students.data.find((student) => {
-            return student.id == param
-      })
-this.setState({
-      studentDetails: studentDetails,
-      name: studentDetails.name,
-      email: studentDetails.email
-})
-}
+            if (nextProps.students.length > 0) {
+                  let studentDetails = nextProps.students.find((student) => {
+                        return student.id == param
+                  })
+                  this.setState({
+                        studentDetails: studentDetails,
+                        name: studentDetails.name,
+                        email: studentDetails.email
+                  })
+            }
       }
       componentDidMount() {
             let param = (this.props.match.params.id)
             this.props.getStudentList()
             this.props.getDailyReports(date, param)
       }
-
-
       findStudent = (id) => {
-            let studentDetails = this.props.students.data.find((student) => {
+            let studentDetails = this.props.students.find((student) => {
                   return student.id == id
             })
             return studentDetails ? <div>
@@ -50,10 +45,9 @@ this.setState({
             </div> : <p>Loading...</p>
       }
       updateName = (value) => {
-                       this.setState({
+            this.setState({
                   name: value
             })
-
       }
       updateEmail = (value) => {
             this.setState({
@@ -63,21 +57,16 @@ this.setState({
       render() {
             const { match, location } = this.props
             let param = (this.props.match.params.id)
-            
-            // let report = this.props.reports.data.find((report) => {
-            //       return `${report.student_id}` === param
-            // })
-
             const format = 'h:mm a';
             const now = moment().hour(6).minute(30);
-            let studentDetails = this.props.students.data.find((student) => {
+            let studentDetails = this.props.students.find((student) => {
                   return student.id == param
             })
-                        return (<div>
+            return (<div>
                   <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#editStudentModal">
                         Edit Student
                        </button>
-                       
+
                   {studentDetails && <div className="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="editStudentModalLabel" aria-hidden="true">
                         <div className="modal-dialog" role="document">
                               <div className="modal-content">
@@ -106,13 +95,11 @@ this.setState({
                   </div>}
                   {this.findStudent(param)}
                   <button onClick={(e) => { this.props.checkIn(e, param) }} disabled={studentDetails ? studentDetails.status === 'in' : true} className='navButtons btn checkInButton'>Check In</button>
-                  {this.props.reports && <p>Report #:{this.props.reports.data.id}</p>}
-                  {console.log(this.props.reports.data)}
+                  {this.props.reports && <p>Report #:{this.props.reports.id}</p>}
                   <div>
                         <div className='checkInDiv'>
                               <label className='add addTitleTur'>Add diaper change:</label>
-
-                              <form onSubmit={(e) => this.props.addDiapering(e)}>
+                              <form onSubmit={(e) => this.props.addDiapering(e, this.props.reports.id)}>
                                     <label className='checkIn'>Time:</label>
                                     <TimePicker
                                           name='diapertime'
@@ -130,17 +117,18 @@ this.setState({
                                     </select>
                                     <label className='checkIn'>Initials:</label>
                                     <select name='initials'>
-                                          {this.props.teachers.data.map((teach) =>
+                                          {this.props.teachers.map((teach) =>
                                                 <option value={teach.initials}>{teach.initials}</option>
                                           )}
                                     </select>
                                     <button type="submit" className='checkIn btn saveButton'>Add</button>
                               </form>
-
-
+                              {this.props.diapering.map((diaper) =>
+                                   <p> {diaper.time}, {diaper.type}, {diaper.initials}</p>)
+                              }
                         </div>
                         <div className='checkInDiv'>
-                              <form onSubmit={(e) => { this.props.addFeeding(e,46) }}>
+                              <form onSubmit={(e) => { this.props.addFeeding(e, this.props.reports.id) }}>
                                     <label className='add addTitleOrg'>Add feeding:</label>
                                     <label className='checkIn'>Time:</label>
                                     <TimePicker
@@ -158,10 +146,12 @@ this.setState({
                                     <input className='checkIn' type='text' name='amount' />
                                     <button className='checkIn btn closeButton' type="submit">Add</button>
                               </form>
-                              <p className='checkIn' id='feedingTimeLocation'></p>
+                              {this.props.feeding.map((feed) =>
+                                    <div>{feed.time}, {feed.food}, {feed.amount}</div>)
+                              }
                         </div>
                         <div className='checkInDiv'>
-                              <form onSubmit={(e) => this.props.addPlayTime(e)}>
+                              <form onSubmit={(e) => this.props.addPlayTime(e, this.props.reports.id)}>
                                     <label className='add addTitleTur'>Add play time: </label>
                                     <label className='checkIn'>Type</label>
                                     <input className='checkIn' type='text' name='playType' />
@@ -169,9 +159,12 @@ this.setState({
                                     <input className='checkIn' type='text' name='activity' />
                                     <button className='checkIn btn saveButton' type="submit">Add</button>
                               </form>
+                              {this.props.playTime.map((play) =>
+                                    <div>{play.activity}, {play.type},</div>)
+                              }
                         </div>
                         <div className='checkInDiv'>
-                              <form onSubmit={(e) => this.props.addNap(e)}>
+                              <form onSubmit={(e) => this.props.addNap(e, this.props.reports.id)}>
                                     <label className='add addTitleOrg'>Add nap:</label>
                                     <label className='checkIn'>Start time</label>
                                     <TimePicker
@@ -195,10 +188,12 @@ this.setState({
                                     />
                                     <button className='checkIn btn closeButton' type='submit'>Add</button>
                               </form>
-                              <p className='checkIn'>mapped naps here</p>
+                              {this.props.nap.map((nap) =>
+                                    <div>{nap.startTime}- {nap.stopTime}</div>)
+                              }
                         </div>
                         <div className='checkInDiv'>
-                              <form onSubmit={(e) => this.props.addMeds(e)}>
+                              <form onSubmit={(e) => this.props.addMeds(e, this.props.reports.id)}>
                                     <label className='add addTitleTur'>Add meds:</label>
                                     <label className='checkIn'>Time:</label>
                                     <TimePicker
@@ -216,23 +211,29 @@ this.setState({
                                     <input className='checkIn' type='text' name='dosage' />
                                     <button className='checkIn btn saveButton' type='submit'>Add</button>
                               </form>
-                              <p className='checkIn' id='medTimeLocation'></p>
+                              {this.props.meds.map((med) =>
+                                    <div>{med.time}, {med.name}, {med.amount}</div>)
+                              }
                         </div>
                         <div className='checkInDiv'>
-                              <form onSubmit={(e) => this.props.addSupplies(e)}>
+                              <form onSubmit={(e) => this.props.addSupplies(e, this.props.reports.id)}>
                                     <label className='add addTitleOrg'>Add supplies:</label>
                                     <input className='checkIn' type="text" name='supplies' />
                                     <button className='checkIn btn closeButton' type='submit'>Add</button>
                               </form>
-                              <p className='checkIn'>mapped supplies here</p>
+                              {this.props.supplies.map((sup) =>
+                                    <div>{sup.supply_item}</div>)
+                              }
                         </div>
                         <div className='checkInDiv'>
-                              <form onSubmit={(e) => this.props.addComments(e)}>
+                              <form onSubmit={(e) => this.props.addComments(e, this.props.reports.id)}>
                                     <label className='add addTitleTur'>Add comments:</label>
                                     <input className='checkIn' type="text" name='comments' />
                                     <button className='checkIn btn saveButton' type='submit'>Add</button>
                               </form>
-                              <p className='checkIn'>mapped comments here</p>
+                              {this.props.comment.map((com) =>
+                                    <div>{com.comment}</div>)
+                              }
                         </div>
                   </div>
                   <button onClick={() => this.props.studentCheckOut(param)} className='checkOut btn closeButton' disabled={studentDetails ? studentDetails.status === 'out' : true}>Check Out</button>
@@ -243,9 +244,16 @@ this.setState({
 
 function mapStateToProps(state) {
       return {
-            students: state.students,
-            teachers: state.teachers,
-            reports: state.reports
+            students: state.studentReducer.students,
+            teachers: state.teacherReducer.teachers,
+            reports: state.reportReducer.reports,
+            diapering: state.reportReducer.diapering,
+            feeding: state.reportReducer.feeding,
+            meds: state.reportReducer.meds,
+            supplies: state.reportReducer.supplies,
+            comment: state.reportReducer.comment,
+            playTime: state.reportReducer.playTime,
+            nap: state.reportReducer.nap
       };
 }
 function mapDispatchToProps(dispatch) {
@@ -253,7 +261,7 @@ function mapDispatchToProps(dispatch) {
 
             studentCheckOut: (id) => dispatch(studentCheckOut(id)),
             getStudentList: () => dispatch(fetchStudents()),
-            getDailyReports:(dat, id)=>dispatch(getTodayReports(dat, id))
+            getDailyReports: (dat, id) => dispatch(getTodayReports(dat, id))
       }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Student);

@@ -14,17 +14,10 @@ module.exports = (app) => {
                   res.send(report)
             })
       })
-      app.get('/getReports/:month/:day/:year', (req, res) => {
-            report.getReport({ date: req.params.month + '/' + req.params.day + '/' + req.params.year }).then((report) => {
+      app.get('/getReports/:month/:day/:year/:id', (req, res) => {
+            report.getReport({ student_id: req.params.id, date: req.params.month + '/' + req.params.day + '/' + req.params.year }).then((report) => {
                   res.send(report)
             })
       })
-      // app.get('/getReport/:date', (req,res)=>{
-      //       console.log(req.params.id)
-      //       report.getReport(req.params.id)
-      //       .then((report)=>{
-      //             console.log(report)
-      //             res.send(report)
-      //       })
-      // })
+
 }

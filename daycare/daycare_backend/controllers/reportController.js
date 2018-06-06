@@ -79,13 +79,12 @@ exports.createReport = (report) => {
                   console.log(err)
             })
 }
-exports.getReport = (id,date) => {
-            return Reports.where(id, date)
+exports.getReport = (id) => {
+      return Reports.where(id)
             .fetch({
                   withRelated: ['feeding', 'comment', 'diapering', 'nap', 'meds', 'playTime', 'supplies']
             })
             .then(report => {
-                  console.log(report.attributes)
                   const meds = report.related('meds')
                   const nap = report.related('nap')
                   const feeding = report.related('feeding')
@@ -93,7 +92,7 @@ exports.getReport = (id,date) => {
                   const supplies = report.related('supplies')
                   const playTime = report.related('playTime')
                   const comm = report.related('comment')
-                  
+
                   const medsList = meds.map(med => {
                         return med.attributes
                   })
@@ -103,7 +102,6 @@ exports.getReport = (id,date) => {
                   const feedingList = feeding.map(feed => {
                         return feed.attributes
                   })
-                  console.log(feedingList)
                   const diaperList = diapering.map(diaper => {
                         return diaper.attributes
                   })
@@ -116,7 +114,7 @@ exports.getReport = (id,date) => {
                   const commentList = comm.map(com => {
                         return com.attributes
                   })
-                   return [feedingList, commentList, napList, playTimeList, suppliesList, diaperList, medsList, report.attributes]
+                  return [feedingList, commentList, napList, playTimeList, suppliesList, diaperList, medsList, report.attributes]
             })
             .catch(err => {
                   console.log(err)
@@ -124,10 +122,12 @@ exports.getReport = (id,date) => {
 }
 
 exports.getReportByName = (id) => {
-      return Reports.where(id).fetchAll()
+      return Reports.where(id).fetchAll({
+            withRelated: ['feeding', 'comment', 'diapering', 'nap', 'meds', 'playTime', 'supplies']
+      })
             .then(result => {
                   const reports = result.models.map(report => {
-                        return report.attributes
+                        return report
                   })
                   return reports
             })
@@ -135,7 +135,7 @@ exports.getReportByName = (id) => {
                   console.log(err)
             })
 }
-exports.getReportByDate = (date) => {
+exports.getPastReports = (name) => {
       return Reports.where(date).fetchAll()
             .then(result => {
                   const reports = result.models.map(report => {

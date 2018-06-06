@@ -9,7 +9,7 @@ module.exports = (app) => {
       })
       app.post('/comments', (req, res) => {
             comment.createComments(req.body)
-                  .then((comments) => { res.send(commentsattributes) })
+                  .then((comments) => { res.send(comments.attributes) })
 
       })
       app.delete('/comments/:id', (req, res) => {
