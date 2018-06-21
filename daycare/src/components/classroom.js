@@ -36,13 +36,8 @@ class Classroom extends Component {
       render() {
             let param = (this.props.match.params.id)
             const { match, location } = this.props
-<<<<<<< HEAD
             let classroomName = this.props.classrooms.find((room) => {
                   return room.id == param
-=======
-             let classroomName = this.props.classrooms.find((room) => {
-               return room.id == param
->>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
             })
             return (
                   <div>
@@ -132,19 +127,11 @@ class Classroom extends Component {
                               </div>
                         </div>
                         {classroomName && <h1 className='classroomTitle'> {classroomName.name}</h1>}
-<<<<<<< HEAD
                         {this.props.students && this.props.students.sort(this.props.compareName).map((student) => {
                               if (!student.active) return null;
                               return <div className='studentDiv'>
                                     <Link className='studentList' to={'/student/' + student.id} onCick={() => this.findReport(student.id)}>{student.name}</Link>
                                     <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target={"#deleteStudentModal" + student.id}>
-=======
-                        {this.props.students && this.props.students.map((student) =>
-                              <div className='studentDiv'>
-
-                                    <Link className='studentList' to={'/student/' + student.id} onClick={() => this.findReport(student.id)}>{student.name}{student.id}</Link>
-                                    <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#deleteStudentModal">
->>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
                                           Delete Student
                        </button>
                                     <div className="modal fade" id={"deleteStudentModal" + student.id} tabindex="-1" role="dialog" aria-labelledby="deleteStudentModalLabel" aria-hidden="true">

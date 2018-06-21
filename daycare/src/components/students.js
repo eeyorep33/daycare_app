@@ -3,19 +3,10 @@ import TimePicker from 'rc-time-picker'
 import moment from 'moment';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-<<<<<<< HEAD
 import { fetchStudents, studentCheckOut } from '../actions/studentActions'
 import { getTodayReports } from '../actions/reportActions'
 let today = new Date()
 let date = today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
-=======
-import { studentCheckOut } from '../actions/studentActions'
-import { getTodayReports } from '../actions/reportActions'
-let today = new Date()
-let date = today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
-
-
->>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
 
 class Student extends Component {
       constructor() {
@@ -26,7 +17,6 @@ class Student extends Component {
                   studentDetails: {}
             }
       }
-<<<<<<< HEAD
       componentWillReceiveProps(nextProps) {
             let param = (nextProps.match.params.id)
             if (nextProps.students.length > 0) {
@@ -40,23 +30,6 @@ class Student extends Component {
                   })
             }
       }
-=======
-      //       componentWillReceiveProps(nextProps){
-      //             console.log(this.props.students)
-      //             let param = (nextProps.match.params.id)
-      // if(nextProps.students.length>0){
-      //       let studentDetails = nextProps.students.find((student) => {
-      //             return student.id == param
-      //       })
-
-      // this.setState({
-      //       studentDetails: studentDetails,
-      //       name: studentDetails.name,
-      //       email: studentDetails.email
-      // })
-      // }
-      //       }
->>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
       componentDidMount() {
             let param = (this.props.match.params.id)
             this.props.getDailyReports(date, param)
@@ -99,14 +72,6 @@ return `${teacher.classroom_id}`===`${studentDetails.classroom_id}`
            render() {
             const { match, location } = this.props
             let param = (this.props.match.params.id)
-<<<<<<< HEAD
-=======
-
-            // let report = this.props.reports.data.find((report) => {
-            //       return `${report.student_id}` === param
-            // })
-
->>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
             const format = 'h:mm a';
             const now = moment().hour(6).minute(30);
             let studentDetails = this.props.students.find((student) => {
@@ -145,10 +110,7 @@ return `${teacher.classroom_id}`===`${studentDetails.classroom_id}`
                   </div>}
                   {this.findStudent(param)}
                   <button onClick={(e) => { this.props.checkIn(e, param) }} disabled={studentDetails ? studentDetails.status === 'in' : true} className='navButtons btn checkInButton'>Check In</button>
-<<<<<<< HEAD
                   {this.findTeacher(param)}
-=======
->>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
                   {this.props.reports && <p>Report #:{this.props.reports.id}</p>}
                   <div>
                         <div className='checkInDiv'>
@@ -171,10 +133,6 @@ return `${teacher.classroom_id}`===`${studentDetails.classroom_id}`
                                     </select>
                                     <label className='checkIn'>Initials:</label>
                                     <select name='initials'>
-<<<<<<< HEAD
-=======
-                                          {console.log(this.props.teachers)}
->>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
                                           {this.props.teachers.map((teach) =>
                                                 <option value={teach.initials}>{teach.initials}</option>
                                           )}
@@ -190,11 +148,7 @@ return `${teacher.classroom_id}`===`${studentDetails.classroom_id}`
                               }
                         </div>
                         <div className='checkInDiv'>
-<<<<<<< HEAD
                               <form onSubmit={(e) => { this.props.addFeeding(e, this.props.reports.id) }}>
-=======
-                              <form onSubmit={(e) => { this.props.addFeeding(e, 46) }}>
->>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
                                     <label className='add addTitleOrg'>Add feeding:</label>
                                     <label className='checkIn'>Time:</label>
                                     <TimePicker
@@ -327,7 +281,6 @@ function mapStateToProps(state) {
             students: state.studentReducer.students,
             teachers: state.teacherReducer.teachers,
             reports: state.reportReducer.reports,
-<<<<<<< HEAD
             diapering: state.reportReducer.diapering,
             feeding: state.reportReducer.feeding,
             meds: state.reportReducer.meds,
@@ -335,19 +288,13 @@ function mapStateToProps(state) {
             comment: state.reportReducer.comment,
             playTime: state.reportReducer.playTime,
             nap: state.reportReducer.nap
-=======
-            classrooms:state.classroomReducer.classrooms
->>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
       };
 }
 function mapDispatchToProps(dispatch) {
       return {
 
             studentCheckOut: (id) => dispatch(studentCheckOut(id)),
-<<<<<<< HEAD
             getStudentList: () => dispatch(fetchStudents()),
-=======
->>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
             getDailyReports: (dat, id) => dispatch(getTodayReports(dat, id))
       }
 }
