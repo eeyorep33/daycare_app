@@ -26,7 +26,11 @@ class ReportList extends Component {
                         )}
                     </div>
                 </div>
+<<<<<<< HEAD
                 {this.props.report && this.props.report.map((report) =>
+=======
+                {this.props.reports && this.props.reports.map((report) =>
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
                     <div className='reportDiv'>
                         <Link className='reportList' to={'/report/' + report.id}>{new Date(report.date).toDateString()}</Link>
                     </div>
@@ -37,9 +41,14 @@ class ReportList extends Component {
 }
 function mapStateToProps(state) {
     return {
+<<<<<<< HEAD
         report: state.reportReducer.pastReports,
         students: state.studentReducer.studentList,
         teachers: state.teacherReducer.teachers,        
+=======
+        reports: state.reportReducer.reports,
+        students: state.studentReducer.students
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
     };
 }
 function mapDispatchToProps(dispatch) {

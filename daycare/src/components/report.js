@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { fetchTeachers } from '../actions/teacherActions'
 
 class DailyReport extends Component {
+<<<<<<< HEAD
       render() {
             const { match, location } = this.props
             let param = (this.props.match.params.id)
@@ -65,6 +67,41 @@ class DailyReport extends Component {
                               <div>{report.comment.map((com) =>
                                     <p className='report'>{com.comment}</p>)}
                               </div>
+=======
+      componentDidMount() {
+            this.props.getTeacherList()
+      }
+
+      render() {
+            const { match, location } = this.props
+            let param = (this.props.match.params.id)
+                        let report = this.props.reports.find((repo) => {
+                  return `${repo.id}`=== `${param}`
+            })            
+            let student = null
+            if(report){student=this.props.store.students.data.find((stud) => {
+                 return `${stud.id}` === `${report.student_id}`
+            })
+      }      
+      let classroom=null;
+      if(student){classroom=this.props.store.classrooms.data.find((classroom)=>{
+            return `${classroom.id}`===`${student.classroom_id}`
+      })
+}
+let teachers;
+if(classroom){teachers=this.props.store.teachers.data.find((teacher)=>{
+      return `${teacher.classroom_id}`===`${classroom.id}`
+})}
+            if(teachers)
+            {            
+            return (           
+                  <div>                        
+                        <p className='report'>Date:{new Date(report.date).toDateString()}</p>
+                        <p className='report'>Name:{student.name}</p>
+                        <p className='report'>Room:{classroom.name}</p>
+                        <div>{teachers.map((teacher)=>
+                        <p className='report'>Teachers:{teachers.name}</p>)}                        
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
                         </div>
                   )
             } else {
@@ -75,14 +112,19 @@ class DailyReport extends Component {
 
 function mapStateToProps(state) {
       return {
+<<<<<<< HEAD
             reports: state.reportReducer.pastReports,
             students: state.studentReducer.studentList,
             teachers: state.teacherReducer.teachers,
             classrooms: state.classroomReducer.classrooms,
             
+=======
+            reports: state.reportReducer.reports
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
       };
 }
 function mapDispatchToProps(dispatch) {
-      return {}
+      return { getTeacherList: () => dispatch(fetchTeachers())
+      }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(DailyReport)

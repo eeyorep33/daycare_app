@@ -12,16 +12,30 @@ import AddClassModal from './components/addClassroomModal'
 import DeleteClassModal from './components/deleteClassroomModal'
 import { connect } from 'react-redux'
 import { removeTeacher, teacherCheckIn, addTeacher, teacherCheckOut } from './actions/teacherActions'
+<<<<<<< HEAD
 import { studentCheckIn, fetchStudents, studentCheckOut, addStudent, removeStudent, changeStudent, getStudentsByClassroom } from './actions/studentActions'
 import { addClassroom, fetchClassrooms, removeClassroom, changeClassroom } from './actions/classroomActions'
 import { addReport, getReports, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, addPlayTime } from './actions/reportActions'
+=======
+import { studentCheckIn, fetchStudents, studentCheckOut, addStudent, removeStudent, changeStudent } from './actions/studentActions'
+import { addClassroom, fetchClassrooms, removeClassroom, changeClassroom, getStudentsByClassroom } from './actions/classroomActions'
+import { addReport, getReports, getAReport, addDiapering, addFeeding, addNap, addMeds, addComments, addSupplies, addPlayTime } from './actions/reportActions'
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
 import Axios from 'axios';
 let today = new Date()
 let date = today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
 
 class App extends Component {
+<<<<<<< HEAD
   componentDidMount() {
     this.props.LoadClassrooms()
+=======
+
+  componentDidMount() {
+
+    this.props.LoadClassrooms()
+
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
   }
   editStudent = (e, id) => {
     e.preventDefault()
@@ -32,19 +46,34 @@ class App extends Component {
   }
   editClassroom = (e, id) => {
     e.preventDefault()
+<<<<<<< HEAD
     const name = e.target.name.value
     const classroom = { name: name }
+=======
+    console.log(id)
+    const name = e.target.name.value
+    const classroom = { name: name }
+    console.log(name)
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
     this.props.changeClassroom(classroom, id)
   }
   getReports = (e, name) => {
     e.preventDefault()
+<<<<<<< HEAD
     console.log(name)
     let studentId = this.props.studentList.find((student) => {
+=======
+    let studentId = this.props.students.find((student) => {
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
       return student.name === name
     })
     console.log(studentId)
     this.props.getReports(studentId.id)
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
   addFeeding = (e, id) => {
     e.preventDefault()
     let time = e.target.feedingtime.value
@@ -104,8 +133,11 @@ class App extends Component {
     let supply = e.target.supplies.value
     let supplies = { supply_item: supply, report_id: id }
     this.props.addSup(supplies)
+<<<<<<< HEAD
     e.target.supplies.value=''
     
+=======
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
   }
   teacherCheckIn = (e, id) => {
     e.preventDefault()
@@ -146,10 +178,18 @@ class App extends Component {
   deleteClassroom = (e) => {
     e.preventDefault()
     let deletedClass = e.target.deleteClass.value
+<<<<<<< HEAD
     let deleted = this.props.classrooms.find((room) => {
       return room.name == deletedClass
     })
     let deletedId = deleted.id
+=======
+    let deleted = this.props.classrooms.filter((room) => {
+      return room.name == deletedClass
+    })
+    console.log(deleted)
+    let deletedId = deleted[0].id
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
     this.props.removeClass(deletedId)
     e.target.deleteClass.value = ''
   }
@@ -187,11 +227,15 @@ class App extends Component {
   }
   deleteTeacher = (e, id) => {
     e.preventDefault()
+<<<<<<< HEAD
+=======
+    console.log(id)
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
     this.props.removeTeacher(id)
   }
 
   render() {
-    return (
+        return (
       <div>
         <h1 className="title">Look What I Did Today</h1>
         <h1 className='date'> {date}</h1>
@@ -208,11 +252,24 @@ class App extends Component {
               aria-expanded="false">
               Classroom</a>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+<<<<<<< HEAD
               {this.props.classrooms.sort(this.compare).map((room) =>
                 <Link onClick={() => this.props.getStudentsByClassroom(room.id)} className="drop buttonText" to={"/classroom/" + room.id}>{room.name} </Link>
               )}
+=======
+              <div>
+                {this.props.classrooms.map((room) =>
+                  <Link onClick={() => this.props.getStudents(room.id)} className="drop buttonText" to={"/classroom/" + room.id}>{room.name} </Link>
+                )}
+              </div>
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
             </div>
           </div>
+
+
+
+
+
           <button className='navButtons btn'>
             <Link className='buttonText' to='/reportList'>Reports</Link>
           </button>
@@ -226,8 +283,57 @@ class App extends Component {
             Add Classroom
 </button>
         </div>
+<<<<<<< HEAD
         <AddClassModal addClassroom={this.addClassroom}/>        
         <DeleteClassModal deleteClassroom={this.deleteClassroom}/>
+=======
+        <div className="modal fade" id="addClassroomModal" tabindex="-1" role="dialog" aria-labelledby="addClassroomModalLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modalTitle" id="addClassroomModalLabel">Add Classroom</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={(e) => this.addClassroom(e)} >
+                  <label className='modalContent'>Classroom Name:</label>
+                  <input type='text' name='addClass' />
+                  <div className="modal-footer">
+                    <button type="submit" className="btn saveButton">Save changes</button>
+                    <button type="button" className="btn closeButton" data-dismiss="modal">Close</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="modal fade" id="deleteClassroomModal" tabindex="-1" role="dialog" aria-labelledby="deleteClassroomModalLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modalTitle" id="deleteClassroomModalLabel">Delete Classroom</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={(e) => this.deleteClassroom(e)} >
+                  <p className='modalContent'>You may only delete a classroom if no students are assigned to that room</p>
+                  <label className='modalContent'>Classroom Name:</label>
+                  <input type='text' name='deleteClass' />
+                  <div className="modal-footer">
+                    <button type="submit" className="btn saveButton">Save changes</button>
+                    <button type="button" className="btn closeButton" data-dismiss="modal">Close</button>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
         <Switch>
           <Route path="/" exact render={(props) => (
             <Home {...props} />
@@ -274,8 +380,12 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     classrooms: state.classroomReducer.classrooms,
+<<<<<<< HEAD
     students: state.studentReducer.students,
     studentList: state.studentReducer.studentList
+=======
+    students: state.studentReducer.students
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -302,7 +412,10 @@ function mapDispatchToProps(dispatch) {
     teacherCheckOut: (id) => dispatch(teacherCheckOut(id)),
     getStudents: (students) => dispatch(getStudentsByClassroom(students)),
     changeStudent: (student, id) => dispatch(changeStudent(student, id)),
+<<<<<<< HEAD
     getStudentsByClassroom: (id) => dispatch(getStudentsByClassroom(id)),
+=======
+>>>>>>> 8a8378e244c5e9be97da5318d5f51b44bde48e4f
     changeClassroom: (name, id) => dispatch(changeClassroom(name, id))
   }
 }
