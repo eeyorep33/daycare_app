@@ -16,8 +16,11 @@ module.exports = (app) => {
             students.createStudent(req.body)
                   .then((student) => { res.send(student.attributes) })
       })
-      app.put('/studentList/:id', (req, res) => {
-            let response = { id: req.params.id, status: 'in' }
+      app.put('/studentDeactivate/:id', (req, res) => {           
+            students.deactivateStudent(req.params.id)
+                  .then((student) => { res.send(student.attributes.id) })
+      })
+      app.put('/studentList/:id', (req, res) => {           
             students.editStatus(req.params.id)
                   .then((student) => { res.send(student.attributes.id) })
       })

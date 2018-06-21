@@ -74,11 +74,12 @@ const studentReducer = (state = initialState, action) => {
             return { ...state, students: editStudent};
       break;
     case "REMOVE_STUDENT_SUCCESS":
-    let studentIndex=state.students.findIndex((student)=>{
+    const newStudents=state.students
+    let index = newStudents.findIndex((student)=>{
       return student.id===action.payload
-    })
-    let removedStudent={...state.students.splice(studentIndex,1)}
-      return { ...state, students: state.students};
+    });
+    newStudents[index].active=false;
+          return { ...state, students: newStudents};
       break;
     case "REMOVE_STUDENT_START":
       return { ...state, loading: true}

@@ -39,8 +39,7 @@ function mapStateToProps(state) {
     return {
         report: state.reportReducer.pastReports,
         students: state.studentReducer.studentList,
-        teachers: state.teacherReducer.teachers,
-        
+        teachers: state.teacherReducer.teachers,        
     };
 }
 function mapDispatchToProps(dispatch) {

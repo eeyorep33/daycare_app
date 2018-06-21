@@ -127,13 +127,14 @@ class Classroom extends Component {
                               </div>
                         </div>
                         {classroomName && <h1 className='classroomTitle'> {classroomName.name}</h1>}
-                        {this.props.students && this.props.students.sort(this.props.compareName).map((student) =>
-                              <div className='studentDiv'>
-                                    <Link className='studentList' to={'/student/' + student.id} onCick={() => this.findReport(student.id)}>{student.name}{student.id}</Link>
-                                    <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#deleteStudentModal">
+                        {this.props.students && this.props.students.sort(this.props.compareName).map((student) => {
+                              if (!student.active) return null;
+                              return <div className='studentDiv'>
+                                    <Link className='studentList' to={'/student/' + student.id} onCick={() => this.findReport(student.id)}>{student.name}</Link>
+                                    <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target={"#deleteStudentModal" + student.id}>
                                           Delete Student
                        </button>
-                                    <div className="modal fade" id="deleteStudentModal" tabindex="-1" role="dialog" aria-labelledby="deleteStudentModalLabel" aria-hidden="true">
+                                    <div className="modal fade" id={"deleteStudentModal" + student.id} tabindex="-1" role="dialog" aria-labelledby="deleteStudentModalLabel" aria-hidden="true">
                                           <div className="modal-dialog" role="document">
                                                 <div className="modal-content">
                                                       <div className="modal-header">
@@ -145,7 +146,6 @@ class Classroom extends Component {
                                                       <div className="modal-body">
                                                             <p className='modalContent'>Are you sure you want to delete this student?</p>
                                                             <div className="modal-footer">
-                                                                  <p>{student.id}</p>
                                                                   <button onClick={() => this.props.deleteStudent(student.id)} type="submit" className="btn saveButton">Save changes</button>
                                                                   <button type="button" className="btn closeButton" data-dismiss="modal">Close</button>
                                                             </div>
@@ -154,7 +154,7 @@ class Classroom extends Component {
                                           </div>
                                     </div>
                               </div>
-                        )}
+                        })}
 
                   </div>
             )

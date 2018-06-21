@@ -44,6 +44,22 @@ class Student extends Component {
                   <p className="status">Status:{studentDetails.status}</p>
             </div> : <p>Loading...</p>
       }
+      findTeacher=(id)=>{
+            let studentDetails = this.props.students.find((student) => {
+                  return student.id == id
+            })
+                       let teach=this.props.teachers.filter((teacher)=>{
+return `${teacher.classroom_id}`===`${studentDetails.classroom_id}`
+            })            
+            return <div>
+                  <p>Teacher(s):</p>
+                  {teach.map((teacher)=>
+                       <p> {teacher.name}</p>
+                  
+
+                  )}
+            </div> 
+      }
       updateName = (value) => {
             this.setState({
                   name: value
@@ -54,7 +70,7 @@ class Student extends Component {
                   email: value
             })
       }
-      render() {
+           render() {
             const { match, location } = this.props
             let param = (this.props.match.params.id)
             const format = 'h:mm a';
@@ -95,6 +111,7 @@ class Student extends Component {
                   </div>}
                   {this.findStudent(param)}
                   <button onClick={(e) => { this.props.checkIn(e, param) }} disabled={studentDetails ? studentDetails.status === 'in' : true} className='navButtons btn checkInButton'>Check In</button>
+                  {this.findTeacher(param)}
                   {this.props.reports && <p>Report #:{this.props.reports.id}</p>}
                   <div>
                         <div className='checkInDiv'>
@@ -123,8 +140,12 @@ class Student extends Component {
                                     </select>
                                     <button type="submit" className='checkIn btn saveButton'>Add</button>
                               </form>
-                              {this.props.diapering.map((diaper) =>
-                                   <p> {diaper.time}, {diaper.type}, {diaper.initials}</p>)
+                              {this.props.diapering.length > 0 && this.props.diapering.map((diaper) =>
+                                    <div>
+                                          <p> Time:{diaper.time}</p>
+                                          <p> B/W:{diaper.type}</p>
+                                          <p>Teacher initials:{diaper.initials}</p>
+                                    </div>)
                               }
                         </div>
                         <div className='checkInDiv'>
@@ -146,8 +167,11 @@ class Student extends Component {
                                     <input className='checkIn' type='text' name='amount' />
                                     <button className='checkIn btn closeButton' type="submit">Add</button>
                               </form>
-                              {this.props.feeding.map((feed) =>
-                                    <div>{feed.time}, {feed.food}, {feed.amount}</div>)
+                              
+                              {this.props.feeding.length>0 && this.props.feeding.map((feed) =>
+                                    <div><p>Time:{feed.time}</p>
+                                          <p>Food: {feed.food}</p>
+                                          <p>Amount: {feed.amount}</p></div>)
                               }
                         </div>
                         <div className='checkInDiv'>
@@ -159,8 +183,10 @@ class Student extends Component {
                                     <input className='checkIn' type='text' name='activity' />
                                     <button className='checkIn btn saveButton' type="submit">Add</button>
                               </form>
-                              {this.props.playTime.map((play) =>
-                                    <div>{play.activity}, {play.type},</div>)
+                              
+                              {this.props.playTime.length>0 && this.props.playTime.map((play) =>
+                                    <div><p>Activity:{play.activity} </p>
+                                          <p> Type:{play.type}</p></div>)
                               }
                         </div>
                         <div className='checkInDiv'>
@@ -188,8 +214,10 @@ class Student extends Component {
                                     />
                                     <button className='checkIn btn closeButton' type='submit'>Add</button>
                               </form>
-                              {this.props.nap.map((nap) =>
-                                    <div>{nap.startTime}- {nap.stopTime}</div>)
+                              
+                              {this.props.nap.length>0 && this.props.nap.map((nap) =>
+                                    <div><p>Start time:{nap.startTime}</p>
+                                          <p>Stop time: {nap.stopTime}</p></div>)
                               }
                         </div>
                         <div className='checkInDiv'>
@@ -211,8 +239,11 @@ class Student extends Component {
                                     <input className='checkIn' type='text' name='dosage' />
                                     <button className='checkIn btn saveButton' type='submit'>Add</button>
                               </form>
-                              {this.props.meds.map((med) =>
-                                    <div>{med.time}, {med.name}, {med.amount}</div>)
+                             
+                              {this.props.meds.length>0 && this.props.meds.map((med) =>
+                                    <div><p>Time:{med.time}</p>
+                                          <p>Medicine name:{med.name}</p>
+                                          <p> Amount:{med.amount}</p></div>)
                               }
                         </div>
                         <div className='checkInDiv'>
@@ -221,7 +252,9 @@ class Student extends Component {
                                     <input className='checkIn' type="text" name='supplies' />
                                     <button className='checkIn btn closeButton' type='submit'>Add</button>
                               </form>
-                              {this.props.supplies.map((sup) =>
+                              <p>Supplies needed:</p>
+                              
+                              {this.props.supplies.length>0 && this.props.supplies.map((sup) =>
                                     <div>{sup.supply_item}</div>)
                               }
                         </div>
@@ -231,7 +264,9 @@ class Student extends Component {
                                     <input className='checkIn' type="text" name='comments' />
                                     <button className='checkIn btn saveButton' type='submit'>Add</button>
                               </form>
-                              {this.props.comment.map((com) =>
+                              <p>Comments:</p>
+                             
+                              {this.props.comment.length>0 && this.props.comment.map((com) =>
                                     <div>{com.comment}</div>)
                               }
                         </div>

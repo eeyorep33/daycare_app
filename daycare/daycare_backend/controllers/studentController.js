@@ -65,6 +65,17 @@ exports.editStatus = (id) => {
                   console.log(err)
             })
 }
+exports.deactivateStudent = (id) => {
+      console.log(id)
+      const fieldToUpdate = { active: false }
+      return new Student({ id: id })
+            .save(fieldToUpdate)
+            .then(saved => {
+                  return saved;
+            }).catch(err => {
+                  console.log(err)
+            })
+}
 exports.studentCheckOut = (id) => {
       console.log(id)
       const fieldToUpdate = { status: 'out' }
@@ -93,6 +104,7 @@ exports.getStudentsByClass = (key) => {
             .then(classroom => {
                   const students = classroom.related('student')
                  const studentList = students.map(student => {
+                       console.log(student.attributes)
                       return   student.attributes
                   })
                     return studentList

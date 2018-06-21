@@ -9,7 +9,7 @@ module.exports = (app) => {
       })
       app.post('/diapering', (req, res) => {
             diaper.createDiapering(req.body)
-                  .then((diapers) => { res.send(diapers.attributes) })
+                              .then((diapers) => {res.send(diapers.attributes) })
       })
       app.delete('/diapering/:id', (req, res) => {
             diaper.deleteDiapering(req.params.id).then((diapers) => {

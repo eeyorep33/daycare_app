@@ -16,10 +16,10 @@ class TeacherList extends Component {
                                     <p className='teacherName'> {teacher.name}</p><p className='teacherName'> Status:{teacher.status}</p>
                                     <button className='teacherStatus btn' onClick={(e) => this.props.teacherCheckOut(e, teacher.id)}>Check-Out</button>
                                     <button className='teacherStatus btn' onClick={(e) => this.props.teacherCheckIn(e, teacher.id)}>Check-In</button>
-                                    <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target="#deleteTeacherModal">
+                                    <button type="button" className="btn btn-primary addClass navButtons" data-toggle="modal" data-target={"#deleteTeacherModal" + teacher.id}>
                                           Delete Teacher
                        </button>
-                                    <div className="modal fade" id="deleteTeacherModal" tabindex="-1" role="dialog" aria-labelledby="deleteTeacherModalLabel" aria-hidden="true">
+                                    <div className="modal fade" id={"deleteTeacherModal" + teacher.id} tabindex="-1" role="dialog" aria-labelledby="deleteTeacherModalLabel" aria-hidden="true">
                                           <div className="modal-dialog" role="document">
                                                 <div className="modal-content">
                                                       <div className="modal-header">

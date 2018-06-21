@@ -8,6 +8,8 @@ import Student from './components/students'
 import Report from './components/report'
 import ReportList from './components/reportList'
 import TeacherList from './components/teacherList'
+import AddClassModal from './components/addClassroomModal'
+import DeleteClassModal from './components/deleteClassroomModal'
 import { connect } from 'react-redux'
 import { removeTeacher, teacherCheckIn, addTeacher, teacherCheckOut } from './actions/teacherActions'
 import { studentCheckIn, fetchStudents, studentCheckOut, addStudent, removeStudent, changeStudent, getStudentsByClassroom } from './actions/studentActions'
@@ -86,7 +88,7 @@ class App extends Component {
     let activity = e.target.activity.value
     let playTime = { type: playType, activity: activity, report_id: id }
     this.props.addPlay(playTime)
-    e.target.type.value=''
+    e.target.playType.value=''
     e.target.activity.value=''
   }
   addComments = (e, id) => {
@@ -137,6 +139,7 @@ class App extends Component {
   addClassroom = (e) => {
     e.preventDefault()
     let newClass = { name: e.target.addClass.value }
+    console.log(newClass)
     this.props.addClass(newClass)
     e.target.addClass.value = ''
   }
@@ -158,14 +161,15 @@ class App extends Component {
       name: studentName,
       email: studentEmail,
       classroom_id: parseInt(room),
-      status: 'out'
+      status: 'out',
+      active:true
     }
     this.props.addNewStudent(newStudent)
     e.target.name.value = ''
     e.target.email.value = ''
   }
   deleteStudent = (id) => {
-    this.props.removeStudent(id)
+      this.props.removeStudent(id)
   }
   addaTeacher = (e, room) => {
     e.preventDefault()
@@ -222,51 +226,8 @@ class App extends Component {
             Add Classroom
 </button>
         </div>
-        <div className="modal fade" id="addClassroomModal" tabindex="-1" role="dialog" aria-labelledby="addClassroomModalLabel" aria-hidden="true">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modalTitle" id="addClassroomModalLabel">Add Classroom</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={(e) => this.addClassroom(e)} >
-                  <label className='modalContent'>Classroom Name:</label>
-                  <input type='text' name='addClass' />
-                  <div className="modal-footer">
-                    <button type="submit" className="btn saveButton">Save changes</button>
-                    <button type="button" className="btn closeButton" data-dismiss="modal">Close</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="modal fade" id="deleteClassroomModal" tabindex="-1" role="dialog" aria-labelledby="deleteClassroomModalLabel" aria-hidden="true">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modalTitle" id="deleteClassroomModalLabel">Delete Classroom</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={(e) => this.deleteClassroom(e)} >
-                  <p className='modalContent'>You may only delete a classroom if no students are assigned to that room</p>
-                  <label className='modalContent'>Classroom Name:</label>
-                  <input type='text' name='deleteClass' />
-                  <div className="modal-footer">
-                    <button type="submit" className="btn saveButton">Save changes</button>
-                    <button type="button" className="btn closeButton" data-dismiss="modal">Close</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AddClassModal addClassroom={this.addClassroom}/>        
+        <DeleteClassModal deleteClassroom={this.deleteClassroom}/>
         <Switch>
           <Route path="/" exact render={(props) => (
             <Home {...props} />
@@ -335,7 +296,6 @@ function mapDispatchToProps(dispatch) {
     addNewStudent: (newStudent) => dispatch(addStudent(newStudent)),
     addNewTeacher: (newTeacher) => dispatch(addTeacher(newTeacher)),
     getReports: (name) => dispatch(getReports(name)),
-    //getAReport: (id) => dispatch(getAReport(id)),
     getStudentList: (students) => dispatch(fetchStudents(students)),
     studentCheckIn: (id) => dispatch(studentCheckIn(id)),
     teacherCheckIn: (id) => dispatch(teacherCheckIn(id)),

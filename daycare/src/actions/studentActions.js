@@ -57,6 +57,7 @@ export const addStudent = (student) => {
     dispatch(addStudentStart())
     return axios.post('http://localhost:8080/studentList', student)
       .then(response => {
+        console.log(response.data)
         dispatch(addStudentSuccess(response.data))
       })
       .catch(err => { dispatch(addStudentError(err)) })
@@ -74,7 +75,7 @@ export const removeStudentStart = student => ({
 export const removeStudent = (student) => {
   return dispatch => {
     dispatch(removeStudentStart())
-    return axios.delete('http://localhost:8080/studentList/' + student)
+    return axios.put('http://localhost:8080/studentDeactivate/' + student)
       .then(response => {
         dispatch(removeStudentSuccess(response.data))
       }).catch(err => { dispatch(removeStudentError(err)) })

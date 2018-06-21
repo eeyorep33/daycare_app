@@ -74,6 +74,7 @@ export const addDiapering = (diaper) => {
     dispatch(addDiaperingStart())
     return axios.post('http://localhost:8080/diapering', diaper)
       .then(response => {
+        console.log(response.data)
         dispatch(addDiaperingSuccess(response.data))
       }).catch(err => { dispatch(addDiaperingError(err)) })
   }
@@ -194,6 +195,7 @@ export const addPlayTime = (playtime) => {
     dispatch(addPlayTimeStart())
     return axios.post('http://localhost:8080/playTime', playtime)
       .then(response => {
+        console.log(response.data)
         dispatch(addPlayTimeSuccess(response.data))
       }).catch(err => { dispatch(addPlayTimeError(err)) })
   }
@@ -231,6 +233,7 @@ export const getTodayReports = (date, id) => {
     dispatch(getTodayReportsStart())
     return axios.get('http://localhost:8080/getReports/' + date + '/' + id)
       .then(response => {
+        console.log(response.data)
         dispatch(getTodayReportsSuccess(response.data))
       }).catch(err => { dispatch(getTodayReportsError(err)) })
   }

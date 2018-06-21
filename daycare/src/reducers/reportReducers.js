@@ -63,7 +63,7 @@ const reportReducer = (state = initialState, action) => {
         return { ...state, error: action.payload, loading: false}
         break;
       case "ADD_PLAYTIME_SUCCESS":
-        const newPlayTime = state.playTime.concat([action.playTime]);
+        const newPlayTime = state.playTime.concat([action.payload]);
         return { ...state, playTime: newPlayTime };
         break;
       case "ADD_PLAYTIME_START":
@@ -92,14 +92,14 @@ const reportReducer = (state = initialState, action) => {
         case "GET_TODAY_REPORTS_START":
         return { ...state, loading: true}
       case "GET_TODAY_REPORTS_SUCCESS":
-      const report=action.payload[7];
-      const feed=action.payload[0];
-      const med=action.payload[6];
-      const com=action.payload[1];
-      const sup=action.payload[4];
-      const nap=action.payload[2];
-      const play=action.payload[3];
-      const diaper=action.payload[5];
+      const report=action.payload[7] || [];
+      const feed=action.payload[0] || [];
+      const med=action.payload[6] || [];
+      const com=action.payload[1] || [];
+      const sup=action.payload[4] || [];
+      const nap=action.payload[2] || [];
+      const play=action.payload[3] || [];
+      const diaper=action.payload[5] || [];
       return { ...state, reports:report, feeding:feed, meds: med, comment:com, supplies: sup, nap:nap, playTime:play, diapering:diaper, loading: false}
       case "GET_TODAY_REPORTS_ERROR":
         return { ...state, error: action.payload, loading: false}
